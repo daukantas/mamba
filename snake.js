@@ -1,50 +1,51 @@
-var Board = (function () {
+var Snake = (function () {
 
-	function Board () {
-		this.head = new Board.Segment(14, 14);
-		this.lastDirection = null;
-		this.apples = [];
-		this.dimension = 30;
-	};
-
-	Board.Segment = function (x, y) {
-		this.current = { x: x, y: y };
+	function Segment (x, y) {
+		this.x = x;
+		this.y = y;
 		this.child = null;
 	}
 
-	Board.apple = function (x, y) {
+	function Board () {
+		this.dim = 10;
+		this.head = new Segment(4, 4);
+		this.lastDirection = null;
+		
+		this.apples = [];
+	};
 
+	Board.apple = function (x, y) {
 	}
 
-	//dir is unit vector {x: x, y: y}.
-	Board.prototype.move = function (dir) {
-		if (this.isInvalidDir(dir)) {
+	Board.prototype.move = function (x, y) {
+		var pos = {x: this.head.x + x,
+							 y: this.head.y + y};
+
+		if (this.isInvalidDir(pos)) {
 			console.log("Invalid move!");
 			return;
+		} else if (this.hasApple(pos)) {
+			this.addSegment(pos);
 		}
 
-		var newPos = {x: this.head.x + dir.x,
-									y: this.head.y + dir.y};
+		this.slide(x, y);
+	}
 
-		if (this.hasApple(dir)) {
-			this.addSegment(newPos);
+	Board.prototype.isInvalidDir = function (pos) {
+		if (pos.x == -this.lastDirection.x &&
+			  pos.y == -this.lastDirection.y) {
+			return false;
+		} else if (Math.max(pos.x, pos.y) > this.dim - 1 || 
+							 Math.min(pos.x, pos.y) < 0) {
+			return false;
 		}
 
-		this.slide(dir);
+		return true;
 	}
 
-	Board.prototype.isInvalidDir = function (dir) {
-		return (dir.x === -this.lastDirection.x &&
-						dir.y === -this.lastDirection.y);
-	}
-
-	Board.prototype.hasApple = function (dir) {
-		var newPos = {x: this.head.x + dir.x,
-									y: this.head.y + dir.y};
-
-		for (var i = 0; i < this.apples.length, i++) {
+	Board.prototype.hasApple = function (pos) {
+		for (var i = 0; i < this.apples.length; i++) {
 			var apple = this.apples[i];
-
 			if (apple.x === newPos.x && apple.y === newPos.y) {
 				return true;
 			}
@@ -53,7 +54,21 @@ var Board = (function () {
 		return false;
 	}
 
-	Board.prototype.slide = function (dir) {
+	Board.prototype.hasSeg = function(pos) {
+		var runner = this.head;
+
+		while (runner) {
+			if (runner.x == pos.x && runner.y == pos.y) {
+				return true;
+			}
+
+			runner = runner.child;
+		}
+
+		return false;
+	}
+
+	Board.prototype.slide = function (x, y) {
 		var runner = this.head;
 
 		while (runner.child) {
@@ -61,15 +76,44 @@ var Board = (function () {
 			runner.child.y = runner.y;
 		}
 
-		this.head.x += dir.x;
-		this.head.y += dir.y;
+		this.head.x += x;
+		this.head.y += y;
 	}
 
-	Board.prototype.addSegment = function (x, y) {
-		var newHead = new Board.Segment(x, y);
+	Board.prototype.addSegment = function (pos) {
+		var newHead = new Segment(pos.x, pos.y);
 		newHead.child = this.head;
 		this.head = newHead;
 	}
 
-	return Board;
+	Board.prototype.render = function () {
+		var str = "";
+
+		for (var i = 0; i < this.dim; i++) {
+			for (var j = 0; j < this.dim; j++) {
+				
+				// Poor performance!
+				if (this.hasApple({x: i, y: j})) {
+					str += " A ";
+				} else if (this.hasSeg({x: i, y: j})) {
+					str += " * ";
+				} else {
+					str += " _ ";
+				}
+
+				if (j == this.dim - 1) {
+					str += "\n";
+				}
+			}
+		}
+
+		console.log(str);
+	}
+
+	return { Board: Board,
+					 Segment: Segment }
 })();
+
+var g = Snake;
+var b = new g.Board();
+b.render();
