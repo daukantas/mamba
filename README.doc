@@ -1,0 +1,9 @@
+snake
+=====
+
+Rewrite of javascript-based Snake game, using _.
+
+TODO:
+- Add obstructions within board.
+- Consider changing jQuery code to allow for boards of varying sizes.
+- Add CSS.
