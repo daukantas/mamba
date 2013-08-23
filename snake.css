@@ -19,52 +19,20 @@
   font-size: 20pt;
 }
 
-.head {
+#apple {
+    background: green;
+}
+
+#head {
   background: gray;
-  display: inline-block;
-  float: left;
-  border: 1px solid black;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  font-size: 20pt;
 }
 
-.apple {
-  background: green;
-  display: inline-block;
-  float: left;
-  border: 1px solid black;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  font-size: 20pt;
-}
-
-.segment {
+#segment {
   background: black;
-  display: inline-block;
-  float: left;
-  border: 1px solid black;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  font-size: 20pt;
 }
 
-.wall {
+#wall {
   background: blue;
-  display: inline-block;
-  float: left;
-  border: 1px solid black;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  font-size: 20pt;
 }
 
 .endmsg {

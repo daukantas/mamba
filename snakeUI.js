@@ -26,7 +26,7 @@ var SnakeUI = (function () {
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 150);
+    }, 100);
   }
 
   Game.prototype.setImpulse = function () {
@@ -54,17 +54,17 @@ var SnakeUI = (function () {
       var $row = $('<div class="row" id="row' + i + '"></div>')
       $(".board").append($row);
       return _.times(20, function (j) {
-        var $cell = $('<div class="col" id="cell' + i + j + '"></div>');
+        var $cell = $('<div class="col"></div>');
         var pos = {x: i, y: j};
 
         if (_.isEqual(that.board.head, pos)) {
-          $cell.removeClass("col").addClass("head");
+          $cell.attr("id", "head");
         } else if (that.board.hasSeg(pos)) {
-          $cell.removeClass("col").addClass("segment");
+          $cell.attr("id", "segment");
         } else if (that.board.hasWall(pos)) {
-          $cell.removeClass("col").addClass("wall");
+          $cell.attr("id", "wall");
         } else if (that.board.hasApple(pos)) {
-          $cell.removeClass("col").addClass("apple");
+          $cell.attr("id", "apple");
         }
 
         $("#row" + i).append($cell);
