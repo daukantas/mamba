@@ -15,6 +15,9 @@ var SnakeUI = (function () {
     this.interval = window.setInterval(function () {
         that.setImpulse.apply(that);
         var impulse = that.impulse;
+        that.board.impulse = impulse;
+        // console.log(that.impulse);
+
         that.makeMove(impulse.x, impulse.y);
         that.render();
 
@@ -23,7 +26,7 @@ var SnakeUI = (function () {
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 200);
+    }, 150);
   }
 
   Game.prototype.setImpulse = function () {
@@ -47,17 +50,20 @@ var SnakeUI = (function () {
     var that = this;
 
     $("body").append($('<div class="board"></div>'));
-    return _.times(10, function (i) {
+    return _.times(20, function (i) {
       var $row = $('<div class="row" id="row' + i + '"></div>')
       $(".board").append($row);
-      return _.times(10, function (j) {
-        var $cell = $('<div class="col" id="cell' + i + j + '"></div>')
+      return _.times(20, function (j) {
+        var $cell = $('<div class="col" id="cell' + i + j + '"></div>');
+        var pos = {x: i, y: j};
 
-        if (_.isEqual(that.board.head, {x: i, y: j})) {
+        if (_.isEqual(that.board.head, pos)) {
           $cell.removeClass("col").addClass("head");
-        } else if (that.board.hasSeg({x: i, y: j})) {
+        } else if (that.board.hasSeg(pos)) {
           $cell.removeClass("col").addClass("segment");
-        } else if (that.board.hasApple({x: i, y: j})) {
+        } else if (that.board.hasWall(pos)) {
+          $cell.removeClass("col").addClass("wall");
+        } else if (that.board.hasApple(pos)) {
           $cell.removeClass("col").addClass("apple");
         }
 

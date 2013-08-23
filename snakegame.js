@@ -3,15 +3,18 @@
 var SnakeBoard = (function () {
 
   function SnakeBoard () {
-    this.dim = 10;
+    this.dim = 20;
     this.valid_dirs();
-
-    this.snake = [{x: 4, y: 4}];
-    this.head = _.first(this.snake);
     this.lastDirection = { x: 0, y: 0 };
+
+    this.snake = [{x: 9, y: 9}];
+    this.head = _.first(this.snake);
 
     this.apples = [];
     this.randomApples();
+
+    this.walls = [];
+    this.randomWalls();
   };
 
   SnakeBoard.prototype.valid_dirs = function () {
@@ -23,17 +26,41 @@ var SnakeBoard = (function () {
     })
   }
 
-  SnakeBoard.prototype.createApple = function (x, y) {
-    this.apples.push({x: x, y: y});
-  }
-
   SnakeBoard.prototype.randomApples = function () {
     var i = 0;
-    while (i < 10) {
-      var randX = _.random(0, 9);
-      var randY = _.random(0, 9);
-      if (!_.isEqual(this.head, {x: randX, y: randY})) {
-        this.createApple(randX, randY);
+    while (i < 30) {
+      var randX = _.random(0, 19);
+      var randY = _.random(0, 19);
+
+      var apple = {x: randX, y: randY};
+      if (!_.isEqual(this.head, apple)) {
+        this.apples.push(apple);
+        i++;
+      }
+    }
+  }
+
+  SnakeBoard.prototype.applesDontContain = function(pos) {
+    var that = this;
+    return _.some(this.apples, function (apple) {
+      return _.isEqual(apple, pos);
+    })
+  }
+
+  /*
+  Make sure there are no
+  intersections with this.apples.
+  */
+  SnakeBoard.prototype.randomWalls = function () {
+    var i = 0;
+    while (i < 20) {
+      var randX = _.random(0, 19);
+      var randY = _.random(0, 19);
+
+      var wall = {x: randX, y: randY};
+      if (!_.isEqual(this.head, wall) && 
+          this.applesDontContain(wall)) {
+        this.walls.push(wall);
         i++;
       }
     }
@@ -77,11 +104,18 @@ var SnakeBoard = (function () {
     })
   }
 
-  SnakeBoard.prototype.hasSeg = function(pos) {
+  SnakeBoard.prototype.hasSeg = function (pos) {
     var that = this;
-    return _.some(this.snake, function(seg) {
+    return _.some(this.snake, function (seg) {
       return _.isEqual(seg, pos);
     })
+  }
+
+  SnakeBoard.prototype.hasWall = function (pos) {
+    var that = this;
+    return _.some(this.walls, function (wall) {
+      return _.isEqual(pos, wall);
+    })  
   }
 
   SnakeBoard.prototype.moveHead = function (x, y) {   
@@ -124,16 +158,19 @@ var SnakeBoard = (function () {
 
   SnakeBoard.prototype.render = function () {
     var str = "";
+    var pos = {x: i, y: j};
 
     for (var i = 0; i < this.dim; i++) {
       for (var j = 0; j < this.dim; j++) {
         
-        if (this.hasApple({x: i, y: j})) {
+        if (this.hasApple(pos)) {
           str += " A ";
-        } else if (_.isEqual(this.head, {x: i, y: j})){
+        } else if (_.isEqual(this.head, pos)){
           str += " H ";
-        } else if (this.hasSeg({x: i, y: j})) {
+        } else if (this.hasSeg(pos)) {
           str += " S ";
+        } else if (this.hasWall(pos)) {
+          str += " W ";
         } else {
           str += " _ ";
         }
@@ -161,9 +198,21 @@ var SnakeBoard = (function () {
     return dups.length > 1;
   }
 
-  SnakeBoard.prototype.wallCollision = function () {
+  SnakeBoard.prototype.outerwallCollision = function () {
     return (Math.max(this.impulse.x, this.impulse.y) > this.dim - 1 || 
             Math.min(this.impulse.x, this.impulse.y) < 0);
+  }
+
+  SnakeBoard.prototype.innerWallCollision = function () {
+    var that = this;
+
+    return _.some(this.walls, function (wall) {
+      return _.isEqual(wall, that.impulse);
+    });
+  }
+
+  SnakeBoard.prototype.wallCollision = function () {
+    return this.innerWallCollision() || this.outerwallCollision();
   }
 
   SnakeBoard.prototype.lose = function () {
@@ -173,22 +222,22 @@ var SnakeBoard = (function () {
   return SnakeBoard;
 })();
 
-// var b = new SnakeBoard();
-// b.render();
-// b.moveHead(1, 0);
-// b.render();
-// b.moveHead(0, 1);
-// b.render();
-// b.moveHead(0, 1);
-// b.render();
-// b.moveHead(0, 1);
-// b.render();
-// b.moveHead(-1, 0);
-// b.render();
-// b.moveHead(0, 1);
-// b.render();
-// b.moveHead(-1, 0);
-// b.render();
+var b = new SnakeBoard();
+b.render();
+b.moveHead(1, 0);
+b.render();
+b.moveHead(0, 1);
+b.render();
+b.moveHead(0, 1);
+b.render();
+b.moveHead(0, 1);
+b.render();
+b.moveHead(-1, 0);
+b.render();
+b.moveHead(0, 1);
+b.render();
+b.moveHead(-1, 0);
+b.render();
 
 
 

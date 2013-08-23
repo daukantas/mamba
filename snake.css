@@ -1,7 +1,7 @@
 .board {
   position: absolute;
-  top:50;
-  left:30%;
+  top:30;
+  left:25%;
 }
 
 .row {
@@ -12,10 +12,10 @@
   display: inline-block;
   float: left;
   border: 1px solid black;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   text-align: center;
-  line-height: 50px;
+  line-height: 30px;
   font-size: 20pt;
 }
 
@@ -24,10 +24,10 @@
   display: inline-block;
   float: left;
   border: 1px solid black;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   text-align: center;
-  line-height: 50px;
+  line-height: 30px;
   font-size: 20pt;
 }
 
@@ -36,10 +36,10 @@
   display: inline-block;
   float: left;
   border: 1px solid black;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   text-align: center;
-  line-height: 50px;
+  line-height: 30px;
   font-size: 20pt;
 }
 
@@ -48,15 +48,27 @@
   display: inline-block;
   float: left;
   border: 1px solid black;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   text-align: center;
-  line-height: 50px;
+  line-height: 30px;
+  font-size: 20pt;
+}
+
+.wall {
+  background: blue;
+  display: inline-block;
+  float: left;
+  border: 1px solid black;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
   font-size: 20pt;
 }
 
 .endmsg {
-  position: absolute;
+ /* position: absolute;*/
   text-align: center;
   color: red;
   font-size: 15em;
