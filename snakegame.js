@@ -102,6 +102,8 @@ var SnakeBoard = (function () {
       // console.log("sliding!");
       this.slide(x, y);
     }
+
+    this.lastDirection = { x: x, y: y };
   }
 
   SnakeBoard.prototype.slide = function (x, y) {
@@ -112,8 +114,6 @@ var SnakeBoard = (function () {
 
     this.head.x += x;
     this.head.y += y;
-
-    this.lastDirection = { x: x, y: y };
   }
 
   SnakeBoard.prototype.pushSegment = function () {
@@ -156,7 +156,7 @@ var SnakeBoard = (function () {
     var that = this;
 
     var dups = _.select(this.snake, function (seg) {
-      return _.isEqual(seg, that.head);
+      return _.isEqual(seg, that.impulse);
     });
 
     return dups.length > 1;
