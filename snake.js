@@ -176,20 +176,20 @@ var SnakeBoard = (function () {
 
 var b = new SnakeBoard();
 b.render();
-b.moveHead(1, 0);
-b.render();
-b.moveHead(0, 1);
-b.render();
-b.moveHead(0, 1);
-b.render();
-b.moveHead(0, 1);
-b.render();
-b.moveHead(-1, 0);
-b.render();
-b.moveHead(0, 1);
-b.render();
-b.moveHead(-1, 0);
-b.render();
+// b.moveHead(1, 0);
+// b.render();
+// b.moveHead(0, 1);
+// b.render();
+// b.moveHead(0, 1);
+// b.render();
+// b.moveHead(0, 1);
+// b.render();
+// b.moveHead(-1, 0);
+// b.render();
+// b.moveHead(0, 1);
+// b.render();
+// b.moveHead(-1, 0);
+// b.render();
 
 
 

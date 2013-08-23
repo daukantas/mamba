@@ -55,9 +55,6 @@ var SnakeUI = (function () {
     }
   }
 
-  Game.prototype.lose = function () {
-  }
-
   Game.prototype.messageIfWon = function () {
     if (this.board.won()) {
       var $winMsg = $('<div class="endmsg">You won!!!</div>');
