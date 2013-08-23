@@ -4,7 +4,7 @@ body {
 
 .board {
   position: absolute;
-  background: lightGray;
+  background: lightgray;
   top:30;
   left:25%;
   z-index: -1;
@@ -17,7 +17,7 @@ body {
 .col {
   display: inline-block;
   float: left;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   width: 30px;
   height: 30px;
   text-align: center;
@@ -26,19 +26,21 @@ body {
 }
 
 #apple {
-    background: green;
+  background: green;
 }
 
 #head {
   background: red;
+  /*border: 1px solid black;*/
 }
 
 #segment {
-  background: black;
+  background: chocolate;
+ /* border: 1px solid black;*/
 }
 
 #wall {
-  background: blue;
+  background: black;
 }
 
 .endmsg {
