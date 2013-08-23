@@ -15,6 +15,9 @@ var SnakeBoard = (function () {
 
     this.walls = [];
     this.randomWalls();
+
+    console.log(this.walls.length);
+    console.log(this.apples.length);
   };
 
   SnakeBoard.prototype.valid_dirs = function () {
@@ -29,8 +32,8 @@ var SnakeBoard = (function () {
   SnakeBoard.prototype.randomApples = function () {
     var i = 0;
     while (i < 30) {
-      var randX = _.random(0, 19);
-      var randY = _.random(0, 19);
+      var randX = _.random(0, this.dim - 1);
+      var randY = _.random(0, this.dim - 1);
 
       var apple = {x: randX, y: randY};
       if (!_.isEqual(this.head, apple)) {
@@ -43,7 +46,7 @@ var SnakeBoard = (function () {
   SnakeBoard.prototype.applesDontContain = function(pos) {
     var that = this;
     return _.some(this.apples, function (apple) {
-      return _.isEqual(apple, pos);
+      return !_.isEqual(apple, pos);
     })
   }
 
@@ -53,9 +56,9 @@ var SnakeBoard = (function () {
   */
   SnakeBoard.prototype.randomWalls = function () {
     var i = 0;
-    while (i < 20) {
-      var randX = _.random(0, 19);
-      var randY = _.random(0, 19);
+    while (i < 30) {
+      var randX = _.random(0, this.dim - 1);
+      var randY = _.random(0, this.dim - 1);
 
       var wall = {x: randX, y: randY};
       if (!_.isEqual(this.head, wall) && 
