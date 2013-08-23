@@ -23,7 +23,7 @@ var SnakeUI = (function () {
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 300);
+    }, 200);
   }
 
   Game.prototype.setImpulse = function () {
@@ -54,11 +54,11 @@ var SnakeUI = (function () {
         var $cell = $('<div class="col" id="cell' + i + j + '"></div>')
 
         if (_.isEqual(that.board.head, {x: i, y: j})) {
-          $cell.text("H");
+          $cell.removeClass("col").addClass("H");
         } else if (that.board.hasSeg({x: i, y: j})) {
-          $cell.text("S");
+          $cell.removeClass("col").addClass("S");
         } else if (that.board.hasApple({x: i, y: j})) {
-          $cell.text("A");
+          $cell.removeClass("col").addClass("A");
         }
 
         $("#row" + i).append($cell);
