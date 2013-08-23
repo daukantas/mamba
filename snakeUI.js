@@ -54,11 +54,11 @@ var SnakeUI = (function () {
         var $cell = $('<div class="col" id="cell' + i + j + '"></div>')
 
         if (_.isEqual(that.board.head, {x: i, y: j})) {
-          $cell.removeClass("col").addClass("H");
+          $cell.removeClass("col").addClass("head");
         } else if (that.board.hasSeg({x: i, y: j})) {
-          $cell.removeClass("col").addClass("S");
+          $cell.removeClass("col").addClass("segment");
         } else if (that.board.hasApple({x: i, y: j})) {
-          $cell.removeClass("col").addClass("A");
+          $cell.removeClass("col").addClass("apple");
         }
 
         $("#row" + i).append($cell);

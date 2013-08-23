@@ -19,7 +19,7 @@
   font-size: 20pt;
 }
 
-.H {
+.head {
   background: gray;
   display: inline-block;
   float: left;
@@ -31,8 +31,8 @@
   font-size: 20pt;
 }
 
-.A {
-  background: red;
+.apple {
+  background: green;
   display: inline-block;
   float: left;
   border: 1px solid black;
@@ -43,7 +43,7 @@
   font-size: 20pt;
 }
 
-.S {
+.segment {
   background: black;
   display: inline-block;
   float: left;
