@@ -64,7 +64,6 @@ var SnakeBoard = (function () {
     //           Math.min(pos.x, pos.y) < 0) {
     //  return false;
     } else if (!this.valid_dir(x, y)) {
-      console.log("^");
       return false;
     }
 
@@ -89,10 +88,10 @@ var SnakeBoard = (function () {
     this.impulse = {x: this.head.x + x,
                     y: this.head.y + y};
 
-    if (this.lose()) {
-      console.log("You lose.");
-      return;
-    }
+    // if (this.lose()) {
+    //   console.log("You lose.");
+    //   return;
+    // }
     if (this.hasApple(this.impulse)) {
       // console.log("Adding segment.");
       this.slide(x, y);
@@ -174,8 +173,8 @@ var SnakeBoard = (function () {
   return SnakeBoard;
 })();
 
-var b = new SnakeBoard();
-b.render();
+// var b = new SnakeBoard();
+// b.render();
 // b.moveHead(1, 0);
 // b.render();
 // b.moveHead(0, 1);
