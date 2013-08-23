@@ -1,140 +1,140 @@
-var Snake = (function () {
+// var _u = require('underscore');
 
-	function Segment (x, y) {
-		this.x = x;
-		this.y = y;
-		this.child = null;
-	}
+var SnakeBoard = (function () {
 
-	function Board () {
+	function SnakeBoard () {
 		this.dim = 10;
-		this.head = new Segment(4, 4);
+		this.valid_dirs();
+
+		this.snake = [{x: 4, y: 4}];
+		this.head = _.first(this.snake);
 		this.lastDirection = { x: 0, y: 0 };
+
 		this.apples = [];
 		this.randomApples();
 	};
 
-	Board.prototype.apple = function (x, y) {
+	SnakeBoard.prototype.valid_dirs = function () {
+		this.VALID_DIRS = [];
+		var that = this;
+		_.each([-1, 1], function(u) {
+			that.VALID_DIRS.push({x: u, y: 0});
+			that.VALID_DIRS.push({x: 0, y: u});
+		})
+	}
+
+	SnakeBoard.prototype.createApple = function (x, y) {
 		this.apples.push({x: x, y: y});
 	}
 
-	Board.prototype.randomApples = function () {
+	SnakeBoard.prototype.randomApples = function () {
 		var i = 0;
-		while (i < 5) {
-			var randomX = Math.floor(Math.random() * 10);
-			var randomY = Math.floor(Math.random() * 10);
-			if (this.head.x != randomX || 
-					this.head.y != randomY) {
-				this.apple(randomX, randomY);
+		while (i < 10) {
+			var randX = _.random(0, 9);
+			var randY = _.random(0, 9);
+			if (!_.isEqual(this.head, {x: randX, y: randY})) {
+				this.createApple(randX, randY);
 				i++;
 			}
 		}
 	}
 
-	Board.prototype.moveHead = function (x, y) {
-		var pos = {x: this.head.x + x,
-							 y: this.head.y + y};
-
-		if (this.isInvalidDir(x, y)) {
-			console.log("Invalid move!");
-			return;
-		} else if (this.hasApple(pos)) {
-			console.log("adding segment");
-			this.slide(x, y);
-			this.addSegment();
-			this.destroyApple(pos);
-		} else {
-			this.slide(x, y);
-		}
+	SnakeBoard.prototype.destroyApple = function (pos) {
+		this.apples = _.reject(this.apples, function(ap) {
+			return _.isEqual(ap, pos);
+		});
 	}
 
-	Board.prototype.destroyApple = function (pos) {
-		for (var i = 0; i < this.apples.length; i++) {
-			var apple = this.apples[i];
-			if (apple.x === pos.x && apple.y === pos.y) {
-				this.apples.splice(i, 1);
-			}
-		}
+	SnakeBoard.prototype.valid_dir = function (x, y) {
+		var that = this;
+		return _.some(this.VALID_DIRS, function(dir) {
+			return _.isEqual(dir, {x: x, y: y});
+		})
 	}
 
-	Board.prototype.isInvalidDir = function (x, y) {
+	SnakeBoard.prototype.isValidDir = function (x, y) {
+		var vec = {x: x, y: y};
 		var pos = {x: this.head.x + x,
 							 y: this.head.y + y};
 
 		if (x == -this.lastDirection.x &&
 			  y == -this.lastDirection.y) {
-			return true;
-		} else if (Math.max(pos.x, pos.y) > this.dim - 1 || 
-							 Math.min(pos.x, pos.y) < 0) {
-			return true;
+			return false;
+		// } else if (Math.max(pos.x, pos.y) > this.dim - 1 || 
+		// 					 Math.min(pos.x, pos.y) < 0) {
+		// 	return false;
+		} else if (!this.valid_dir(x, y)) {
+			console.log("^");
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
-	Board.prototype.hasApple = function (pos) {
-		for (var i = 0; i < this.apples.length; i++) {
-			var apple = this.apples[i];
-			if (apple.x === pos.x && apple.y === pos.y) {
-				return true;
-			}
+	SnakeBoard.prototype.hasApple = function (pos) {
+		var that = this;
+		return _.some(this.apples, function(apple) {
+			return _.isEqual(apple, pos);
+		})
+	}
+
+	SnakeBoard.prototype.hasSeg = function(pos) {
+		var that = this;
+		return _.some(this.snake, function(seg) {
+			return _.isEqual(seg, pos);
+		})
+	}
+
+	SnakeBoard.prototype.moveHead = function (x, y) {		
+		this.impulse = {x: this.head.x + x,
+							 			y: this.head.y + y};
+
+		if (this.lose()) {
+			console.log("You lose.");
+			return;
 		}
-
-		return false;
-	}
-
-	Board.prototype.hasSeg = function(pos) {
-		var runner = this.head;
-
-		while (runner) {
-			if (runner.x == pos.x && runner.y == pos.y) {
-				return true;
-			}
-
-			runner = runner.child;
+		if (this.hasApple(this.impulse)) {
+			// console.log("Adding segment.");
+			this.slide(x, y);
+			this.pushSegment();
+			this.destroyApple(this.impulse);
+		} else {
+			// console.log("sliding!");
+			this.slide(x, y);
 		}
-
-		return false;
 	}
 
-	Board.prototype.slide = function (x, y) {
-		console.log("sliding!");
-		var runner = this.head;
-
-		while (runner.child != null) {
-			runner.child.x = runner.x;
-			runner.child.y = runner.y;
-			runner = runner.child;
+	SnakeBoard.prototype.slide = function (x, y) {
+		for (var i = this.snake.length - 1; i > 0; i--) {
+			this.snake[i].x = this.snake[i - 1].x;
+			this.snake[i].y = this.snake[i - 1].y;
 		}
 
 		this.head.x += x;
 		this.head.y += y;
+
 		this.lastDirection = { x: x, y: y };
 	}
 
-	Board.prototype.addSegment = function () {
-		console.log("in add segment");
+	SnakeBoard.prototype.pushSegment = function () {
+		var tail = _.last(this.snake);
 
-		var runner = this.head;
-		while (runner.child != null) {
-			runner = runner.child;
-		}
-
-		runner.child = new Segment(runner.x - this.lastDirection.x,
-															 runner.y - this.lastDirection.y);
+		this.snake.push({x: tail.x - this.lastDirection.x,
+										 y: tail.y - this.lastDirection.y});
 	}
 
-	Board.prototype.render = function () {
+	SnakeBoard.prototype.render = function () {
 		var str = "";
 
 		for (var i = 0; i < this.dim; i++) {
 			for (var j = 0; j < this.dim; j++) {
 				
-				// Poor performance!
 				if (this.hasApple({x: i, y: j})) {
 					str += " A ";
+				} else if (_.isEqual(this.head, {x: i, y: j})){
+					str += " H ";
 				} else if (this.hasSeg({x: i, y: j})) {
-					str += " * ";
+					str += " S ";
 				} else {
 					str += " _ ";
 				}
@@ -148,16 +148,33 @@ var Snake = (function () {
 		console.log(str);
 	}
 
-	Board.prototype.won = function () {
+	SnakeBoard.prototype.won = function () {
 		return this.apples.length == 0;
 	}
 
-	return { Board: Board,
-					 Segment: Segment }
+	SnakeBoard.prototype.selfCollision = function () {
+		var that = this;
+
+		var dups = _.select(this.snake, function (seg) {
+			return _.isEqual(seg, that.head);
+		});
+
+		return dups.length > 1;
+	}
+
+	SnakeBoard.prototype.wallCollision = function () {
+		return (Math.max(this.impulse.x, this.impulse.y) > this.dim - 1 || 
+						Math.min(this.impulse.x, this.impulse.y) < 0);
+	}
+
+	SnakeBoard.prototype.lose = function () {
+		return this.wallCollision() || this.selfCollision();
+	}
+
+	return SnakeBoard;
 })();
 
-var g = Snake;
-var b = new g.Board();
+var b = new SnakeBoard();
 b.render();
 b.moveHead(1, 0);
 b.render();
@@ -171,9 +188,8 @@ b.moveHead(-1, 0);
 b.render();
 b.moveHead(0, 1);
 b.render();
-b.moveHead(0, 1);
+b.moveHead(-1, 0);
 b.render();
-
 
 
 
