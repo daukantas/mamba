@@ -1,7 +1,9 @@
 .board {
   position: absolute;
+  background: lightGray;
   top:30;
   left:25%;
+  z-index: -1;
 }
 
 .row {
@@ -36,7 +38,8 @@
 }
 
 .endmsg {
- /* position: absolute;*/
+  /*position: relative;*/
+/*  z-index: -1;*/
   text-align: center;
   color: red;
   font-size: 15em;

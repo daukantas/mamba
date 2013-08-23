@@ -98,13 +98,13 @@ var SnakeUI = (function () {
 
   Game.prototype.wonAction = function () {
     var $winMsg = $('<div class="endmsg">You win!</div>');
-    $("body").append($winMsg);
+    $("body").prepend($winMsg);
     clearInterval(this.interval);
   }
 
   Game.prototype.loseAction = function () {
     var $loseMsg = $('<div class="endmsg">You lose.</div>');
-    $("body").append($loseMsg);
+    $("body").prepend($loseMsg);
     clearInterval(this.interval);
   }
 
