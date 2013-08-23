@@ -9,44 +9,73 @@ var Snake = (function () {
 	function Board () {
 		this.dim = 10;
 		this.head = new Segment(4, 4);
-		this.lastDirection = null;
-		
+		this.lastDirection = { x: 0, y: 0 };
 		this.apples = [];
+		this.randomApples();
 	};
 
-	Board.apple = function (x, y) {
+	Board.prototype.apple = function (x, y) {
+		this.apples.push({x: x, y: y});
 	}
 
-	Board.prototype.move = function (x, y) {
+	Board.prototype.randomApples = function () {
+		var i = 0;
+		while (i < 5) {
+			var randomX = Math.floor(Math.random() * 10);
+			var randomY = Math.floor(Math.random() * 10);
+			if (this.head.x != randomX || 
+					this.head.y != randomY) {
+				this.apple(randomX, randomY);
+				i++;
+			}
+		}
+	}
+
+	Board.prototype.moveHead = function (x, y) {
 		var pos = {x: this.head.x + x,
 							 y: this.head.y + y};
 
-		if (this.isInvalidDir(pos)) {
+		if (this.isInvalidDir(x, y)) {
 			console.log("Invalid move!");
 			return;
 		} else if (this.hasApple(pos)) {
-			this.addSegment(pos);
+			console.log("adding segment");
+			this.slide(x, y);
+			this.addSegment();
+			this.destroyApple(pos);
+		} else {
+			this.slide(x, y);
 		}
-
-		this.slide(x, y);
 	}
 
-	Board.prototype.isInvalidDir = function (pos) {
-		if (pos.x == -this.lastDirection.x &&
-			  pos.y == -this.lastDirection.y) {
-			return false;
+	Board.prototype.destroyApple = function (pos) {
+		for (var i = 0; i < this.apples.length; i++) {
+			var apple = this.apples[i];
+			if (apple.x === pos.x && apple.y === pos.y) {
+				this.apples.splice(i, 1);
+			}
+		}
+	}
+
+	Board.prototype.isInvalidDir = function (x, y) {
+		var pos = {x: this.head.x + x,
+							 y: this.head.y + y};
+
+		if (x == -this.lastDirection.x &&
+			  y == -this.lastDirection.y) {
+			return true;
 		} else if (Math.max(pos.x, pos.y) > this.dim - 1 || 
 							 Math.min(pos.x, pos.y) < 0) {
-			return false;
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	Board.prototype.hasApple = function (pos) {
 		for (var i = 0; i < this.apples.length; i++) {
 			var apple = this.apples[i];
-			if (apple.x === newPos.x && apple.y === newPos.y) {
+			if (apple.x === pos.x && apple.y === pos.y) {
 				return true;
 			}
 		}
@@ -69,21 +98,30 @@ var Snake = (function () {
 	}
 
 	Board.prototype.slide = function (x, y) {
+		console.log("sliding!");
 		var runner = this.head;
 
-		while (runner.child) {
+		while (runner.child != null) {
 			runner.child.x = runner.x;
 			runner.child.y = runner.y;
+			runner = runner.child;
 		}
 
 		this.head.x += x;
 		this.head.y += y;
+		this.lastDirection = { x: x, y: y };
 	}
 
-	Board.prototype.addSegment = function (pos) {
-		var newHead = new Segment(pos.x, pos.y);
-		newHead.child = this.head;
-		this.head = newHead;
+	Board.prototype.addSegment = function () {
+		console.log("in add segment");
+
+		var runner = this.head;
+		while (runner.child != null) {
+			runner = runner.child;
+		}
+
+		runner.child = new Segment(runner.x - this.lastDirection.x,
+															 runner.y - this.lastDirection.y);
 	}
 
 	Board.prototype.render = function () {
@@ -110,6 +148,10 @@ var Snake = (function () {
 		console.log(str);
 	}
 
+	Board.prototype.won = function () {
+		return this.apples.length == 0;
+	}
+
 	return { Board: Board,
 					 Segment: Segment }
 })();
@@ -117,3 +159,21 @@ var Snake = (function () {
 var g = Snake;
 var b = new g.Board();
 b.render();
+b.moveHead(1, 0);
+b.render();
+b.moveHead(0, 1);
+b.render();
+b.moveHead(0, 1);
+b.render();
+b.moveHead(0, 1);
+b.render();
+b.moveHead(-1, 0);
+b.render();
+b.moveHead(0, 1);
+b.render();
+b.moveHead(0, 1);
+b.render();
+
+
+
+
