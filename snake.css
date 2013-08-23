@@ -1,3 +1,7 @@
+body {
+  background: black;
+}
+
 .board {
   position: absolute;
   background: lightGray;
@@ -26,7 +30,7 @@
 }
 
 #head {
-  background: gray;
+  background: red;
 }
 
 #segment {
