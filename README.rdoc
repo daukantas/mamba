@@ -5,4 +5,3 @@ Rewrite of javascript-based Snake game, using _.
 
 TODO:
 - scoring
-- do not allow reversals
