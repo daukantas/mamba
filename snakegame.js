@@ -47,7 +47,7 @@ var SnakeBoard = (function () {
 
   SnakeBoard.prototype.randomWalls = function () {
     var i = 0;
-    while (i < 20) {
+    while (i < 10) {
       var randX = _.random(0, this.dim -1);
       var randY = _.random(0, this.dim -1);
 
