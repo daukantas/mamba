@@ -4,4 +4,5 @@ snake
 Rewrite of javascript-based Snake game, using _.
 
 TODO:
-- Better CSS.
+- scoring
+- do not allow reversals

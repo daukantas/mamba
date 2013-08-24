@@ -31,7 +31,7 @@ var SnakeBoard = (function () {
 
   SnakeBoard.prototype.randomApples = function () {
     var i = 0;
-    while (i < 30) {
+    while (i < 20) {
       var randX = _.random(0, this.dim - 1);
       var randY = _.random(0, this.dim - 1);
 
@@ -45,15 +45,11 @@ var SnakeBoard = (function () {
 
   SnakeBoard.prototype.applesDontContain = function(pos) {
     var that = this;
-    return _.some(this.apples, function (apple) {
+    return _.every(this.apples, function (apple) {
       return !_.isEqual(apple, pos);
     })
   }
 
-  /*
-  Make sure there are no
-  intersections with this.apples.
-  */
   SnakeBoard.prototype.randomWalls = function () {
     var i = 0;
     while (i < 20) {
@@ -90,9 +86,6 @@ var SnakeBoard = (function () {
     if (x == -this.lastDirection.x &&
         y == -this.lastDirection.y) {
       return false;
-    // } else if (Math.max(pos.x, pos.y) > this.dim - 1 || 
-    //           Math.min(pos.x, pos.y) < 0) {
-    //  return false;
     } else if (!this.valid_dir(x, y)) {
       return false;
     }
@@ -125,17 +118,11 @@ var SnakeBoard = (function () {
     this.impulse = {x: this.head.x + x,
                     y: this.head.y + y};
 
-    // if (this.lose()) {
-    //   console.log("You lose.");
-    //   return;
-    // }
     if (this.hasApple(this.impulse)) {
-      // console.log("Adding segment.");
       this.slide(x, y);
       this.pushSegment();
       this.destroyApple(this.impulse);
     } else {
-      // console.log("sliding!");
       this.slide(x, y);
     }
 
@@ -192,6 +179,10 @@ var SnakeBoard = (function () {
   }
 
   SnakeBoard.prototype.selfCollision = function () {
+    if (this.snake.length < 5) {
+      return false;
+    }
+
     var that = this;
 
     var dups = _.select(this.snake, function (seg) {
@@ -226,21 +217,21 @@ var SnakeBoard = (function () {
 })();
 
 var b = new SnakeBoard();
-b.render();
-b.moveHead(1, 0);
-b.render();
-b.moveHead(0, 1);
-b.render();
-b.moveHead(0, 1);
-b.render();
-b.moveHead(0, 1);
-b.render();
-b.moveHead(-1, 0);
-b.render();
-b.moveHead(0, 1);
-b.render();
-b.moveHead(-1, 0);
-b.render();
+// b.render();
+// b.moveHead(1, 0);
+// b.render();
+// b.moveHead(0, 1);
+// b.render();
+// b.moveHead(0, 1);
+// b.render();
+// b.moveHead(0, 1);
+// b.render();
+// b.moveHead(-1, 0);
+// b.render();
+// b.moveHead(0, 1);
+// b.render();
+// b.moveHead(-1, 0);
+// b.render();
 
 
 

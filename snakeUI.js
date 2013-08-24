@@ -1,24 +1,24 @@
-// var _u = require('underscore');
-
 var SnakeUI = (function () {
 
   var Game = function () {
     this.board = new SnakeBoard();
-    this.render();
-    // this.setClickListener();
+    this.render();   
     this.setInterval();
     this.impulse = {x: 0, y: 0};
+    this.IMPULSES = { "up": {x: -1, y: 0},
+                      "down": {x: 1, y: 0},
+                      "left": {x: 0, y: -1},
+                      "right": {x: 0, y: 1} }
   }
 
   Game.prototype.setInterval = function () {
     var that = this;
+
     this.interval = window.setInterval(function () {
         that.setImpulse.apply(that);
         var impulse = that.impulse;
-        that.board.impulse = impulse;
-        // console.log(that.impulse);
 
-        that.makeMove(impulse.x, impulse.y);
+        that.makeMove(impulse);
         that.render();
 
         if (that.lose()) {
@@ -26,22 +26,18 @@ var SnakeUI = (function () {
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 100);
+    }, 200);
   }
 
   Game.prototype.setImpulse = function () {
     if (key.isPressed("up")) {
-      console.log("up");
-      this.impulse = {x: -1, y: 0};
+      this.impulse = this.IMPULSES.up; 
     } else if (key.isPressed("down")) {
-      console.log("down");
-      this.impulse = {x: 1, y: 0};
+      this.impulse = this.IMPULSES.down;
     } else if (key.isPressed("left")) {
-      console.log("left");
-      this.impulse = {x: 0, y: -1};
+      this.impulse = this.IMPULSES.left; 
     } else if (key.isPressed("right")) {
-      console.log("right");
-      this.impulse = {x: 0, y: 1};
+      this.impulse = this.IMPULSES.right; 
     }
   }
 
@@ -72,20 +68,8 @@ var SnakeUI = (function () {
     });
   }
 
-  // Game.prototype.setClickListener = function () {
-  //   var that = this;
-  //   $(".col").on('click', function () {
-  //     var posMatch = this.id.match(/cell(\d)(\d)/);
-  //     that.makeMove(posMatch[1], posMatch[2]);
-  //     console.log(posMatch[1], posMatch[2]);
-  //   });
-  // }
-
-  Game.prototype.makeMove = function (x, y) {
-    // var x_ = x - this.board.head.x,
-    //     y_ = y - this.board.head.y;
-
-    this.board.moveHead(x, y);
+  Game.prototype.makeMove = function (impulse) {
+    this.board.moveHead(impulse.x, impulse.y;
   }
 
   Game.prototype.lose = function () {
