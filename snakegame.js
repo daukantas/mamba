@@ -1,5 +1,3 @@
-// var _u = require('underscore');
-
 var SnakeBoard = (function () {
 
   function SnakeBoard () {
@@ -15,9 +13,6 @@ var SnakeBoard = (function () {
 
     this.walls = [];
     this.randomWalls();
-
-    console.log(this.walls.length);
-    console.log(this.apples.length);
   };
 
   SnakeBoard.prototype.valid_dirs = function () {
@@ -89,7 +84,6 @@ var SnakeBoard = (function () {
     } else if (!this.valid_dir(x, y)) {
       return false;
     }
-
     return true;
   }
 
@@ -126,7 +120,7 @@ var SnakeBoard = (function () {
       this.slide(x, y);
     }
 
-    this.lastDirection = { x: x, y: y };
+    this.lastDirection = {x: x, y: y};
   }
 
   SnakeBoard.prototype.slide = function (x, y) {
@@ -184,7 +178,6 @@ var SnakeBoard = (function () {
     }
 
     var that = this;
-
     var dups = _.select(this.snake, function (seg) {
       return _.isEqual(seg, that.impulse);
     });
@@ -215,23 +208,3 @@ var SnakeBoard = (function () {
 
   return SnakeBoard;
 })();
-
-var b = new SnakeBoard();
-// b.render();
-// b.moveHead(1, 0);
-// b.render();
-// b.moveHead(0, 1);
-// b.render();
-// b.moveHead(0, 1);
-// b.render();
-// b.moveHead(0, 1);
-// b.render();
-// b.moveHead(-1, 0);
-// b.render();
-// b.moveHead(0, 1);
-// b.render();
-// b.moveHead(-1, 0);
-// b.render();
-
-
-

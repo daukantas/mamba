@@ -15,10 +15,9 @@ var SnakeUI = (function () {
     var that = this;
 
     this.interval = window.setInterval(function () {
+        console.log(that.impulse);
         that.setImpulse.apply(that);
-        var impulse = that.impulse;
-
-        that.makeMove(impulse);
+        that.makeMove(that.impulse);
         that.render();
 
         if (that.lose()) {
@@ -26,17 +25,25 @@ var SnakeUI = (function () {
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 200);
+    }, 100);
+  }
+
+  Game.prototype.validImpulse = function (impulse) {
+    return this.board.isValidDir(impulse.x, impulse.y);
+  }
+
+  Game.prototype.validKey = function (dir) {
+    return key.isPressed(dir) && this.validImpulse(this.IMPULSES[dir]);
   }
 
   Game.prototype.setImpulse = function () {
-    if (key.isPressed("up")) {
+    if (this.validKey("up")) {
       this.impulse = this.IMPULSES.up; 
-    } else if (key.isPressed("down")) {
+    } else if (this.validKey("down")) {
       this.impulse = this.IMPULSES.down;
-    } else if (key.isPressed("left")) {
+    } else if (this.validKey("left")) {
       this.impulse = this.IMPULSES.left; 
-    } else if (key.isPressed("right")) {
+    } else if (this.validKey("right")) {
       this.impulse = this.IMPULSES.right; 
     }
   }
@@ -69,7 +76,7 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.makeMove = function (impulse) {
-    this.board.moveHead(impulse.x, impulse.y;
+    this.board.moveHead(impulse.x, impulse.y);
   }
 
   Game.prototype.lose = function () {
