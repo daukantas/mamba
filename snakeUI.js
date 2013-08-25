@@ -26,25 +26,25 @@ var SnakeUI = (function () {
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 100);
+    }, 75);
   }
 
   Game.prototype.validImpulse = function (impulse) {
     return this.board.isValidDir(impulse.x, impulse.y);
   }
 
-  Game.prototype.validKey = function (dir) {
+  Game.prototype.validKeyPress = function (dir) {
     return key.isPressed(dir) && this.validImpulse(this.IMPULSES[dir]);
   }
 
   Game.prototype.setImpulse = function () {
-    if (this.validKey("up")) {
+    if (this.validKeyPress("up")) {
       this.impulse = this.IMPULSES.up; 
-    } else if (this.validKey("down")) {
+    } else if (this.validKeyPress("down")) {
       this.impulse = this.IMPULSES.down;
-    } else if (this.validKey("left")) {
+    } else if (this.validKeyPress("left")) {
       this.impulse = this.IMPULSES.left; 
-    } else if (this.validKey("right")) {
+    } else if (this.validKeyPress("right")) {
       this.impulse = this.IMPULSES.right; 
     }
   }
