@@ -6,4 +6,5 @@ The object of the game is to eat all of the apples on the board without dying.
 
 TODO:
 - implement pause
-- do not pre-populate apples; instead, create as they are destroy. also, scoring. 
+- implement re-start
+- implement difficulty levels

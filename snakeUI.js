@@ -26,7 +26,7 @@ var SnakeUI = (function () {
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 75);
+    }, 100);
   }
 
   Game.prototype.validImpulse = function (impulse) {
