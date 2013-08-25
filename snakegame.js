@@ -1,18 +1,15 @@
 var SnakeBoard = (function () {
 
-  function SnakeBoard () {
-    this.dim = 20;
+  function SnakeBoard (dim, numApples, numWalls) {
+    this.dim = dim;
     this.valid_dirs();
     this.lastDirection = { x: 0, y: 0 };
 
-    this.snake = [{x: 9, y: 9}];
+    this.snake = [{x: this.dim / 2 - 1, y: this.dim / 2 - 1}];
     this.head = _.first(this.snake);
 
-    this.apples = [];
-    this.randomApples();
-
-    this.walls = [];
-    this.randomWalls();
+    this.randomApples(numApples);
+    this.randomWalls(numWalls);
   };
 
   SnakeBoard.prototype.valid_dirs = function () {
@@ -24,9 +21,11 @@ var SnakeBoard = (function () {
     })
   }
 
-  SnakeBoard.prototype.randomApples = function () {
+  SnakeBoard.prototype.randomApples = function (numApples) {
+    this.apples = [];
+
     var i = 0;
-    while (i < 20) {
+    while (i < numApples) {
       var randX = _.random(0, this.dim - 1);
       var randY = _.random(0, this.dim - 1);
 
@@ -45,9 +44,11 @@ var SnakeBoard = (function () {
     })
   }
 
-  SnakeBoard.prototype.randomWalls = function () {
+  SnakeBoard.prototype.randomWalls = function (numWalls) {
+    this.walls = [];
+    
     var i = 0;
-    while (i < 10) {
+    while (i < numWalls) {
       var randX = _.random(0, this.dim -1);
       var randY = _.random(0, this.dim -1);
 

@@ -25,22 +25,20 @@ body {
   font-size: 20pt;
 }
 
-#apple {
-  background: green;
+.col.apple {
+    background: green;
 }
 
-#head {
+.col.wall {
+    background: black;
+}
+
+.col.head {
   background: red;
-  /*border: 1px solid black;*/
 }
 
-#segment {
+.col.seg {
   background: chocolate;
- /* border: 1px solid black;*/
-}
-
-#wall {
-  background: black;
 }
 
 .endmsg {

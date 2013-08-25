@@ -1,8 +1,10 @@
 var SnakeUI = (function () {
 
-  var Game = function () {
-    this.board = new SnakeBoard();
-    this.render();   
+  var Game = function (dim, numApples, numWalls) {
+    this.board = new SnakeBoard(dim, numApples, numWalls);
+    this.dim = this.board.dim;
+    this.createBoard();   
+    this.updateBoard();
     this.setInterval();
     this.impulse = {x: 0, y: 0};
     this.IMPULSES = { "up": {x: -1, y: 0},
@@ -15,17 +17,16 @@ var SnakeUI = (function () {
     var that = this;
 
     this.interval = window.setInterval(function () {
-        console.log(that.impulse);
         that.setImpulse.apply(that);
         that.makeMove(that.impulse);
-        that.render();
+        that.updateBoard();
 
         if (that.lose()) {
           that.loseAction();
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 100);
+    }, 75);
   }
 
   Game.prototype.validImpulse = function (impulse) {
@@ -48,31 +49,55 @@ var SnakeUI = (function () {
     }
   }
 
-  Game.prototype.render = function () {
-    $("body").empty();
+  Game.prototype.createBoard = function () {
     var that = this;
 
     $("body").append($('<div class="board"></div>'));
-    return _.times(20, function (i) {
-      var $row = $('<div class="row" id="row' + i + '"></div>')
+    return _.times(that.dim, function (i) {
+      var $row = $('<div class="row" id="' + i + '"></div>')
       $(".board").append($row);
-      return _.times(20, function (j) {
+
+      return _.times(that.dim, function (j) {
         var $cell = $('<div class="col"></div>');
         var pos = {x: i, y: j};
 
         if (_.isEqual(that.board.head, pos)) {
-          $cell.attr("id", "head");
+          $cell.toggleClass("head");
         } else if (that.board.hasSeg(pos)) {
-          $cell.attr("id", "segment");
+          $cell.toggleClass("seg");
         } else if (that.board.hasWall(pos)) {
-          $cell.attr("id", "wall");
+          $cell.toggleClass("wall");
         } else if (that.board.hasApple(pos)) {
-          $cell.attr("id", "apple");
-        }
+          $cell.toggleClass("apple");
+        } 
 
-        $("#row" + i).append($cell);
+        $(".row#" + i).append($cell);
       });
     });
+  }
+
+  Game.prototype.updateBoard = function () {
+    var that = this;
+
+    _.times(that.dim, function (i) {
+      var $rowCells = $(".row#" + i).children();
+
+      $rowCells.each(function (j, el) {
+        var pos = {x: i, y: j};
+
+        if (that.board.hasApple(pos)) {
+          el.setAttribute("class", "col apple");
+        } else if (that.board.hasWall(pos)) {
+          el.setAttribute("class", "col wall");
+        } else if (_.isEqual(that.board.head, pos)) {
+          el.setAttribute("class", "col head");
+        } else if (that.board.hasSeg(pos)) {
+          el.setAttribute("class", "col seg");
+        } else {
+          el.setAttribute("class", "col");
+        }
+      })
+    })
   }
 
   Game.prototype.makeMove = function (impulse) {
