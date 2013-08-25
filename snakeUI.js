@@ -4,7 +4,6 @@ var SnakeUI = (function () {
     this.board = new SnakeBoard(dim, numApples, numWalls);
     this.dim = this.board.dim;
     this.createBoard();   
-    this.updateBoard();
     this.setInterval();
     this.impulse = {x: 0, y: 0};
     this.IMPULSES = { "up": {x: -1, y: 0},
