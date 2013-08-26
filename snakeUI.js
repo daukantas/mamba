@@ -89,11 +89,11 @@ var SnakeUI = (function () {
     // Determined at run-time if varying board-size, 
     // though I'm settling on fixed size.
     $("div.board").css({
-                    "width": this.dim * 35 + "px",
-                    "height": this.dim * 35 + "px",
-                    "margin-left": -this.dim * 35 / 2 + "px",
-                    "margin-top": -this.dim * 35 / 2 + "px"
-                  });
+      "width": this.dim * 35 + "px",
+      "height": this.dim * 35 + "px",
+      "margin-left": -this.dim * 35 / 2 + "px",
+      "margin-top": -this.dim * 35 / 2 + "px"
+    });
 
     return _.times(that.dim, function (i) {
       var $row = $('<div class="row" id="' + i + '"></div>')
@@ -166,16 +166,24 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.displayMessage = function (msg) {
+    var that = this;
+    var times = 5;
+
+    var flash = function() {
       $("#message").html(msg);
-      this.timeout = window.setTimeout(function () {
+      times--;
+
+      if (times == 0) {
+        return;
+      }
+
+      window.setTimeout(function () {
         $("#message").html("");
-        window.setTimeout(function () {
-          $("#message").html(msg);
-          window.setTimeout(function () {
-            $("#message").html("");
-          }, 2000);
-        }, 2000);
+        flash();
       }, 2000);
+    }
+
+    flash();
   }
 
   // 'r' keycode: 114.
@@ -184,9 +192,8 @@ var SnakeUI = (function () {
 
     $(window).keypress(function (ev) {
       if (ev.which == 114) {
-        that.restart();
+        that.restart.apply(that);
         $(window).off('keypress');
-        that.clearTimeout(that.timeout);
      }
     })
   }
@@ -200,6 +207,7 @@ var SnakeUI = (function () {
     }
 
     $("body").empty();
+    clearTimeout(this.timeout);
     new Game(opts);
   }
 
