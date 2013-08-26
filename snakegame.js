@@ -50,7 +50,7 @@ var SnakeBoard = (function () {
       if (this.doesntOverlap("apples", wall) &&
           this.doesntOverlap("walls", wall) &&
           this.doesntOverlap("snake", wall) &&
-          this.distance(this.head, wall) > 3) {
+          this.distance(this.head, wall) > 5) {
         this.walls.push(wall);
         i++;
       }

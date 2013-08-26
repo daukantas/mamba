@@ -3,7 +3,7 @@
   width: 500px;
   height: auto;
   margin-top: 125px;
-  margin-left: 50px;
+  margin-left: 100px;
   float: left;
   font: bold 50 consolas;
   text-align: left;
@@ -11,6 +11,11 @@
 }
 
 #score { 
+  font: 40 consolas;
+  text-align: left;
+}
+
+#streak { 
   font: 40 consolas;
   text-align: left;
 }

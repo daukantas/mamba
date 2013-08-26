@@ -62,19 +62,14 @@ var SnakeUI = (function () {
   Game.prototype.createBorders = function () {
     var $sidebar = $('<div id="sidebar"></div>').html("SNAKE GAME remix");
     var $content = $('<div id="content"></div>');
-    var $score = $('<p id="score">score: ' + 
-                  (this.numApples - this.board.apples.length) + 
-                  '</p>');
+    var $score = $('<p id="score">score: 0</p>');
+    var $streak = $('<p id="streak">streak: 0</p>');
+    var $message = $('<p id="message"></p>');
 
     $("body").append($sidebar);
     $("#sidebar").append($content);
     $("#content").append($score);
-  }
-
-  Game.prototype.updateScore = function () {
-    var score = this.numApples * (this.numClears + 1) - this.board.apples.length;
-
-    $("#score").html("score: " + score);
+    $("#content").append($streak);
   }
 
   Game.prototype.initDisplay = function () {
@@ -139,13 +134,28 @@ var SnakeUI = (function () {
       })
     })
 
-    this.updateScore();
-
     if (!this.board.apples.length) {
-      this.board.randomApples(this.numApples);
-      this.numClears++;
+      this.repopulateApples();
       this.shuffleWalls();
+      this.numClears++;
     }
+
+    this.updateScore();
+    this.updateStreak();
+  }
+
+  Game.prototype.updateScore = function () {
+    var score = this.numApples * (this.numClears + 1) - this.board.apples.length;
+
+    $("#score").html("score: " + score);
+  }
+
+  Game.prototype.updateStreak = function () {
+    $("#streak").html("streak: " + this.numClears); 
+  }
+
+  Game.prototype.repopulateApples = function () {
+    this.board.randomApples(this.numApples);
   }
 
   Game.prototype.shuffleWalls = function () {
@@ -162,8 +172,6 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.loseAction = function () {
-    // var $loseMsg = $('<div class="endmsg">You lose.</div>');
-    // $("body").prepend($loseMsg);
     clearInterval(this.interval);
   }
 
