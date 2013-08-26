@@ -10,9 +10,6 @@ var SnakeUI = (function () {
     this.dim = this.board.dim;
     this.initDisplay();
 
-    // this.createCounters();
-    // this.createTitleBar();
-
     this.setInterval(opts.timeStep);
     this.impulse = {x: 0, y: 0};
 
@@ -22,6 +19,8 @@ var SnakeUI = (function () {
       "left": {x: 0, y: -1}, 
       "right": {x: 0, y: 1} 
     }
+
+    this.numClears = 0;
   }
 
   Game.prototype.setInterval = function (timeStep) {
@@ -37,10 +36,6 @@ var SnakeUI = (function () {
         }
     }, timeStep);
   }
-
-  // Game.prototype.createCounter = function () {
-  //   $("body").
-  // }
 
   Game.prototype.validImpulse = function (impulse) {
     return this.board.validImpulse(impulse);
@@ -62,23 +57,34 @@ var SnakeUI = (function () {
     }
   }
 
-  Game.prototype.createLeftSideBar = function () {
+  Game.prototype.createBorders = function () {
+    var $sidebar = $('<div id="sidebar"></div>').html("SNAKE GAME remix");
+    var $content = $('<div id="content"></div>');
+    var $score = $('<p id="score">score: ' + 
+                  (this.numApples - this.board.apples.length) + 
+                  '</p>');
 
+    $("body").append($sidebar);
+    $("#sidebar").append($content);
+    $("#content").append($score);
   }
 
-  Game.prototype.createRightSideBar = function () {
+  Game.prototype.updateScore = function () {
+    var score = this.numApples * (this.numClears + 1) - this.board.apples.length;
 
+    $("#score").html("score: " + score);
   }
 
   Game.prototype.initDisplay = function () {
+    this.createBorders();
+
     var that = this;
-
-
 
     $("body").append($('<div class="board"></div>'));
     $("div.board").toggleClass("center");
 
-    // Must be determined at run-time!
+    // Determined at run-time if varying board-size, 
+    // though I'm settling on fixed size.
     $("div.board").css({
                     "width": this.dim * 35 + "px",
                     "height": this.dim * 35 + "px",
@@ -131,8 +137,11 @@ var SnakeUI = (function () {
       })
     })
 
+    this.updateScore();
+
     if (!this.board.apples.length) {
       this.board.randomApples(this.numApples);
+      this.numClears++;
     }
   }
 
@@ -145,8 +154,8 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.loseAction = function () {
-    var $loseMsg = $('<div class="endmsg">You lose.</div>');
-    $("body").prepend($loseMsg);
+    // var $loseMsg = $('<div class="endmsg">You lose.</div>');
+    // $("body").prepend($loseMsg);
     clearInterval(this.interval);
   }
 

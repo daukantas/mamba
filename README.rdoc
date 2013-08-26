@@ -2,7 +2,6 @@ snake
 =====
 
 Rewrite of javascript-based Snake game, using _.
-The object of the game is to eat all of the apples on the board without dying.
 
 TODO:
 - implement pause

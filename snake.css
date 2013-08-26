@@ -1,3 +1,25 @@
+#sidebar { 
+  position: absolute;
+  width: 500px;
+  height: auto;
+  margin-top: 125px;
+  margin-left: 50px;
+  float: left;
+  font: bold 50 consolas;
+  text-align: left;
+  color: lightGray;
+}
+
+#score { 
+  font: 40 consolas;
+  text-align: left;
+}
+
+#content {
+  width: 500px;
+  height: 500px;
+}
+
 body {
   background: black;
 }
@@ -40,8 +62,6 @@ body {
 }
 
 .endmsg {
-  /*position: relative;*/
-/*  z-index: -1;*/
   text-align: center;
   color: red;
   font-size: 15em;
