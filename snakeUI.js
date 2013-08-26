@@ -6,7 +6,9 @@ var SnakeUI = (function () {
                   opts.numWalls
                 );
 
+    this.numWalls = opts.numWalls;
     this.numApples = opts.numApples;
+
     this.dim = this.board.dim;
     this.initDisplay();
 
@@ -142,7 +144,13 @@ var SnakeUI = (function () {
     if (!this.board.apples.length) {
       this.board.randomApples(this.numApples);
       this.numClears++;
+      this.shuffleWalls();
     }
+  }
+
+  Game.prototype.shuffleWalls = function () {
+    this.board.walls = [];
+    this.board.randomWalls(this.numWalls);
   }
 
   Game.prototype.makeMove = function (impulse) {

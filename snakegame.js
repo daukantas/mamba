@@ -20,7 +20,6 @@ var SnakeBoard = (function () {
     })
   }
 
-  // Apples are generated many times.
   SnakeBoard.prototype.randomApples = function (numApples) {
     this.apples = [];
 
@@ -39,7 +38,6 @@ var SnakeBoard = (function () {
     }
   }
 
-  // Walls are generated once at initialization.
   SnakeBoard.prototype.randomWalls = function (numWalls) {
     this.walls = [];
     
@@ -49,13 +47,21 @@ var SnakeBoard = (function () {
       var randY = _.random(0, this.dim -1);
 
       var wall = {x: randX, y: randY};
-      if (!_.isEqual(this.head, wall) && 
-          this.doesntOverlap("apples", wall) &&
-          this.doesntOverlap("walls", wall)) {
+      if (this.doesntOverlap("apples", wall) &&
+          this.doesntOverlap("walls", wall) &&
+          this.doesntOverlap("snake", wall) &&
+          this.distance(this.head, wall) > 3) {
         this.walls.push(wall);
         i++;
       }
     }
+  }
+
+  SnakeBoard.prototype.distance = function (obj, other) {
+    var dx2 = Math.pow(obj.x - other.x, 2),
+        dy2 = Math.pow(obj.y - other.y, 2);
+
+    return Math.sqrt(dx2 + dy2);
   }
 
   SnakeBoard.prototype.doesntOverlap = function (type, pos) {
