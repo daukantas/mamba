@@ -2,16 +2,15 @@ body {
   background: black;
 }
 
+.center {
+  top:50%;
+  left:50%;
+}
+
 .board {
   position: absolute;
   background: lightgray;
-  top:30;
-  left:25%;
   z-index: -1;
-}
-
-.row {
-  display: block;
 }
 
 .col {
@@ -22,7 +21,6 @@ body {
   height: 30px;
   text-align: center;
   line-height: 30px;
-  font-size: 20pt;
 }
 
 .col.apple {

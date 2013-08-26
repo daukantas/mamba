@@ -1,18 +1,20 @@
 var SnakeUI = (function () {
 
-  var Game = function (dim, numApples, numWalls) {
+  var Game = function (dim, numApples, numWalls, timeStep) {
     this.board = new SnakeBoard(dim, numApples, numWalls);
     this.dim = this.board.dim;
     this.createBoard();   
-    this.setInterval();
+    this.setInterval(timeStep);
     this.impulse = {x: 0, y: 0};
     this.IMPULSES = { "up": {x: -1, y: 0},
                       "down": {x: 1, y: 0},
                       "left": {x: 0, y: -1},
                       "right": {x: 0, y: 1} }
+                      console.log(this.board.apples.length);
+                      console.log(this.board.walls.length);
   }
 
-  Game.prototype.setInterval = function () {
+  Game.prototype.setInterval = function (timeStep) {
     var that = this;
 
     this.interval = window.setInterval(function () {
@@ -25,8 +27,12 @@ var SnakeUI = (function () {
         } else if (that.won()) {
           that.wonAction();
         }
-    }, 75);
+    }, timeStep);
   }
+
+  // Game.prototype.createCounter = function () {
+  //   $("body").
+  // }
 
   Game.prototype.validImpulse = function (impulse) {
     return this.board.isValidDir(impulse.x, impulse.y);
@@ -52,6 +58,12 @@ var SnakeUI = (function () {
     var that = this;
 
     $("body").append($('<div class="board"></div>'));
+    $("div.board").toggleClass("center");
+    $("div.board").css({"width": this.dim * 30 + "px",
+                        "height": this.dim * 30 + "px",
+                        "margin-left": -this.dim * 30 / 2 + "px",
+                        "margin-top": -this.dim * 30 / 2 + "px",});
+
     return _.times(that.dim, function (i) {
       var $row = $('<div class="row" id="' + i + '"></div>')
       $(".board").append($row);
