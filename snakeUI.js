@@ -2,14 +2,15 @@ var SnakeUI = (function () {
 
   var Game = function (opts) {
     this.board = new SnakeBoard(opts.dim, 
-                  opts.numApples, 
-                  opts.numWalls
-                );
+      opts.numApples, 
+      opts.numWalls
+    );
 
+    this.dim = opts.dim;
     this.numWalls = opts.numWalls;
     this.numApples = opts.numApples;
-
-    this.dim = this.board.dim;
+    this.timeStep = opts.timeStep;
+    
     this.initDisplay();
 
     this.setInterval(opts.timeStep);
@@ -22,7 +23,7 @@ var SnakeUI = (function () {
       "right": {x: 0, y: 1} 
     }
 
-    this.numClears = 0;
+    this.streak = 0;
   }
 
   Game.prototype.setInterval = function (timeStep) {
@@ -143,7 +144,7 @@ var SnakeUI = (function () {
       this.displayMessage("great job!");
       this.repopulateApples();
       this.shuffleWalls();
-      this.numClears++;
+      this.streak++;
     } 
 
     this.updateScore();
@@ -151,13 +152,13 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.updateScore = function () {
-    var score = this.numApples * (this.numClears + 1) - this.board.apples.length;
+    var score = this.numApples * (this.streak + 1) - this.board.apples.length;
 
     $("#score").html("score: " + score);
   }
 
   Game.prototype.updateStreak = function () {
-    $("#streak").html("streak: " + this.numClears);
+    $("#streak").html("streak: " + this.streak);
   }
 
   Game.prototype.repopulateApples = function () {
@@ -177,8 +178,29 @@ var SnakeUI = (function () {
       }, 2000);
   }
 
+  // 'r' keycode: 114.
   Game.prototype.promptRestart = function () {
+    var that = this;
 
+    $(window).keypress(function (ev) {
+      if (ev.which == 114) {
+        that.restart();
+        $(window).off('keypress');
+        that.clearTimeout(that.timeout);
+     }
+    })
+  }
+
+  Game.prototype.restart = function () {
+    opts = {
+      dim: this.dim,
+      numWalls: this.numWalls,
+      numApples: this.numApples,
+      timeStep: this.timeStep 
+    }
+
+    $("body").empty();
+    new Game(opts);
   }
 
   Game.prototype.shuffleWalls = function () {
