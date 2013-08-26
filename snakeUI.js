@@ -34,8 +34,11 @@ var SnakeUI = (function () {
         that.updateBoard();
 
         if (that.lose()) {
-          that.loseAction();
+          that.displayMessage("game over!<br/>press 'r' to restart.", 1);
+          clearInterval(that.interval);
+          that.promptRestart();
         }
+
     }, timeStep);
   }
 
@@ -70,6 +73,7 @@ var SnakeUI = (function () {
     $("#sidebar").append($content);
     $("#content").append($score);
     $("#content").append($streak);
+    $("#content").append($message);
   }
 
   Game.prototype.initDisplay = function () {
@@ -135,10 +139,11 @@ var SnakeUI = (function () {
     })
 
     if (!this.board.apples.length) {
+      this.displayMessage("great job!");
       this.repopulateApples();
       this.shuffleWalls();
       this.numClears++;
-    }
+    } 
 
     this.updateScore();
     this.updateStreak();
@@ -151,11 +156,28 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.updateStreak = function () {
-    $("#streak").html("streak: " + this.numClears); 
+    $("#streak").html("streak: " + this.numClears);
   }
 
   Game.prototype.repopulateApples = function () {
     this.board.randomApples(this.numApples);
+  }
+
+  Game.prototype.displayMessage = function (msg) {
+      $("#message").html(msg);
+      window.setTimeout(function () {
+        $("#message").html("");
+        window.setTimeout(function () {
+          $("#message").html(msg);
+          window.setTimeout(function () {
+            $("#message").html("");
+          }, 2000);
+        }, 2000);
+      }, 2000);
+  }
+
+  Game.prototype.promptRestart = function () {
+
   }
 
   Game.prototype.shuffleWalls = function () {
@@ -172,7 +194,6 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.loseAction = function () {
-    clearInterval(this.interval);
   }
 
   return Game;

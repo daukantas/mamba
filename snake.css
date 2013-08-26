@@ -13,11 +13,19 @@
 #score { 
   font: 40 consolas;
   text-align: left;
+  color: green;
 }
 
 #streak { 
   font: 40 consolas;
   text-align: left;
+  color: cyan;
+}
+
+#message { 
+  font: 40 consolas;
+  text-align: left;
+  color: yellow;
 }
 
 #content {
