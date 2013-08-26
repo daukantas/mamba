@@ -8,7 +8,7 @@ var SnakeUI = (function () {
 
     this.numApples = opts.numApples;
     this.dim = this.board.dim;
-    this.createBoard();
+    this.initDisplay();
 
     // this.createCounters();
     // this.createTitleBar();
@@ -62,16 +62,28 @@ var SnakeUI = (function () {
     }
   }
 
-  Game.prototype.createBoard = function () {
+  Game.prototype.createLeftSideBar = function () {
+
+  }
+
+  Game.prototype.createRightSideBar = function () {
+
+  }
+
+  Game.prototype.initDisplay = function () {
     var that = this;
+
+
 
     $("body").append($('<div class="board"></div>'));
     $("div.board").toggleClass("center");
+
+    // Must be determined at run-time!
     $("div.board").css({
-                    "width": this.dim * 30 + "px",
-                    "height": this.dim * 30 + "px",
-                    "margin-left": -this.dim * 30 / 2 + "px",
-                    "margin-top": -this.dim * 30 / 2 + "px"
+                    "width": this.dim * 35 + "px",
+                    "height": this.dim * 35 + "px",
+                    "margin-left": -this.dim * 35 / 2 + "px",
+                    "margin-top": -this.dim * 35 / 2 + "px"
                   });
 
     return _.times(that.dim, function (i) {
@@ -84,11 +96,11 @@ var SnakeUI = (function () {
 
         if (_.isEqual(that.board.head, pos)) {
           $cell.toggleClass("head");
-        } else if (that.board.hasSeg(pos)) {
+        } else if (that.board.has("snake", pos)) {
           $cell.toggleClass("seg");
-        } else if (that.board.hasWall(pos)) {
+        } else if (that.board.has("walls", pos)) {
           $cell.toggleClass("wall");
-        } else if (that.board.hasApple(pos)) {
+        } else if (that.board.has("apples", pos)) {
           $cell.toggleClass("apple");
         } 
 
@@ -105,13 +117,13 @@ var SnakeUI = (function () {
         var $cell = $('div.row#' + i).children()[j];
 
         var pos = {x: i, y: j};
-        if (that.board.hasApple(pos)) {
+        if (that.board.has("apples", pos)) {
           $cell.setAttribute("class", "col apple");
-        } else if (that.board.hasWall(pos)) {
+        } else if (that.board.has("walls", pos)) {
           $cell.setAttribute("class", "col wall");
         } else if (_.isEqual(that.board.head, pos)) {
           $cell.setAttribute("class", "col head");
-        } else if (that.board.hasSeg(pos)) {
+        } else if (that.board.has("snake", pos)) {
           $cell.setAttribute("class", "col seg");
         } else {
           $cell.setAttribute("class", "col");

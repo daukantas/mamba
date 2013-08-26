@@ -94,32 +94,18 @@ var SnakeBoard = (function () {
     return true;
   }
 
-  SnakeBoard.prototype.hasApple = function (pos) {
+  SnakeBoard.prototype.has = function (type, pos) {
     var that = this;
-    return _.some(this.apples, function(apple) {
-      return _.isEqual(apple, pos);
+    return _.some(this[type], function (type) {
+      return _.isEqual(type, pos);
     })
-  }
-
-  SnakeBoard.prototype.hasSeg = function (pos) {
-    var that = this;
-    return _.some(this.snake, function (seg) {
-      return _.isEqual(seg, pos);
-    })
-  }
-
-  SnakeBoard.prototype.hasWall = function (pos) {
-    var that = this;
-    return _.some(this.walls, function (wall) {
-      return _.isEqual(pos, wall);
-    })  
   }
 
   SnakeBoard.prototype.moveHead = function (impulse) {
     this.impulse = {x: this.head.x + impulse.x,
                     y: this.head.y + impulse.y};
 
-    if (this.hasApple(this.impulse)) {
+    if (this.has("apples", this.impulse)) {
       this.slide(impulse);
       this.pushSegment();
       this.destroyApple(this.impulse);
@@ -156,13 +142,13 @@ var SnakeBoard = (function () {
     for (var i = 0; i < this.dim; i++) {
       for (var j = 0; j < this.dim; j++) {
         
-        if (this.hasApple(pos)) {
+        if (this.has("apples", pos)) {
           str += " A ";
         } else if (_.isEqual(this.head, pos)){
           str += " H ";
-        } else if (this.hasSeg(pos)) {
+        } else if (this.has("snake", pos)) {
           str += " S ";
-        } else if (this.hasWall(pos)) {
+        } else if (this.has("walls", pos)) {
           str += " W ";
         } else {
           str += " _ ";
