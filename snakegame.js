@@ -7,7 +7,6 @@ var SnakeBoard = (function () {
 
     this.snake = [{x: this.dim / 2 - 1, y: this.dim / 2 - 1}];
     this.head = _.first(this.snake);
-
     this.randomApples(numApples);
     this.randomWalls(numWalls);
   };
@@ -21,6 +20,7 @@ var SnakeBoard = (function () {
     })
   }
 
+  // Apples are generated many times.
   SnakeBoard.prototype.randomApples = function (numApples) {
     this.apples = [];
 
@@ -30,20 +30,16 @@ var SnakeBoard = (function () {
       var randY = _.random(0, this.dim - 1);
 
       var apple = {x: randX, y: randY};
-      if (!_.isEqual(this.head, apple)) {
+      if (this.doesntOverlap("apples", apple) && 
+          this.doesntOverlap("walls", apple) && 
+          this.doesntOverlap("snake", apple)) {
         this.apples.push(apple);
         i++;
       }
     }
   }
 
-  SnakeBoard.prototype.applesDontContain = function(pos) {
-    var that = this;
-    return _.every(this.apples, function (apple) {
-      return !_.isEqual(apple, pos);
-    })
-  }
-
+  // Walls are generated once at initialization.
   SnakeBoard.prototype.randomWalls = function (numWalls) {
     this.walls = [];
     
@@ -54,11 +50,19 @@ var SnakeBoard = (function () {
 
       var wall = {x: randX, y: randY};
       if (!_.isEqual(this.head, wall) && 
-          this.applesDontContain(wall)) {
+          this.doesntOverlap("apples", wall) &&
+          this.doesntOverlap("walls", wall)) {
         this.walls.push(wall);
         i++;
       }
     }
+  }
+
+  SnakeBoard.prototype.doesntOverlap = function (type, pos) {
+    var that = this;
+    return _.every(this[type], function (type) {
+      return !_.isEqual(type, pos);
+    })
   }
 
   SnakeBoard.prototype.destroyApple = function (pos) {
@@ -67,22 +71,24 @@ var SnakeBoard = (function () {
     });
   }
 
-  SnakeBoard.prototype.valid_dir = function (x, y) {
+  SnakeBoard.prototype.valid_dir = function (impulse) {
+    var x = impulse.x,
+        y = impulse.y;
+
     var that = this;
-    return _.some(this.VALID_DIRS, function(dir) {
+    return _.some(this.VALID_DIRS, function (dir) {
       return _.isEqual(dir, {x: x, y: y});
     })
   }
 
-  SnakeBoard.prototype.isValidDir = function (x, y) {
-    var vec = {x: x, y: y};
-    var pos = {x: this.head.x + x,
-               y: this.head.y + y};
+  SnakeBoard.prototype.validImpulse = function (impulse) {
+    var pos = {x: this.head.x + impulse.x,
+               y: this.head.y + impulse.y};
 
-    if (x == -this.lastDirection.x &&
-        y == -this.lastDirection.y) {
+    if (impulse.x == -this.lastDirection.x &&
+        impulse.y == -this.lastDirection.y) {
       return false;
-    } else if (!this.valid_dir(x, y)) {
+    } else if (!this.valid_dir(impulse)) {
       return false;
     }
     return true;
@@ -109,36 +115,38 @@ var SnakeBoard = (function () {
     })  
   }
 
-  SnakeBoard.prototype.moveHead = function (x, y) {   
-    this.impulse = {x: this.head.x + x,
-                    y: this.head.y + y};
+  SnakeBoard.prototype.moveHead = function (impulse) {
+    this.impulse = {x: this.head.x + impulse.x,
+                    y: this.head.y + impulse.y};
 
     if (this.hasApple(this.impulse)) {
-      this.slide(x, y);
+      this.slide(impulse);
       this.pushSegment();
       this.destroyApple(this.impulse);
     } else {
-      this.slide(x, y);
+      this.slide(impulse);
     }
 
-    this.lastDirection = {x: x, y: y};
+    this.lastDirection = impulse;
   }
 
-  SnakeBoard.prototype.slide = function (x, y) {
+  SnakeBoard.prototype.slide = function (impulse) {
     for (var i = this.snake.length - 1; i > 0; i--) {
       this.snake[i].x = this.snake[i - 1].x;
       this.snake[i].y = this.snake[i - 1].y;
     }
 
-    this.head.x += x;
-    this.head.y += y;
+    this.head.x += impulse.x;
+    this.head.y += impulse.y;
   }
 
   SnakeBoard.prototype.pushSegment = function () {
     var tail = _.last(this.snake);
 
-    this.snake.push({x: tail.x - this.lastDirection.x,
-                     y: tail.y - this.lastDirection.y});
+    this.snake.push({
+      x: tail.x - this.lastDirection.x,
+      y: tail.y - this.lastDirection.y
+    });
   }
 
   SnakeBoard.prototype.render = function () {
@@ -167,10 +175,6 @@ var SnakeBoard = (function () {
     }
 
     console.log(str);
-  }
-
-  SnakeBoard.prototype.won = function () {
-    return this.apples.length == 0;
   }
 
   SnakeBoard.prototype.selfCollision = function () {

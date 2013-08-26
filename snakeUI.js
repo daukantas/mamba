@@ -1,10 +1,18 @@
 var SnakeUI = (function () {
 
   var Game = function (opts) {
-    console.log(opts);
-    this.board = new SnakeBoard(opts.dim, opts.numApples, opts.numWalls);
+    this.board = new SnakeBoard(opts.dim, 
+                  opts.numApples, 
+                  opts.numWalls
+                );
+
+    this.numApples = opts.numApples;
     this.dim = this.board.dim;
-    this.createBoard();   
+    this.createBoard();
+
+    // this.createCounters();
+    // this.createTitleBar();
+
     this.setInterval(opts.timeStep);
     this.impulse = {x: 0, y: 0};
 
@@ -26,8 +34,6 @@ var SnakeUI = (function () {
 
         if (that.lose()) {
           that.loseAction();
-        } else if (that.won()) {
-          that.wonAction();
         }
     }, timeStep);
   }
@@ -37,7 +43,7 @@ var SnakeUI = (function () {
   // }
 
   Game.prototype.validImpulse = function (impulse) {
-    return this.board.isValidDir(impulse.x, impulse.y);
+    return this.board.validImpulse(impulse);
   }
 
   Game.prototype.validKeyPress = function (dir) {
@@ -61,10 +67,12 @@ var SnakeUI = (function () {
 
     $("body").append($('<div class="board"></div>'));
     $("div.board").toggleClass("center");
-    $("div.board").css({"width": this.dim * 30 + "px",
-                        "height": this.dim * 30 + "px",
-                        "margin-left": -this.dim * 30 / 2 + "px",
-                        "margin-top": -this.dim * 30 / 2 + "px",});
+    $("div.board").css({
+                    "width": this.dim * 30 + "px",
+                    "height": this.dim * 30 + "px",
+                    "margin-left": -this.dim * 30 / 2 + "px",
+                    "margin-top": -this.dim * 30 / 2 + "px"
+                  });
 
     return _.times(that.dim, function (i) {
       var $row = $('<div class="row" id="' + i + '"></div>')
@@ -93,42 +101,35 @@ var SnakeUI = (function () {
     var that = this;
 
     _.times(that.dim, function (i) {
-      var $rowCells = $(".row#" + i).children();
+      _.times(that.dim, function (j, el) {
+        var $cell = $('div.row#' + i).children()[j];
 
-      $rowCells.each(function (j, el) {
         var pos = {x: i, y: j};
-
         if (that.board.hasApple(pos)) {
-          el.setAttribute("class", "col apple");
+          $cell.setAttribute("class", "col apple");
         } else if (that.board.hasWall(pos)) {
-          el.setAttribute("class", "col wall");
+          $cell.setAttribute("class", "col wall");
         } else if (_.isEqual(that.board.head, pos)) {
-          el.setAttribute("class", "col head");
+          $cell.setAttribute("class", "col head");
         } else if (that.board.hasSeg(pos)) {
-          el.setAttribute("class", "col seg");
+          $cell.setAttribute("class", "col seg");
         } else {
-          el.setAttribute("class", "col");
+          $cell.setAttribute("class", "col");
         }
       })
     })
+
+    if (!this.board.apples.length) {
+      this.board.randomApples(this.numApples);
+    }
   }
 
   Game.prototype.makeMove = function (impulse) {
-    this.board.moveHead(impulse.x, impulse.y);
+    this.board.moveHead(impulse);
   }
 
   Game.prototype.lose = function () {
     return this.board.lose();
-  }
-
-  Game.prototype.won = function () {
-    return this.board.won();
-  }
-
-  Game.prototype.wonAction = function () {
-    var $winMsg = $('<div class="endmsg">You win!</div>');
-    $("body").prepend($winMsg);
-    clearInterval(this.interval);
   }
 
   Game.prototype.loseAction = function () {
