@@ -141,6 +141,7 @@ var SnakeUI = (function () {
     })
 
     if (!this.board.apples.length) {
+      clearTimeout(this.timeout);
       this.displayMessage("great job!");
       this.repopulateApples();
       this.shuffleWalls();
@@ -166,24 +167,10 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.displayMessage = function (msg) {
-    var that = this;
-    var times = 5;
-
-    var flash = function() {
-      $("#message").html(msg);
-      times--;
-
-      if (times == 0) {
-        return;
-      }
-
-      window.setTimeout(function () {
-        $("#message").html("");
-        flash();
-      }, 2000);
-    }
-
-    flash();
+    $("#message").html(msg);
+    this.timeout = setTimeout(function () {
+      $("#message").html("");
+    }, 3000)
   }
 
   // 'r' keycode: 114.
