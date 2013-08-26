@@ -7,12 +7,13 @@ var SnakeUI = (function () {
     this.createBoard();   
     this.setInterval(opts.timeStep);
     this.impulse = {x: 0, y: 0};
-    this.IMPULSES = { "up": {x: -1, y: 0},
-                      "down": {x: 1, y: 0},
-                      "left": {x: 0, y: -1},
-                      "right": {x: 0, y: 1} }
-                      console.log(this.board.apples.length);
-                      console.log(this.board.walls.length);
+
+    this.IMPULSES = { 
+      "up": {x: -1, y: 0},
+      "down": {x: 1, y: 0}, 
+      "left": {x: 0, y: -1}, 
+      "right": {x: 0, y: 1} 
+    }
   }
 
   Game.prototype.setInterval = function (timeStep) {
