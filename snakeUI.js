@@ -34,8 +34,9 @@ var SnakeUI = (function () {
         that.updateBoard();
 
         if (that.lose()) {
-          that.displayMessage("game over!<br/>press 'r' to restart.", 1);
+          clearTimeout(that.timeout);
           clearInterval(that.interval);
+          that.displayMessage("game over!<br/>press 'r' to restart.");
           that.promptRestart();
         }
 
@@ -165,7 +166,7 @@ var SnakeUI = (function () {
 
   Game.prototype.displayMessage = function (msg) {
       $("#message").html(msg);
-      window.setTimeout(function () {
+      this.timeout = window.setTimeout(function () {
         $("#message").html("");
         window.setTimeout(function () {
           $("#message").html(msg);
@@ -191,9 +192,6 @@ var SnakeUI = (function () {
 
   Game.prototype.lose = function () {
     return this.board.lose();
-  }
-
-  Game.prototype.loseAction = function () {
   }
 
   return Game;
