@@ -1,10 +1,11 @@
 var SnakeUI = (function () {
 
-  var Game = function (dim, numApples, numWalls, timeStep) {
-    this.board = new SnakeBoard(dim, numApples, numWalls);
+  var Game = function (opts) {
+    console.log(opts);
+    this.board = new SnakeBoard(opts.dim, opts.numApples, opts.numWalls);
     this.dim = this.board.dim;
     this.createBoard();   
-    this.setInterval(timeStep);
+    this.setInterval(opts.timeStep);
     this.impulse = {x: 0, y: 0};
     this.IMPULSES = { "up": {x: -1, y: 0},
                       "down": {x: 1, y: 0},
