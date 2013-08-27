@@ -66,42 +66,44 @@ var SnakeUI = (function () {
 
   Game.prototype.createBorders = function () {
     var $sidebar = $('<div id="sidebar"></div>').html("SNAKE GAME remix");
-    var $content = $('<div id="content"></div>');
     var $score = $('<p id="score">score: 0</p>');
     var $streak = $('<p id="streak">streak: 0</p>');
     var $message = $('<p id="message"></p>');
+    var width = window.innerWidth - this.board_width;
 
     $("body").append($sidebar);
-    $("#sidebar").append($content);
-    $("#content").append($score);
-    $("#content").append($streak);
-    $("#content").append($message);
+    $("#sidebar").css({"width": width / 3 + "px"});
+    $("#sidebar").append($score);
+    $("#sidebar").append($streak);
+    $("#sidebar").append($message);
+
+    $sidebar.css({"font": "bold " + width / 20 + " consolas"})
+    $score.css({"font": width / 25 + " consolas"})
+    $streak.css({"font": width / 25 + " consolas"})
+    $message.css({"font": width / 25 + " consolas"})
   }
 
   Game.prototype.initDisplay = function () {
+    var that = this;
+    var cell_size = window.innerHeight / (this.dim + 5);
+    this.board_width = this.dim * cell_size;
     this.createBorders();
 
-    var that = this;
-
-    $("body").append($('<div class="board"></div>'));
-    $("div.board").toggleClass("center");
-
-    // Determined at run-time if varying board-size, 
-    // though I'm settling on fixed size.
-    $("div.board").css({
-      "width": this.dim * 35 + "px",
-      "height": this.dim * 35 + "px",
-      "margin-left": -this.dim * 35 / 2 + "px",
-      "margin-top": -this.dim * 35 / 2 + "px"
-    });
+    $("body").append($('<div class="board center"></div>'));
+    $(".board").css({
+      "margin-left": -10 * cell_size + "px",
+      "margin-top": -10 * cell_size + "px"});
 
     return _.times(that.dim, function (i) {
       var $row = $('<div class="row" id="' + i + '"></div>')
       $(".board").append($row);
 
       return _.times(that.dim, function (j) {
-        var $cell = $('<div class="col"></div>');
         var pos = {x: i, y: j};
+
+        var $cell = $('<div class="col"></div>');
+        $cell.css({"height": cell_size + "px", "width": cell_size + "px"});
+        
 
         if (_.isEqual(that.board.head, pos)) {
           $cell.toggleClass("head");

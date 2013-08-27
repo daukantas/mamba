@@ -1,36 +1,23 @@
 #sidebar { 
   position: absolute;
-  width: 500px;
   height: auto;
-  margin-top: 125px;
-  margin-left: 100px;
   float: left;
-  font: bold 50 consolas;
-  text-align: left;
+  margin-top: 100px;
+  margin-left: 50px;
+  text-align: center;
   color: lightGray;
 }
 
 #score { 
-  font: 40 consolas;
-  text-align: left;
   color: green;
 }
 
 #streak { 
-  font: 40 consolas;
-  text-align: left;
   color: cyan;
 }
 
 #message { 
-  font: 40 consolas;
-  text-align: left;
   color: yellow;
-}
-
-#content {
-  width: 500px;
-  height: 500px;
 }
 
 body {
@@ -44,18 +31,15 @@ body {
 
 .board {
   position: absolute;
-  background: lightgray;
+  background: lightgray; 
+  height: auto;
+  width: auto;
   z-index: -1;
 }
 
 .col {
   display: inline-block;
   float: left;
-  /*border: 1px solid black;*/
-  width: 35px;
-  height: 35px;
-  text-align: center;
-  line-height: 35px;
 }
 
 .col.apple {
