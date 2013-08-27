@@ -3,6 +3,9 @@ snake
 
 Rewrite of javascript-based Snake game, using _.
 
+Consume the green squares and improve your streak.
+NB: This game is not easy, so pay attention.
+
 TODO:
 - implement difficulty levels
 
