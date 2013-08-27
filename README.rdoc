@@ -5,5 +5,5 @@ Rewrite of javascript-based Snake game, using _.
 
 TODO:
 - implement difficulty levels
-- implement auto-sizing based on window params
+
 
