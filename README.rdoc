@@ -4,6 +4,6 @@ snake
 Rewrite of javascript-based Snake game, using _.
 
 TODO:
-- implement re-start
 - implement difficulty levels
+- auto window-resizing
 
