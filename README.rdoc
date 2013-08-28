@@ -11,5 +11,5 @@ NB: This game is not easy, so pay attention.
 
 TODO:
 - implement difficulty levels
-
+- flash messages for pre-set durations and frequencies
 
