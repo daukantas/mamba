@@ -1,0 +1,16 @@
+{
+  "name": "snake-remix",
+  "description": "An interpretation of the classical Snake game.",
+
+  "repository": { 
+    "type": "git",
+    "url": "https://github.com/yangmillstheory/snake.git"
+  },
+
+  "version": "0.0.1",
+  "private": false,
+
+  "dependencies": {
+    "express": "3.4.0"
+  }
+}
