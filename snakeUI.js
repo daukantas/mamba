@@ -1,69 +1,67 @@
 var SnakeUI = (function () {
 
   var Game = function (opts) {
-    this.board = new SnakeBoard(opts.dim, 
+    var game = this;
+
+    game.board = new SnakeBoard(opts.dim, 
       opts.numApples, 
       opts.numWalls
     );
 
-    this.dim = opts.dim;
-    this.numWalls = opts.numWalls;
-    this.numApples = opts.numApples;
-    this.timeStep = opts.timeStep;
+    game.dim = opts.dim;
+    game.numWalls = opts.numWalls;
+    game.numApples = opts.numApples;
+    game.timeStep = opts.timeStep;
     
-    this.initDisplay();
+    game.initDisplay();
 
-    this.setInterval(opts.timeStep);
-    this.impulse = {x: 0, y: 0};
+    game.bindKeys();
+    game.setInterval(opts.timeStep);
+    game.impulse = {x: 0, y: 0};
 
-    this.IMPULSES = { 
+    game.IMPULSES = { 
       38: {x: -1, y: 0},
       40: {x: 1, y: 0}, 
       37: {x: 0, y: -1}, 
       39: {x: 0, y: 1} 
     };
 
-    this.streak = 0;
+    game.streak = 0;
   }
 
   Game.prototype.setInterval = function (timeStep) {
-    var that = this;
+    var game = this;
 
-    this.interval = window.setInterval(function () {
-        that.setImpulse.apply(that);
-        that.makeMove(that.impulse);
-        that.updateBoard();
+    game.interval = window.setInterval(function () {
+        game.makeMove(game.impulse);
+        game.updateBoard();
 
-        if (that.lose()) {
-          clearTimeout(that.timeout);
-          clearInterval(that.interval);
-          that.displayMessage("game over!<br/>press 'r' to restart.");
-          that.promptRestart();
+        if (game.lose()) {
+          clearTimeout(game.timeout);
+          clearInterval(game.interval);
+          game.displayMessage("game over!<br/>press 'r' to restart.");
+          game.promptRestart();
         }
 
     }, timeStep);
+  },
+
+  Game.prototype.bindKeys = function () {
+    var game = this;
+
+    _.each([37, 38, 39, 40], function (keycode) {
+
+      $(document).keydown(function (ev) {
+        if (ev.which === keycode &&
+            game.validImpulse.apply(game, [ keycode ])) {
+          game.impulse = game.IMPULSES[keycode]
+        }
+      })
+    })
   }
 
-  Game.prototype.validImpulse = function (impulse) {
-    return this.board.validImpulse(impulse);
-  }
-
-  Game.prototype.validKeyPress = function (keyCode) {
-    return $(document).keypress(function (ev) {
-      return ev.keyCode == keyCode;
-    }) && this.validImpulse(this.IMPULSES[keyCode]);
-  }
-
-  Game.prototype.setImpulse = function () {
-    if (this.validKeyPress(38)) {
-      this.impulse = this.IMPULSES[38]; 
-    } else if (this.validKeyPress(40)) {
-      this.impulse = this.IMPULSES[40];
-    } else if (this.validKeyPress(37)) {
-      this.impulse = this.IMPULSES[37]; 
-    } else if (this.validKeyPress(39)) {
-      this.impulse = this.IMPULSES[39]; 
-    }
+  Game.prototype.validImpulse = function (keycode) {
+    return this.board.validImpulse(this.IMPULSES[keycode]);
   }
 
   Game.prototype.createBorders = function () {
@@ -86,7 +84,7 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.initDisplay = function () {
-    var that = this;
+    var game = this;
     var cell_size = window.innerHeight / (this.dim + 5);
     this.board_width = this.dim * cell_size;
     this.createBorders();
@@ -96,24 +94,24 @@ var SnakeUI = (function () {
       "margin-left": -10 * cell_size + "px",
       "margin-top": -10 * cell_size + "px"});
 
-    return _.times(that.dim, function (i) {
+    return _.times(game.dim, function (i) {
       var $row = $('<div class="row" id="' + i + '"></div>')
       $(".board").append($row);
 
-      return _.times(that.dim, function (j) {
+      return _.times(game.dim, function (j) {
         var pos = {x: i, y: j};
 
         var $cell = $('<div class="col"></div>');
         $cell.css({"height": cell_size + "px", "width": cell_size + "px"});
         
 
-        if (_.isEqual(that.board.head, pos)) {
+        if (_.isEqual(game.board.head, pos)) {
           $cell.toggleClass("head");
-        } else if (that.board.has("snake", pos)) {
+        } else if (game.board.has("snake", pos)) {
           $cell.toggleClass("seg");
-        } else if (that.board.has("walls", pos)) {
+        } else if (game.board.has("walls", pos)) {
           $cell.toggleClass("wall");
-        } else if (that.board.has("apples", pos)) {
+        } else if (game.board.has("apples", pos)) {
           $cell.toggleClass("apple");
         } 
 
@@ -123,20 +121,20 @@ var SnakeUI = (function () {
   }
 
   Game.prototype.updateBoard = function () {
-    var that = this;
+    var game = this;
 
-    _.times(that.dim, function (i) {
-      _.times(that.dim, function (j, el) {
+    _.times(game.dim, function (i) {
+      _.times(game.dim, function (j) {
         var $cell = $('div.row#' + i).children()[j];
 
         var pos = {x: i, y: j};
-        if (that.board.has("apples", pos)) {
+        if (game.board.has("apples", pos)) {
           $cell.setAttribute("class", "col apple");
-        } else if (that.board.has("walls", pos)) {
+        } else if (game.board.has("walls", pos)) {
           $cell.setAttribute("class", "col wall");
-        } else if (_.isEqual(that.board.head, pos)) {
+        } else if (_.isEqual(game.board.head, pos)) {
           $cell.setAttribute("class", "col head");
-        } else if (that.board.has("snake", pos)) {
+        } else if (game.board.has("snake", pos)) {
           $cell.setAttribute("class", "col seg");
         } else {
           $cell.setAttribute("class", "col");
@@ -144,16 +142,16 @@ var SnakeUI = (function () {
       })
     })
 
-    if (!this.board.apples.length) {
-      clearTimeout(this.timeout);
-      this.displayMessage("great job!");
-      this.repopulateApples();
-      this.shuffleWalls();
-      this.streak++;
+    if (!game.board.apples.length) {
+      clearTimeout(game.timeout);
+      game.displayMessage("great job!");
+      game.repopulateApples();
+      game.shuffleWalls();
+      game.streak++;
     } 
 
-    this.updateScore();
-    this.updateStreak();
+    game.updateScore();
+    game.updateStreak();
   }
 
   Game.prototype.updateScore = function () {
@@ -179,12 +177,12 @@ var SnakeUI = (function () {
 
   // 'r' keycode: 114.
   Game.prototype.promptRestart = function () {
-    var that = this;
+    var game = this;
 
     $(window).keypress(function (ev) {
       if (ev.which == 114) {
-        that.restart.apply(that);
-        $(window).off('keypress');
+        game.restart.apply(game);
+        $(window).off("keypress");
      }
     })
   }

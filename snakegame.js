@@ -13,10 +13,10 @@ var SnakeBoard = (function () {
 
   SnakeBoard.prototype.valid_dirs = function () {
     this.VALID_DIRS = [];
-    var that = this;
+    var board = this;
     _.each([-1, 1], function(u) {
-      that.VALID_DIRS.push({x: u, y: 0});
-      that.VALID_DIRS.push({x: 0, y: u});
+      board.VALID_DIRS.push({x: u, y: 0});
+      board.VALID_DIRS.push({x: 0, y: u});
     })
   }
 
@@ -65,7 +65,7 @@ var SnakeBoard = (function () {
   }
 
   SnakeBoard.prototype.doesntOverlap = function (type, pos) {
-    var that = this;
+    var board = this;
     return _.every(this[type], function (type) {
       return !_.isEqual(type, pos);
     })
@@ -81,7 +81,7 @@ var SnakeBoard = (function () {
     var x = impulse.x,
         y = impulse.y;
 
-    var that = this;
+    var board = this;
     return _.some(this.VALID_DIRS, function (dir) {
       return _.isEqual(dir, {x: x, y: y});
     })
@@ -101,7 +101,7 @@ var SnakeBoard = (function () {
   }
 
   SnakeBoard.prototype.has = function (type, pos) {
-    var that = this;
+    var board = this;
     return _.some(this[type], function (type) {
       return _.isEqual(type, pos);
     })
@@ -174,9 +174,9 @@ var SnakeBoard = (function () {
       return false;
     }
 
-    var that = this;
+    var board = this;
     var dups = _.select(this.snake, function (seg) {
-      return _.isEqual(seg, that.impulse);
+      return _.isEqual(seg, board.impulse);
     });
 
     return dups.length > 1;
@@ -188,10 +188,10 @@ var SnakeBoard = (function () {
   }
 
   SnakeBoard.prototype.innerWallCollision = function () {
-    var that = this;
+    var board = this;
 
     return _.some(this.walls, function (wall) {
-      return _.isEqual(wall, that.impulse);
+      return _.isEqual(wall, board.impulse);
     });
   }
 
