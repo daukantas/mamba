@@ -1,3 +1,8 @@
+@font-face {
+  font-family: consolas;
+  src: url(consolas.ttf);
+}
+
 #sidebar { 
   position: absolute;
   height: auto;
@@ -47,7 +52,7 @@ body {
 }
 
 .col.wall {
-    background: black;
+  background: black;
 }
 
 .col.head {
