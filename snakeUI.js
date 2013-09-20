@@ -17,11 +17,11 @@ var SnakeUI = (function () {
     this.impulse = {x: 0, y: 0};
 
     this.IMPULSES = { 
-      "up": {x: -1, y: 0},
-      "down": {x: 1, y: 0}, 
-      "left": {x: 0, y: -1}, 
-      "right": {x: 0, y: 1} 
-    }
+      38: {x: -1, y: 0},
+      40: {x: 1, y: 0}, 
+      37: {x: 0, y: -1}, 
+      39: {x: 0, y: 1} 
+    };
 
     this.streak = 0;
   }
@@ -48,19 +48,21 @@ var SnakeUI = (function () {
     return this.board.validImpulse(impulse);
   }
 
-  Game.prototype.validKeyPress = function (dir) {
-    return key.isPressed(dir) && this.validImpulse(this.IMPULSES[dir]);
+  Game.prototype.validKeyPress = function (keyCode) {
+    return $(document).keypress(function (ev) {
+      return ev.keyCode == keyCode;
+    }) && this.validImpulse(this.IMPULSES[keyCode]);
   }
 
   Game.prototype.setImpulse = function () {
-    if (this.validKeyPress("up")) {
-      this.impulse = this.IMPULSES.up; 
-    } else if (this.validKeyPress("down")) {
-      this.impulse = this.IMPULSES.down;
-    } else if (this.validKeyPress("left")) {
-      this.impulse = this.IMPULSES.left; 
-    } else if (this.validKeyPress("right")) {
-      this.impulse = this.IMPULSES.right; 
+    if (this.validKeyPress(38)) {
+      this.impulse = this.IMPULSES[38]; 
+    } else if (this.validKeyPress(40)) {
+      this.impulse = this.IMPULSES[40];
+    } else if (this.validKeyPress(37)) {
+      this.impulse = this.IMPULSES[37]; 
+    } else if (this.validKeyPress(39)) {
+      this.impulse = this.IMPULSES[39]; 
     }
   }
 
