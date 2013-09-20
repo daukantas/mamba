@@ -62,12 +62,3 @@ body {
 .col.seg {
   background: chocolate;
 }
-
-.endmsg {
-  text-align: center;
-  color: red;
-  font-size: 15em;
-  margin: auto;
-  top:30%;
-  left:30%;
-}

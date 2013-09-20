@@ -64,35 +64,28 @@ var SnakeUI = (function () {
     return this.board.validImpulse(this.IMPULSES[keycode]);
   }
 
-  Game.prototype.createBorders = function () {
-    var $sidebar = $('<div id="sidebar"></div>').html("SNAKE GAME remix");
-    var $score = $('<p id="score">score: 0</p>');
-    var $streak = $('<p id="streak">streak: 0</p>');
-    var $message = $('<p id="message"></p>');
+  Game.prototype.styleSidebar = function () {
     var width = window.innerWidth - this.board_width;
+    $("#sidebar").css({
+      "width": width / 3 + "px",
+      "font": "bold " + width / 20 + "px consolas"
+    });
 
-    $("body").append($sidebar);
-    $("#sidebar").css({"width": width / 3 + "px"});
-    $("#sidebar").append($score);
-    $("#sidebar").append($streak);
-    $("#sidebar").append($message);
-
-    $sidebar.css({"font": "bold " + width / 20 + " consolas"})
-    $score.css({"font": width / 25 + " consolas"})
-    $streak.css({"font": width / 25 + " consolas"})
-    $message.css({"font": width / 25 + " consolas"})
+    $("#score").css("font", "bold " + width / 25 + "px consolas")
+    $("#streak").css("font", "bold " + width / 25 + "px consolas")
+    $("#message").css("font", "bold " + width / 25 + "px consolas")
   }
 
   Game.prototype.initDisplay = function () {
     var game = this;
     var cell_size = window.innerHeight / (this.dim + 5);
     this.board_width = this.dim * cell_size;
-    this.createBorders();
+    this.styleSidebar();
 
-    $("body").append($('<div class="board center"></div>'));
     $(".board").css({
       "margin-left": -10 * cell_size + "px",
-      "margin-top": -10 * cell_size + "px"});
+      "margin-top": -10 * cell_size + "px"
+    });
 
     return _.times(game.dim, function (i) {
       var $row = $('<div class="row" id="' + i + '"></div>')
@@ -170,7 +163,9 @@ var SnakeUI = (function () {
 
   Game.prototype.displayMessage = function (msg) {
     $("#message").html(msg);
+    $("#message").hide().fadeIn("slow");
     this.timeout = setTimeout(function () {
+      $("#message").fadeOut("slow");
       $("#message").html("");
     }, 3000)
   }
