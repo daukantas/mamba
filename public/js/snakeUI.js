@@ -175,9 +175,13 @@ var SnakeGame = (function () {
       game.displayMessage("great job!");
       game.repopulateApples();
       game.shuffleWalls();
-      window.setTimeout(function () {
-        $(".wall").effect("pulsate", "fast")  
-      }, 100)
+
+      if (game.streak < game.winStreak - 1) {
+        window.setTimeout(function () {
+          $(".wall").effect("pulsate", "fast")  
+        }, 100)
+      }
+      
       game.streak++;
     } 
 
