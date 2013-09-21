@@ -65,8 +65,10 @@ var SnakeGame = (function () {
     return this.board.validImpulse(this.IMPULSES[keycode]);
   }
 
-  Game.prototype.styleSidebar = function () {
+  Game.prototype.styleBorders = function () {
     var width = window.innerWidth - this.board_width;
+    $("#header").css("font", "bold " + width / 20 +  "px consolas");
+
     $("#sidebar").css({
       "width": width / 2 + "px",
       "font": "bold " + width / 20 + "px consolas"
@@ -140,7 +142,7 @@ var SnakeGame = (function () {
 
     game.cell_size = window.innerHeight / (game.dim + 10);
     game.board_width = game.dim * game.cell_size  ;
-    game.styleSidebar();
+    game.styleBorders();
 
     $(".board").css({
       "margin-left": -10 * game.cell_size  + "px",
@@ -168,8 +170,6 @@ var SnakeGame = (function () {
     _.times(game.dim, function (i) {
       _.times(game.dim, function (j) {
         var $cell = $("#" + i + ".board-row").children()[j];
-
-        debugger
 
         var pos = {x: i, y: j};
         if (game.board.has("apples", pos)) {

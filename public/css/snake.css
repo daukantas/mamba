@@ -1,13 +1,12 @@
 @font-face {
-  font-family: consolas;
-  src: url(consolas.ttf);
+  font-family: Consolas;
+  src: url(Consolas.ttf);
 }
 
 #sidebar {
 }
 
 #header {
-  font: bold 75px consolas;
   color: #FFD700;
   margin-top: 50px;
 }
