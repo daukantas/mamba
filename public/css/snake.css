@@ -3,26 +3,34 @@
   src: url(consolas.ttf);
 }
 
-#sidebar { 
+#sidebar {
 }
 
 #header {
   font: bold 75px consolas;
-  text-align: center;
   color: #FFD700;
   margin-top: 50px;
 }
 
+.row {
+  text-align: center;
+}
+
 #score { 
+  margin-top: 100px;
   color: green;
 }
 
 #streak { 
   color: cyan;
+  margin-top: 100px;
 }
 
 #message { 
-  color: yellow;
+  color: lightGray;
+  margin-top: 100px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 body {

@@ -66,7 +66,7 @@ var SnakeGame = (function () {
   Game.prototype.styleSidebar = function () {
     var width = window.innerWidth - this.board_width;
     $("#sidebar").css({
-      "width": width / 3 + "px",
+      "width": width / 2 + "px",
       "font": "bold " + width / 20 + "px consolas"
     });
 
@@ -77,9 +77,10 @@ var SnakeGame = (function () {
 
   Game.prototype.initDisplay = function () {
     var game = this;
-    var cell_size = window.innerHeight / (this.dim + 10);
-    this.board_width = this.dim * cell_size;
-    this.styleSidebar();
+
+    var cell_size = window.innerHeight / (game.dim + 10);
+    game.board_width = game.dim * cell_size;
+    game.styleSidebar();
 
     $(".board").css({
       "margin-left": -10 * cell_size + "px",
@@ -113,7 +114,14 @@ var SnakeGame = (function () {
     });
   }
 
+  // Game.prototype.renderRows = function () {
+    // var game = this;
 
+    // function renderRow (row) {
+    //   if (row === game.dim())
+    // }
+
+  // }
 
   Game.prototype.updateBoard = function () {
     var game = this;
@@ -149,17 +157,22 @@ var SnakeGame = (function () {
   }
 
   Game.prototype.updateScore = function () {
-    var score = this.numApples * (this.streak + 1) - this.board.apples.length;
+    var game = this;
+
+    var score = game.numApples * (game.streak + 1) - 
+                                  game.board.apples.length;
 
     $("#score").html("score: " + score);
   }
 
   Game.prototype.updateStreak = function () {
-    $("#streak").html("streak: " + this.streak);
+    var game = this;
+    $("#streak").html("streak: " + game.streak);
   }
 
   Game.prototype.repopulateApples = function () {
-    this.board.randomApples(this.numApples);
+    var game = this;
+    game.board.randomApples(game.numApples);
   }
 
   Game.prototype.displayMessage = function (msg) {
@@ -184,15 +197,16 @@ var SnakeGame = (function () {
   }
 
   Game.prototype.restart = function () {
+    var game = this;
+
     opts = {
-      dim: this.dim,
-      numWalls: this.numWalls,
-      numApples: this.numApples,
-      timeStep: this.timeStep 
+      dim: game.dim,
+      numWalls: game.numWalls,
+      numApples: game.numApples,
+      timeStep: game.timeStep 
     }
 
     $(".board").empty();
-    $("#header").hide().fadeIn(1000)
     $("#score").html("score: 0").hide().fadeIn(1000);
     $("#streak").html("streak: 0").hide().fadeIn(1000);
     $("#message").html("");
@@ -201,11 +215,14 @@ var SnakeGame = (function () {
   }
 
   Game.prototype.shuffleWalls = function () {
-    this.board.walls = [];
-    this.board.randomWalls(this.numWalls);
+    var game = this;
+
+    game.board.walls = [];
+    game.board.randomWalls(game.numWalls);
   }
 
   Game.prototype.makeMove = function (impulse) {
+    var game = this;
     this.board.moveHead(impulse);
   }
 
