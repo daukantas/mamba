@@ -13,7 +13,7 @@ var SnakeGame = (function () {
     game.numApples = opts.numApples;
     game.timeStep = opts.timeStep;
     
-    game.initDisplay();
+    game.populateBoard();
 
     game.bindKeys();
     game.setInterval(opts.timeStep);
@@ -34,7 +34,7 @@ var SnakeGame = (function () {
 
     game.interval = window.setInterval(function () {
         game.makeMove(game.impulse);
-        game.updateBoard();
+        // game.updateBoard();
 
         if (game.lose()) {
           clearInterval(game.interval);
@@ -75,60 +75,97 @@ var SnakeGame = (function () {
     $("#message").css("font", "bold " + width / 25 + "px consolas")
   }
 
-  Game.prototype.initDisplay = function () {
+  Game.prototype.populateBoard = function () {
     var game = this;
+    game.setSizes();
 
-    var cell_size = window.innerHeight / (game.dim + 10);
-    game.board_width = game.dim * cell_size;
-    game.styleSidebar();
+    var $row;
+    var $cell;
 
-    $(".board").css({
-      "margin-left": -10 * cell_size + "px",
-      "margin-top": -10 * cell_size + "px"
-    });
-
-    return _.times(game.dim, function (i) {
-      var $row = $('<div class="board-row" id="' + i + '"></div>')
+    _.each(_.range(game.dim), function (i) {
+      $row = $('<div class="board-row"></div>')
+      $row.attr("id", i)
 
       $(".board").append($row);
+      game.populateRow.apply(game, [ $row, i ])
+    });
 
-      return _.times(game.dim, function (j) {
-        var pos = {x: i, y: j};
+    game.reveal();
+  }
 
-        var $cell = $('<div class="col"></div>');
-        $cell.css({"height": cell_size + "px", "width": cell_size + "px"});
-        
+  Game.prototype.populateRow = function ($row, row_index) {
+    var game = this;
 
-        if (_.isEqual(game.board.head, pos)) {
-          $cell.toggleClass("head");
-        } else if (game.board.has("snake", pos)) {
-          $cell.toggleClass("seg");
-        } else if (game.board.has("walls", pos)) {
-          $cell.toggleClass("wall");
-        } else if (game.board.has("apples", pos)) {
-          $cell.toggleClass("apple");
-        } 
+    _.each(_.range(game.dim), function (j) {
+      var pos = { x: row_index, y: j };
 
-        $(".board-row#" + i).append($cell);
+      $cell = $('<div class="board-col"></div>');
+      $cell.attr("id", j)
+      $cell.css({
+        "min-height": game.cell_size  + "px", 
+        "min-width": game.cell_size  + "px"
       });
+
+      game.color($cell, pos)
+
+      $row.append($cell);
+      $row.css("visibility", "hidden")
     });
   }
 
-  // Game.prototype.renderRows = function () {
-    // var game = this;
+  Game.prototype.reveal = function () {
+    var game = this;
+    
+    function renderRow(row) {
+      if (row >= game.dim / 2) {
+        return;
+      } else {
+        $("#" + row + ".board-row").css("visibility", "visible")
+                                   .hide().fadeIn(100, function () {
+          $("#" + (game.dim - row - 1) + ".board-row").css("visibility", "visible")
+                                                      .hide().fadeIn(100, function () {
+            renderRow(++row);
+          });
+        });
+      }
+    }
 
-    // function renderRow (row) {
-    //   if (row === game.dim())
-    // }
+    renderRow(0);
+  }
 
-  // }
+  Game.prototype.setSizes = function () {
+    var game = this;
+
+    game.cell_size = window.innerHeight / (game.dim + 10);
+    game.board_width = game.dim * game.cell_size  ;
+    game.styleSidebar();
+
+    $(".board").css({
+      "margin-left": -10 * game.cell_size  + "px",
+      "margin-top": -10 * game.cell_size   + "px"
+    });
+  }
+
+  Game.prototype.color = function ($cell, pos) {
+    var game = this;
+
+    if (_.isEqual(game.board.head, pos)) {
+      $cell.toggleClass("head");
+    } else if (game.board.has("snake", pos)) {
+      $cell.toggleClass("seg");
+    } else if (game.board.has("walls", pos)) {
+      $cell.toggleClass("wall");
+    } else if (game.board.has("apples", pos)) {
+      $cell.toggleClass("apple");
+    } 
+  }
 
   Game.prototype.updateBoard = function () {
     var game = this;
 
     _.times(game.dim, function (i) {
       _.times(game.dim, function (j) {
-        var $cell = $('div.board-row#' + i).children()[j];
+        var $cell = $("#" + i + ".board-row").children()[j];
 
         var pos = {x: i, y: j};
         if (game.board.has("apples", pos)) {

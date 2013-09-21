@@ -44,29 +44,31 @@ body {
 
 .board {
   position: absolute;
-  background: lightgray; 
+  background: lightGray; 
   height: auto;
   width: auto;
   z-index: -1;
+  padding: 1px;
 }
 
-.col {
+.board-col  {
   display: inline-block;
   float: left;
+  margin: 1px;
 }
 
-.col.apple {
-    background: green;
+.apple {
+  background: green;
 }
 
-.col.wall {
+.wall {
   background: black;
 }
 
-.col.head {
+.head {
   background: red;
 }
 
-.col.seg {
+.seg {
   background: chocolate;
 }
