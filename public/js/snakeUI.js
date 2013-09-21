@@ -39,6 +39,7 @@ var SnakeGame = (function () {
         game.updateBoard();
 
         if (game.lose()) {
+          $(".board").effect("shake");
           clearInterval(game.interval);
           game.displayMessage("game over!<br/>press 'r' to restart.");
           game.promptRestart();
@@ -67,30 +68,41 @@ var SnakeGame = (function () {
 
   Game.prototype.styleBorders = function () {
     var width = window.innerWidth - this.board_width;
+    var height = window.innerHeight / 2
+
     $("#header").css("font", "bold " + width / 20 +  "px consolas");
 
     $("#sidebar").css({
       "width": width / 2 + "px",
-      "font": "bold " + width / 20 + "px consolas"
+      "font": "bold " + width / 20 + "px consolas",
+      "margin-top": height / 3
+    });
+
+    $("#instructions").css({
+      "width": "auto",
+      "font": "bold " + width / 40 + "px consolas",
+      "bottom": height / 1.5
     });
 
     $("#score").css({
-      "font": "bold " + width / 25 + "px consolas",
-      "margin-top": width / 15 + "px"
+      "font": "bold " + width / 20 + "px consolas",
+      "margin-top": width / 20 + "px"
     })
     $("#streak").css({
-      "font": "bold " + width / 25 + "px consolas",
-      "margin-top": width / 10 + "px"
+      "font": "bold " + width / 20 + "px consolas",
+      "margin-top": width / 20 + "px"
     })
 
     $("#message").css({
-      "font": "bold " + width / 25 + "px consolas",
-      "margin-top": width / 10 + "px"
+      "font": "bold " + width / 20 + "px consolas",
+      "margin-top": width / 20 + "px"
     })
   }
 
   Game.prototype.populateBoard = function (callback) {
     var game = this;
+
+    $("#sidebar").hide();
     game.setSizes();
 
     var $row;
@@ -129,7 +141,9 @@ var SnakeGame = (function () {
 
   Game.prototype.reveal = function (callback) {
     var game = this;
-    
+
+    $("#sidebar").fadeIn("slow")
+
     function renderRow(row) {
       if (row >= game.dim / 2) {
         callback();
@@ -209,16 +223,33 @@ var SnakeGame = (function () {
 
   Game.prototype.updateScore = function () {
     var game = this;
+    var prevScore = $("#score").html()
+    prevScore = parseInt($("#score").html().charAt(prevScore.length - 1))
 
     var score = game.numApples * (game.streak + 1) - 
                                   game.board.apples.length;
 
-    $("#score").html("score: " + score);
+    $("#score").html("SCORE: " + score);
+
+    if (prevScore < score) {
+      $("#score").fadeOut("fast", function () {
+        $("#score").fadeIn("slow")
+      })
+    }
   }
 
   Game.prototype.updateStreak = function () {
     var game = this;
-    $("#streak").html("streak: " + game.streak);
+    var prevStreak = $("#streak").html()
+    prevStreak = parseInt($("#streak").html().charAt(prevStreak.length - 1))
+
+    $("#streak").html("STREAK: " + game.streak);
+
+    if (prevStreak < game.streak) {
+      $("#streak").fadeOut("fast", function () {
+        $("#streak").fadeIn("slow")
+      })
+    }
   }
 
   Game.prototype.repopulateApples = function () {
@@ -228,9 +259,9 @@ var SnakeGame = (function () {
 
   Game.prototype.displayMessage = function (msg) {
     $("#message").html(msg);
-    $("#message").hide().fadeIn(1000, function () {
+    $("#message").hide().fadeIn("slow", function () {
       window.setTimeout(function () {
-        $("#message").fadeOut(1000, function () {
+        $("#message").fadeOut("slow", function () {
           $("#message").html("");  
         });
       }, 3000)
@@ -260,8 +291,8 @@ var SnakeGame = (function () {
     }
 
     $(".board").empty();
-    $("#score").html("score: 0").hide().fadeIn(1000);
-    $("#streak").html("streak: 0").hide().fadeIn(1000);
+    $("#score").html("SCORE: 0").hide().fadeIn("slow");
+    $("#streak").html("STREAK: 0").hide().fadeIn("slow");
     $("#message").html("");
 
     new Game(opts);

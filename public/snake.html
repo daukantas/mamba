@@ -2,15 +2,20 @@
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title>Snake!</title>
+  <!-- Underscore -->
   <script type="text/javascript" src="js/underscore.js" charset="utf-8">
   </script>
+
+  <!-- jQuery -->
   <script type="text/javascript" src="js/jquery-1.9.1.js" charset="utf-8">
   </script>
+
+  <!-- jQueryUI -->
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+  <!-- Bootstrap (CSS) -->
   <link rel="stylesheet" 
         href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" 
-        href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/snakeBoard.js" charset="utf-8">
   </script>
   <script type="text/javascript" src="js/snakeUI.js" charset="utf-8">
@@ -19,35 +24,41 @@
 </head>
 <body>
 
-  <div class="row" id="header">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-6">
-      &nbsp;&nbsp;SNAKE GAME remix
+  <div class="row">
+    <div id="header">
+        &nbsp;&nbsp;SNAKE GAME remix
     </div>
   </div>
 
   <div class="row main">
-    <div id="sidebar">
-      <div class="row" id="score">
-        score: 0
-      </div>
+    <div class="col-md-3">
+      <div id="sidebar">
+        <div class="row" id="score">
+          SCORE: 0
+        </div>
 
-      <div class="row" id="streak">
-        streak: 0
-      </div>
+        <div class="row" id="streak">
+          STREAK: 0
+        </div>
 
-      <div class="row" id="message">
+        <div class="row" id="message">
+        </div>
       </div>
     </div>
 
     <div class="board center">
-    </div> 
+    </div>
 
-    <div class="sidebar">
+    <div class="col-md-3 col-md-offset-9" id="instructions">
+      <p>Welcome to SNAKE.</p>
+      <br/>
+      <p>This game is meant to be challenging.</p>
+      <br/>
+      <p>Your goal is to obtain a streak of five.</p>
+      <br/>
+      <p>Happy trying!</p>
     </div>
   </div>
-  
 
 </body>
   <script type="text/javascript" charset="utf-8">
