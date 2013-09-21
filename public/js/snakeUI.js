@@ -228,11 +228,13 @@ var SnakeGame = (function () {
 
   Game.prototype.displayMessage = function (msg) {
     $("#message").html(msg);
-    $("#message").hide().fadeIn(1000);
-    window.setTimeout(function () {
-      $("#message").fadeOut(1000);
-      $("#message").html("");
-    }, 3000)
+    $("#message").hide().fadeIn(1000, function () {
+      window.setTimeout(function () {
+        $("#message").fadeOut(1000, function () {
+          $("#message").html("");  
+        });
+      }, 3000)
+    });
   }
 
   // 'r' keycode: 114.
