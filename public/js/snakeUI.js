@@ -12,13 +12,9 @@ var SnakeGame = (function () {
     game.numWalls = opts.numWalls;
     game.numApples = opts.numApples;
     game.timeStep = opts.timeStep;
-    
-    game.populateBoard();
+    game.streak = 0;
 
-    game.bindKeys();
-    game.setInterval(opts.timeStep);
-    game.impulse = {x: 0, y: 0};
-
+    // Keys are key-codes.
     game.IMPULSES = { 
       38: {x: -1, y: 0},
       40: {x: 1, y: 0}, 
@@ -26,7 +22,13 @@ var SnakeGame = (function () {
       39: {x: 0, y: 1} 
     };
 
-    game.streak = 0;
+    // Player is initially static.
+    game.impulse = {x: 0, y: 0};
+    
+    game.bindKeys();
+    game.populateBoard(function () {
+      game.setInterval(opts.timeStep);
+    });
   }
 
   Game.prototype.setInterval = function (timeStep) {
@@ -34,7 +36,7 @@ var SnakeGame = (function () {
 
     game.interval = window.setInterval(function () {
         game.makeMove(game.impulse);
-        // game.updateBoard();
+        game.updateBoard();
 
         if (game.lose()) {
           clearInterval(game.interval);
@@ -75,7 +77,7 @@ var SnakeGame = (function () {
     $("#message").css("font", "bold " + width / 25 + "px consolas")
   }
 
-  Game.prototype.populateBoard = function () {
+  Game.prototype.populateBoard = function (callback) {
     var game = this;
     game.setSizes();
 
@@ -90,7 +92,7 @@ var SnakeGame = (function () {
       game.populateRow.apply(game, [ $row, i ])
     });
 
-    game.reveal();
+    game.reveal(callback);
   }
 
   Game.prototype.populateRow = function ($row, row_index) {
@@ -106,19 +108,19 @@ var SnakeGame = (function () {
         "min-width": game.cell_size  + "px"
       });
 
-      game.color($cell, pos)
+      game.colorCell($cell, pos)
 
       $row.append($cell);
       $row.css("visibility", "hidden")
     });
   }
 
-  Game.prototype.reveal = function () {
+  Game.prototype.reveal = function (callback) {
     var game = this;
     
     function renderRow(row) {
       if (row >= game.dim / 2) {
-        return;
+        callback();
       } else {
         $("#" + row + ".board-row").css("visibility", "visible")
                                    .hide().fadeIn(100, function () {
@@ -146,7 +148,7 @@ var SnakeGame = (function () {
     });
   }
 
-  Game.prototype.color = function ($cell, pos) {
+  Game.prototype.colorCell = function ($cell, pos) {
     var game = this;
 
     if (_.isEqual(game.board.head, pos)) {
@@ -167,17 +169,19 @@ var SnakeGame = (function () {
       _.times(game.dim, function (j) {
         var $cell = $("#" + i + ".board-row").children()[j];
 
+        debugger
+
         var pos = {x: i, y: j};
         if (game.board.has("apples", pos)) {
-          $cell.setAttribute("class", "col apple");
+          $cell.setAttribute("class", "board-col apple");
         } else if (game.board.has("walls", pos)) {
-          $cell.setAttribute("class", "col wall");
+          $cell.setAttribute("class", "board-col wall");
         } else if (_.isEqual(game.board.head, pos)) {
-          $cell.setAttribute("class", "col head");
+          $cell.setAttribute("class", "board-col head");
         } else if (game.board.has("snake", pos)) {
-          $cell.setAttribute("class", "col seg");
+          $cell.setAttribute("class", "board-col seg");
         } else {
-          $cell.setAttribute("class", "col");
+          $cell.setAttribute("class", "board-col");
         }
       })
     })
