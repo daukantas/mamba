@@ -4,13 +4,13 @@
 }
 
 #sidebar { 
-  position: absolute;
-  height: auto;
-  float: left;
-  margin-top: 100px;
-  margin-left: 50px;
+}
+
+#header {
+  font: bold 75px consolas;
   text-align: center;
-  color: lightGray;
+  color: #FFD700;
+  margin-top: 50px;
 }
 
 #score { 

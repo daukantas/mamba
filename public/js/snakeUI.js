@@ -1,4 +1,4 @@
-var SnakeUI = (function () {
+var SnakeGame = (function () {
 
   var Game = function (opts) {
     var game = this;
@@ -37,7 +37,6 @@ var SnakeUI = (function () {
         game.updateBoard();
 
         if (game.lose()) {
-          clearTimeout(game.timeout);
           clearInterval(game.interval);
           game.displayMessage("game over!<br/>press 'r' to restart.");
           game.promptRestart();
@@ -78,7 +77,7 @@ var SnakeUI = (function () {
 
   Game.prototype.initDisplay = function () {
     var game = this;
-    var cell_size = window.innerHeight / (this.dim + 5);
+    var cell_size = window.innerHeight / (this.dim + 10);
     this.board_width = this.dim * cell_size;
     this.styleSidebar();
 
@@ -88,7 +87,8 @@ var SnakeUI = (function () {
     });
 
     return _.times(game.dim, function (i) {
-      var $row = $('<div class="row" id="' + i + '"></div>')
+      var $row = $('<div class="board-row" id="' + i + '"></div>')
+
       $(".board").append($row);
 
       return _.times(game.dim, function (j) {
@@ -108,17 +108,19 @@ var SnakeUI = (function () {
           $cell.toggleClass("apple");
         } 
 
-        $(".row#" + i).append($cell);
+        $(".board-row#" + i).append($cell);
       });
     });
   }
+
+
 
   Game.prototype.updateBoard = function () {
     var game = this;
 
     _.times(game.dim, function (i) {
       _.times(game.dim, function (j) {
-        var $cell = $('div.row#' + i).children()[j];
+        var $cell = $('div.board-row#' + i).children()[j];
 
         var pos = {x: i, y: j};
         if (game.board.has("apples", pos)) {
@@ -136,7 +138,6 @@ var SnakeUI = (function () {
     })
 
     if (!game.board.apples.length) {
-      clearTimeout(game.timeout);
       game.displayMessage("great job!");
       game.repopulateApples();
       game.shuffleWalls();
@@ -163,9 +164,9 @@ var SnakeUI = (function () {
 
   Game.prototype.displayMessage = function (msg) {
     $("#message").html(msg);
-    $("#message").hide().fadeIn("slow");
-    this.timeout = setTimeout(function () {
-      $("#message").fadeOut("slow");
+    $("#message").hide().fadeIn(1000);
+    window.setTimeout(function () {
+      $("#message").fadeOut(1000);
       $("#message").html("");
     }, 3000)
   }
@@ -190,8 +191,12 @@ var SnakeUI = (function () {
       timeStep: this.timeStep 
     }
 
-    $("body").empty();
-    clearTimeout(this.timeout);
+    $(".board").empty();
+    $("#header").hide().fadeIn(1000)
+    $("#score").html("score: 0").hide().fadeIn(1000);
+    $("#streak").html("streak: 0").hide().fadeIn(1000);
+    $("#message").html("");
+
     new Game(opts);
   }
 
