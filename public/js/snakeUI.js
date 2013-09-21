@@ -74,9 +74,19 @@ var SnakeGame = (function () {
       "font": "bold " + width / 20 + "px consolas"
     });
 
-    $("#score").css("font", "bold " + width / 25 + "px consolas")
-    $("#streak").css("font", "bold " + width / 25 + "px consolas")
-    $("#message").css("font", "bold " + width / 25 + "px consolas")
+    $("#score").css({
+      "font": "bold " + width / 25 + "px consolas",
+      "margin-top": width / 15 + "px"
+    })
+    $("#streak").css({
+      "font": "bold " + width / 25 + "px consolas",
+      "margin-top": width / 10 + "px"
+    })
+
+    $("#message").css({
+      "font": "bold " + width / 25 + "px consolas",
+      "margin-top": width / 10 + "px"
+    })
   }
 
   Game.prototype.populateBoard = function (callback) {
