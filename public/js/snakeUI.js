@@ -12,7 +12,10 @@ var SnakeGame = (function () {
     game.numWalls = opts.numWalls;
     game.numApples = opts.numApples;
     game.timeStep = opts.timeStep;
+    game.winStreak = opts.winStreak;
     game.streak = 0;
+
+    console.log(game.winStreak)
 
     // Keys are key-codes.
     game.IMPULSES = { 
@@ -35,15 +38,10 @@ var SnakeGame = (function () {
     var game = this;
 
     game.interval = window.setInterval(function () {
-        game.makeMove(game.impulse);
-        game.updateBoard();
 
-        if (game.lose()) {
-          $(".board").effect("shake");
-          clearInterval(game.interval);
-          game.displayMessage("game over!<br/>press 'r' to restart.");
-          game.promptRestart();
-        }
+        game.makeMove.apply(game, [ game.impulse ]);
+        game.updateBoard.apply(game);
+        game.checkGameOver.apply(game);
 
     }, timeStep);
   },
@@ -59,43 +57,6 @@ var SnakeGame = (function () {
           game.impulse = game.IMPULSES[keycode]
         }
       })
-    })
-  }
-
-  Game.prototype.validImpulse = function (keycode) {
-    return this.board.validImpulse(this.IMPULSES[keycode]);
-  }
-
-  Game.prototype.styleBorders = function () {
-    var width = window.innerWidth - this.board_width;
-    var height = window.innerHeight / 2
-
-    $("#header").css("font", "bold " + width / 20 +  "px consolas");
-
-    $("#sidebar").css({
-      "width": width / 2 + "px",
-      "font": "bold " + width / 20 + "px consolas",
-      "margin-top": height / 3
-    });
-
-    $("#instructions").css({
-      "width": "auto",
-      "font": "bold " + width / 40 + "px consolas",
-      "bottom": height / 1.5
-    });
-
-    $("#score").css({
-      "font": "bold " + width / 20 + "px consolas",
-      "margin-top": width / 20 + "px"
-    })
-    $("#streak").css({
-      "font": "bold " + width / 20 + "px consolas",
-      "margin-top": width / 20 + "px"
-    })
-
-    $("#message").css({
-      "font": "bold " + width / 20 + "px consolas",
-      "margin-top": width / 20 + "px"
     })
   }
 
@@ -268,6 +229,33 @@ var SnakeGame = (function () {
     });
   }
 
+  Game.prototype.checkGameOver = function () {
+    var game = this;
+
+    if (game.lose()) {
+
+      clearInterval(game.interval);
+      $(".board").effect("shake", { distance: 100 });
+      game.displayMessage("Ouch!<br/>Press 'r' to restart.");
+      game.promptRestart();
+
+    } else if (game.streak === game.winStreak) {
+
+      clearInterval(game.interval);
+      game.displayMessage(
+        "You won!<br/>Amazing!<br/>Press 'r' to restart."
+      );
+
+      $(".board").effect("explode", function () {
+        window.setTimeout(function () {
+          $(".board").fadeIn("slow")
+          game.promptRestart();
+        }, 3000)
+      });
+
+    }
+  }
+
   // 'r' keycode: 114.
   Game.prototype.promptRestart = function () {
     var game = this;
@@ -287,7 +275,8 @@ var SnakeGame = (function () {
       dim: game.dim,
       numWalls: game.numWalls,
       numApples: game.numApples,
-      timeStep: game.timeStep 
+      timeStep: game.timeStep,
+      winStreak: game.winStreak
     }
 
     $(".board").empty();
@@ -296,6 +285,39 @@ var SnakeGame = (function () {
     $("#message").html("");
 
     new Game(opts);
+  }
+
+  Game.prototype.styleBorders = function () {
+    var width = window.innerWidth - this.board_width;
+    var height = window.innerHeight / 2
+
+    $("#header").css("font", "bold " + width / 20 +  "px consolas");
+
+    $("#sidebar").css({
+      "width": width / 2 + "px",
+      "font": "bold " + width / 20 + "px consolas",
+      "margin-top": height / 3
+    });
+
+    $("#instructions").css({
+      "width": "auto",
+      "font": "bold " + width / 40 + "px consolas",
+      "bottom": height / 1.5
+    });
+
+    $("#score").css({
+      "font": "bold " + width / 20 + "px consolas",
+      "margin-top": width / 20 + "px"
+    })
+    $("#streak").css({
+      "font": "bold " + width / 20 + "px consolas",
+      "margin-top": width / 20 + "px"
+    })
+
+    $("#message").css({
+      "font": "bold " + width / 20 + "px consolas",
+      "margin-top": width / 20 + "px"
+    })
   }
 
   Game.prototype.shuffleWalls = function () {
@@ -312,6 +334,10 @@ var SnakeGame = (function () {
 
   Game.prototype.lose = function () {
     return this.board.lose();
+  }
+
+  Game.prototype.validImpulse = function (keycode) {
+    return this.board.validImpulse(this.IMPULSES[keycode]);
   }
 
   return Game;
