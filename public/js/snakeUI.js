@@ -178,10 +178,11 @@ var SnakeGame = (function () {
 
       if (game.streak < game.winStreak - 1) {
         window.setTimeout(function () {
-          $(".wall").effect("pulsate", "fast")  
+          $(".wall").effect("pulsate", "fast")
+          $(".apple").effect("pulsate", "fast")
         }, 100)
       }
-      
+
       game.streak++;
     } 
 
