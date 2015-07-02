@@ -1,5 +1,4 @@
 SNAKE GAME remix
 ================
 
-Rewrite of the classical Snake game, using JavaScript, _ and $.
-Consume the green squares and improve your streak.
+I wrote this years ago and I plan to re-write in React, or something.
