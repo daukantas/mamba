@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var react = require('gulp-react');
 var browserify = require('browserify');
+var uglify = require('gulp-uglify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 
@@ -24,11 +25,12 @@ var DIST = {
 };
 
 
-gulp.task('browserify', function() {
+gulp.task('bundle', function() {
   return browserify({entries: DIST.js('grid.js'), debug: true})
     .bundle()
-    .pipe(source(DIST.js('mamba.js')))
+    .pipe(source(DIST.js('mamba.min.js')))
     .pipe(buffer())
+    .pipe(uglify())
     .pipe(gulp.dest('./'));
 });
 
@@ -40,4 +42,4 @@ gulp.task('react', function() {
 });
 
 
-gulp.task('build', gulp.series('react', 'browserify'));
+gulp.task('build', gulp.series('react', 'bundle'));
