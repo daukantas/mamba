@@ -7,4 +7,4 @@ var Cell = React.createClass({
     }
 });
 
-module.exports = {Cell: Cell};
+module.exports = Cell;

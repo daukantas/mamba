@@ -9,7 +9,7 @@ var Grid = React.createClass({
 
   render: function() {
     return (
-      <div class="grid">
+      <div className="grid">
         <Row />
         <Row />
         <Row />
