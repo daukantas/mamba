@@ -6,17 +6,21 @@ var buffer = require('vinyl-buffer');
 
 
 var DIST = {
+  _make_suffix: function(pattern) {
+    return (pattern && ('/' + pattern )) || '';
+  },
 
   base: function() {
     return 'public';
   },
 
   js: function(pattern) {
-    var suffix = (pattern && ('/' + pattern )) || '';
+    return this.base() + '/' + 'js' + this._make_suffix(pattern);
+  },
 
-    return this.base() + '/' + 'js' + suffix;
+  jsx: function(pattern) {
+    return this.base() + '/' + 'jsx' + this._make_suffix(pattern);
   }
-
 };
 
 
@@ -29,8 +33,8 @@ gulp.task('browserify', function() {
 });
 
 gulp.task('react', function() {
-  gulp
-    .src(DIST.js('/**.jsx'))
+  return gulp
+    .src(DIST.jsx('/**.jsx'))
     .pipe(react())
     .pipe(gulp.dest(DIST.js()))
 });
