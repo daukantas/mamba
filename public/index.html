@@ -1,78 +1,16 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <title>Snake!</title>
-  <!-- Underscore -->
-  <script type="text/javascript" src="bower_components/underscore/underscore-min.js" charset="utf-8">
-  </script>
+    <meta charset="UTF-8">
+    <title></title>
 
-  <!-- jQuery -->
-  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js" charset="utf-8">
-  </script>
-
-  <!-- jQueryUI -->
-  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-
-  <!-- Bootstrap (CSS) -->
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-  <script type="text/javascript" src="js/snakeBoard.js" />
-  <script type="text/javascript" src="js/snakeUI.js" />
-  </script>
-  <link rel="stylesheet" href="css/snake.css" type="text/css">
+    <link href="css/mamba.css" rel="stylesheet">
 </head>
 <body>
-
-  <div class="row">
-    <div id="header">
-        &nbsp;&nbsp;SNAKE GAME remix
-    </div>
-  </div>
-
-  <div class="row main">
-    <div class="col-md-3">
-      <div id="sidebar">
-        <div class="row" id="score">
-          SCORE: 0
-        </div>
-
-        <div class="row" id="streak">
-          STREAK: 0
-        </div>
-
-        <div class="row" id="message">
-        </div>
-      </div>
-    </div>
-
-    <div class="board center">
-    </div>
-
-    <div class="col-md-3 col-md-offset-9" id="instructions">
-      <p>Welcome to my interpretation of SNAKE.</p>
-      <br/>
-      <p>This game is meant to be challenging.</p>
-      <br/>
-      <p>Your goal is to obtain a streak of four.</p>
-      <br/>
-      <p>Happy trying!</p>
-    </div>
-  </div>
-
+    <section id="mamba"></section>
+    <script src="js/grid.js"></script>
+    <script src="js/row.js"></script>
+    <script src="js/cell.js"></script>
+    <script src="js/mamba.js"></script>
 </body>
-  <script type="text/javascript" charset="utf-8">
-    $(function(){
-      // The parameters determine, resp., the size of the board,
-      // the number of apples on the board, and the number of walls.
-      var game = new SnakeGame({
-                   dim: 20, 
-                   numApples: 5, 
-                   numWalls: 15, 
-                   timeStep: 100,
-                   winStreak: 4
-                 });
-
-      $("#header").css("width", window.innerWidth)
-      $(".main").css("width", window.innerWidth)
-    });
-  </script>
 </html>
