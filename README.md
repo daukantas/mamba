@@ -2,11 +2,11 @@ TODO:
 
 build:
 
-- dependency injection somehow
-- CoffeeScript compiling to JSX
+- copy bower components CSS + JS into public/
 - LESS
 
 feat:
 
 - pause
 - randomize walls
+- 2-player mode
