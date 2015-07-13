@@ -25,5 +25,8 @@
   "devDependencies": {
     "bower": "^1.4.1",
     "browserify": "^10.2.6"
+  },
+  "dependencies": {
+    "react": "^0.13.3"
   }
 }
