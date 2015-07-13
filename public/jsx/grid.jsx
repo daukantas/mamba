@@ -1,19 +1,20 @@
 var React = require('react');
 var Row = require('./row');
+var _ = require('underscore');
 
 var Grid = React.createClass({
 
-  defaultProps: function() {
+  getDefaultProps: function() {
     return {dimension: 50};
   },
 
   render: function() {
+    var rows = _.times(this.props.dimension, function() {
+      return <Row row_length={this.props.dimension} />
+    }, this);
+
     return (
-      <div className="grid">
-        <Row />
-        <Row />
-        <Row />
-      </div>
+      <div className="grid">{rows}</div>
     );
   }
 });
