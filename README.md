@@ -1,12 +1,1 @@
-TODO:
-
-build:
-
-- copy bower components CSS + JS into public/
-- LESS
-
-feat:
-
-- pause
-- randomize walls
-- 2-player mode
+![Under Development](public/img/under-construction.png "Under Development")
