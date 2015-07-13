@@ -3,4 +3,4 @@ bower_components
 .idea
 *.log
 
-public/js
+public/js/*.js
