@@ -17,26 +17,27 @@ DEST =
     'public'
 
   js: (pattern) ->
-    "#{@base()}/js/#{@_make_suffix(pattern)}"
+    "#{@base()}/js#{@_make_suffix(pattern)}"
 
   jsx: (pattern) ->
-    "#{@base()}/jsx/#{@_make_suffix(pattern)}"
+    "#{@base()}/jsx#{@_make_suffix(pattern)}"
+
+
+gulp.task 'react', ->
+  gulp
+  .src(DEST.jsx('/**.jsx'))
+  .pipe(react())
+  .pipe(gulp.dest(DEST.js()))
 
 
 gulp.task 'bundle', ->
   browserify(entries: DEST.js('grid.js'), debug: true)
     .bundle()
-    .pipe(source(DEST.js('mamba.min.js')))
+    .pipe(source('mamba.min.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init())
+    .pipe(sourcemaps.init(loadMaps: true))
       .pipe(uglify())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./'))
-
-gulp.task 'react', ->
-  gulp
-    .src(DEST.jsx('/**.jsx'))
-    .pipe(react())
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(DEST.js()))
 
 

@@ -4,5 +4,6 @@ bower_components
 *.log
 
 public/js/*.js
+public/js/*.map
 
 notes.md
