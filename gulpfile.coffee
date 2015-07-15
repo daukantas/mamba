@@ -2,11 +2,10 @@ gulp = require 'gulp'
 react = require 'gulp-react'
 
 browserify = require 'browserify'
-sourcemaps = require 'gulp-sourcemaps'
+exorcist = require 'exorcist'
+uglifyjs = require 'uglify-js'
 
-uglify = require 'gulp-uglify'
-source = require 'vinyl-source-stream'
-buffer = require 'vinyl-buffer'
+fs = require 'fs'
 
 
 DEST =
@@ -30,15 +29,28 @@ gulp.task 'react', ->
   .pipe(gulp.dest(DEST.js()))
 
 
-gulp.task 'bundle', ->
+gulp.task 'bundle', (done) ->
+  bundle_map = DEST.js('bundle-map.json')
+  stream = ''
+
   browserify(entries: DEST.js('grid.js'), debug: true)
     .bundle()
-    .pipe(source('mamba.min.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init(loadMaps: true))
-      .pipe(uglify())
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(DEST.js()))
+    .pipe(exorcist(bundle_map))
+    .on 'data', (chunk) ->
+      stream += chunk
+    .on 'end', ->
+      minified = uglifyjs.minify stream,
+        fromString: true
+        inSourceMap: bundle_map
+        outSourceMap: 'bundle-min.map'
+
+      minified.map.sourceRoot = 'public/js'
+#      minified.map.sourcesContent = (require "./#{bundle_map}").sourcesContent
+
+      fs.writeFile 'public/js/bundle-min.js', minified.code
+      fs.writeFile DEST.js('bundle-min.map'), JSON.stringify(JSON.parse minified.map)
+
+      done?()
 
 
 gulp.task 'build', gulp.series('react', 'bundle')
