@@ -43,14 +43,10 @@ gulp.task 'bundle', (done) ->
         fromString: true
         inSourceMap: bundle_map
         outSourceMap: 'bundle-min.map'
+        sourceRoot: 'public/js'
 
-      minified.map.sourceRoot = 'public/js'
-#      minified.map.sourcesContent = (require "./#{bundle_map}").sourcesContent
-
-      fs.writeFile 'public/js/bundle-min.js', minified.code
+      fs.writeFile DEST.js('bundle-min.js'), minified.code
       fs.writeFile DEST.js('bundle-min.map'), JSON.stringify(JSON.parse minified.map)
-
-      done?()
 
 
 gulp.task 'build', gulp.series('react', 'bundle')
