@@ -3,7 +3,7 @@ react = require 'gulp-react'
 
 browserify = require 'browserify'
 exorcist = require 'exorcist'
-uglifyjs = require 'uglify-js'
+minifify = require 'minifyify'
 
 fs = require 'fs'
 
@@ -30,23 +30,15 @@ gulp.task 'react', ->
 
 
 gulp.task 'bundle', (done) ->
-  bundle_map = DEST.js('bundle-map.json')
-  stream = ''
-
   browserify(entries: DEST.js('grid.js'), debug: true)
-    .bundle()
-    .pipe(exorcist(bundle_map))
-    .on 'data', (chunk) ->
-      stream += chunk
-    .on 'end', ->
-      minified = uglifyjs.minify stream,
-        fromString: true
-        inSourceMap: bundle_map
-        outSourceMap: 'bundle-min.map'
-        sourceRoot: 'public/js'
+    .plugin 'minifyify',
+      map: 'bundle-min.map'
+      output: 'public/js/bundle-min.map'
+    .bundle (err, src, map) ->
+      fs.writeFile DEST.js('bundle-min.js'), src
+      done?()
 
-      fs.writeFile DEST.js('bundle-min.js'), minified.code
-      fs.writeFile DEST.js('bundle-min.map'), JSON.stringify(JSON.parse minified.map)
+
 
 
 gulp.task 'build', gulp.series('react', 'bundle')
