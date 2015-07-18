@@ -32,13 +32,11 @@ gulp.task 'react', ->
 gulp.task 'bundle', (done) ->
   browserify(entries: DEST.js('grid.js'), debug: true)
     .plugin 'minifyify',
-      map: 'bundle-min.map'
-      output: 'public/js/bundle-min.map'
-    .bundle (err, src, map) ->
+      map: 'bundle-min.js.map'
+      output: 'public/js/bundle-min.js.map'
+    .bundle (err, src) ->
       fs.writeFile DEST.js('bundle-min.js'), src
       done?()
-
-
 
 
 gulp.task 'build', gulp.series('react', 'bundle')
