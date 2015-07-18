@@ -12,8 +12,8 @@ buffer = require 'vinyl-buffer'
 fs = require 'fs'
 
 
-_suffix_path = (pattern) ->
-  (pattern && ('/' + pattern )) || ''
+path_suffix = (suffix) ->
+  (suffix && ('/' + suffix )) || ''
 
 
 SRC =
@@ -27,7 +27,7 @@ SRC =
     "#{@_base()}/jsx/**.jsx"
 
   js: (suffix) ->
-    "#{@_base()}/js#{_suffix_path(suffix)}"
+    "#{@_base()}/js#{path_suffix(suffix)}"
 
 
 PUBLIC =
@@ -35,7 +35,7 @@ PUBLIC =
     'public'
 
   js: (suffix) ->
-    "#{@_base()}/js#{_suffix_path(suffix)}"
+    "#{@_base()}/js#{path_suffix(suffix)}"
 
   _js_file: (file, options) ->
     if options.fullpath
