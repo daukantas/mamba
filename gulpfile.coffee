@@ -1,42 +1,91 @@
 gulp = require 'gulp'
+path = require 'path'
 react = require 'gulp-react'
 
 browserify = require 'browserify'
 exorcist = require 'exorcist'
 minifify = require 'minifyify'
 
+source = require 'vinyl-source-stream'
+buffer = require 'vinyl-buffer'
+
 fs = require 'fs'
 
 
-DEST =
-  _make_suffix: (pattern) ->
-    (pattern && ('/' + pattern )) || ''
+_suffix_path = (pattern) ->
+  (pattern && ('/' + pattern )) || ''
 
-  base: ->
+
+SRC =
+  _base: ->
+    'src'
+
+  entries: ->
+    [@js('grid.js')]
+
+  jsx: ->
+    "#{@_base()}/jsx/**.jsx"
+
+  js: (suffix) ->
+    "#{@_base()}/js#{_suffix_path(suffix)}"
+
+
+PUBLIC =
+  _base: ->
     'public'
 
-  js: (pattern) ->
-    "#{@base()}/js#{@_make_suffix(pattern)}"
+  js: (suffix) ->
+    "#{@_base()}/js#{_suffix_path(suffix)}"
 
-  jsx: (pattern) ->
-    "#{@base()}/jsx#{@_make_suffix(pattern)}"
+  _js_file: (file, options) ->
+    if options.fullpath
+      file = @js(file)
+    file
+
+  srcmap: (options = {fullpath: false}) ->
+    @_js_file('mamba.js.map', options)
+
+  bundle: (options = {fullpath: false}) ->
+    @_js_file('mamba.js', options)
 
 
 gulp.task 'react', ->
   gulp
-  .src(DEST.jsx('/**.jsx'))
+  .src(SRC.jsx())
   .pipe(react())
-  .pipe(gulp.dest(DEST.js()))
+  .pipe(gulp.dest(SRC.js()))
 
 
-gulp.task 'bundle', (done) ->
-  browserify(entries: DEST.js('grid.js'), debug: true)
+gulp.task 'bundle:production', (done) ->
+  browserify(entries: SRC.entries(), debug: true)
     .plugin 'minifyify',
-      map: 'bundle-min.js.map'
-      output: 'public/js/bundle-min.js.map'
-    .bundle (err, src) ->
-      fs.writeFile DEST.js('bundle-min.js'), src
+      map: PUBLIC.srcmap()
+      output: PUBLIC.srcmap(fullpath: true)
+    .bundle (_, minified, map) ->
+      # this is necessarg to set the correct paths to sources
+      # in web inspectors; couldn't find a way to do this through minifyify.
+      map = JSON.parse map
+      map.sourceRoot = '/'
+
+      fs.writeFile PUBLIC.srcmap(fullpath: true), JSON.stringify map
+      fs.writeFile PUBLIC.bundle(fullpath: true), minified
       done?()
 
 
-gulp.task 'build', gulp.series('react', 'bundle')
+gulp.task 'bundle:development', ->
+  browserify(entries: SRC.entries(), debug: true)
+    .bundle()
+    .pipe exorcist(PUBLIC.srcmap(fullpath: true), null, '/')
+    .pipe source(PUBLIC.bundle())
+    .pipe buffer()
+    .pipe gulp.dest(PUBLIC.js())
+
+
+gulp.task 'build:development', gulp.series(
+  'react',
+  'bundle:development'
+)
+gulp.task 'build:production', gulp.series(
+  'react',
+  'bundle:production'
+)
