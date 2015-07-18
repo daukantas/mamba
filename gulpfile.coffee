@@ -62,7 +62,7 @@ gulp.task 'bundle:production', (done) ->
       map: PUBLIC.srcmap()
       output: PUBLIC.srcmap(fullpath: true)
     .bundle (_, minified, map) ->
-      # this is necessarg to set the correct paths to sources
+      # this is necessary to set the correct paths to sources
       # in web inspectors; couldn't find a way to do this through minifyify.
       map = JSON.parse map
       map.sourceRoot = '/'
