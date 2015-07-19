@@ -3,11 +3,8 @@ bower_files = require 'main-bower-files'
 
 
 PATHS =
-
   suffix: (suffix) ->
     (suffix && ('/' + suffix )) || ''
-
-
   build_filepath: (file, options) ->
     if options.base
       file = "#{options.base}/#{file}"
@@ -15,61 +12,44 @@ PATHS =
 
 
 APP =
-
   _base: ->
     'app'
-
   entries: ->
     [@js('grid.js')]
-
   jsx: ->
     "#{@_base()}/jsx/**.jsx"
-
   js: (suffix) ->
     "#{@_base()}/js#{PATHS.suffix(suffix)}"
-
   template: ->
     "#{@_base()}/index.html"
 
 DEST =
-
   base: ->
     'public'
-
   js: (suffix) ->
     "#{@base()}/js#{PATHS.suffix(suffix)}"
-
   _get_base: (options) ->
     (options.fullpath && "#{@base()}/js") || ''
-
   srcmap: (options = {fullpath: false}) ->
     PATHS.build_filepath('mamba.js.map', base: @_get_base(options))
-
   bundle: (options = {fullpath: false}) ->
     PATHS.build_filepath('mamba.js', base: @_get_base(options))
-
   template: ->
     "#{@base()}/index.html"
 
-  BOWER:
-
+  bower:
     base: ->
       'public/bower'
-
     _get_base: (options) ->
       (options.fullpath && @base()) || ''
-
     jsfile: (options = {fullpath: false}) ->
       PATHS.build_filepath('bower.min.js', base: @_get_base(options))
-
     cssfile: (options = {fullpath: false}) ->
       PATHS.build_filepath('bower.min.css', base: @_get_base(options))
 
 
 BOWER =
-
   source: bower_files()
-
   stream: (filter) ->
     gulp
       .src @source

@@ -13,8 +13,8 @@ inject_script = (filepath) ->
 
 gulp.task 'inject:bower', ->
   bower_files = gulp.src [
-    DEST.BOWER.jsfile(fullpath: true)
-    DEST.BOWER.cssfile(fullpath: true)
+    DEST.bower.jsfile(fullpath: true)
+    DEST.bower.cssfile(fullpath: true)
   ], read: false
 
   gulp
