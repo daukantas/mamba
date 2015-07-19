@@ -8,7 +8,7 @@ rename = require 'gulp-rename'
 
 inject_script = (filepath) ->
   path = filepath.replace("/#{DEST.base()}/", '')
-  "<script src=#{path}></script>"
+  "<script src='#{path}'></script>"
 
 
 gulp.task 'inject:bower', ->
