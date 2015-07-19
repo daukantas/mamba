@@ -18,8 +18,6 @@ APP =
     ["#{@base()}/grid/index.js"]
   cjsx: ->
     "#{@base()}/**/*.cjsx"
-  jsx: ->
-    "#{@base()}/**/*.jsx"
   template: ->
     "#{@base()}/index.html"
 

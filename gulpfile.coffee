@@ -4,15 +4,17 @@ require_dir './gulp/tasks', recurse: true
 gulp = require 'gulp'
 
 
+build_common = [
+  'cjsx'
+]
+
 
 gulp.task 'build:development', gulp.series(
-  'react',
-  'bower',
+  build_common...,
   'bundle:development'
 )
 
 gulp.task 'build:production', gulp.series(
-  'react',
-  'bower',
+  build_common...,
   'bundle:production'
 )
