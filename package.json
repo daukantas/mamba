@@ -1,6 +1,6 @@
 {
   "name": "mamba",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Snake game implemented in React.js",
   "main": "index.js",
   "scripts": {
