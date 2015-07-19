@@ -13,6 +13,7 @@ fs = require 'fs'
 MAP_SOURCE_ROOT = '/'
 
 
+# FIXME: generated sourcemaps work inconsistently in Chrome
 gulp.task 'bundle:production', (done) ->
   browserify(entries: APP.entries(), debug: true)
     .plugin 'minifyify',
