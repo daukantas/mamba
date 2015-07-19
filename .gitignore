@@ -3,10 +3,9 @@ bower_components
 .idea
 *.log
 
-src/js
-public/js
-public/bower
-public/css
-public/index.html
+app/**/*.js
+app/**/*.css
+
+public
 
 notes.md
