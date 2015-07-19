@@ -2,11 +2,20 @@ gulp = require 'gulp'
 bower_files = require 'main-bower-files'
 
 
-path_suffix = (suffix) ->
-  (suffix && ('/' + suffix )) || ''
+PATHS =
+
+  suffix: (suffix) ->
+    (suffix && ('/' + suffix )) || ''
+
+
+  build_filepath: (file, options) ->
+    if options.base
+      file = "#{options.base}/#{file}"
+    file
 
 
 APP =
+
   _base: ->
     'app'
 
@@ -17,28 +26,27 @@ APP =
     "#{@_base()}/jsx/**.jsx"
 
   js: (suffix) ->
-    "#{@_base()}/js#{path_suffix(suffix)}"
+    "#{@_base()}/js#{PATHS.suffix(suffix)}"
 
   template: ->
     "#{@_base()}/index.html"
 
 DEST =
+
   base: ->
     'public'
 
   js: (suffix) ->
-    "#{@base()}/js#{path_suffix(suffix)}"
+    "#{@base()}/js#{PATHS.suffix(suffix)}"
 
-  _file: (file, options) ->
-    if options.fullpath
-      file = "#{@base()}/#{file}"
-    file
+  _get_base: (options) ->
+    (options.fullpath && "#{@base()}/js") || ''
 
   srcmap: (options = {fullpath: false}) ->
-    @_file('js/mamba.js.map', options)
+    PATHS.build_filepath('mamba.js.map', base: @_get_base(options))
 
   bundle: (options = {fullpath: false}) ->
-    @_file('js/mamba.js', options)
+    PATHS.build_filepath('mamba.js', base: @_get_base(options))
 
   template: ->
     "#{@base()}/index.html"
@@ -48,11 +56,14 @@ DEST =
     base: ->
       'public/bower'
 
+    _get_base: (options) ->
+      (options.fullpath && @base()) || ''
+
     jsfile: (options = {fullpath: false}) ->
-      DEST._file.call(@, 'bower.min.js', options)
+      PATHS.build_filepath('bower.min.js', base: @_get_base(options))
 
     cssfile: (options = {fullpath: false}) ->
-      DEST._file.call(@, 'bower.min.css', options)
+      PATHS.build_filepath('bower.min.css', base: @_get_base(options))
 
 
 BOWER =
