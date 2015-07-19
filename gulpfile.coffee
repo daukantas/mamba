@@ -7,10 +7,12 @@ gulp = require 'gulp'
 
 gulp.task 'build:development', gulp.series(
   'react',
+  'bower',
   'bundle:development'
 )
 
 gulp.task 'build:production', gulp.series(
   'react',
+  'bower',
   'bundle:production'
 )
