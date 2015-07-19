@@ -22,7 +22,7 @@ APP =
   template: ->
     "#{@_base()}/index.html"
 
-DST =
+DEST =
   base: ->
     'public'
 
@@ -49,10 +49,10 @@ DST =
       'public/bower'
 
     jsfile: (options = {fullpath: false}) ->
-      DST._file.call(@, 'bower.min.js', options)
+      DEST._file.call(@, 'bower.min.js', options)
 
     cssfile: (options = {fullpath: false}) ->
-      DST._file.call(@, 'bower.min.css', options)
+      DEST._file.call(@, 'bower.min.css', options)
 
 
 BOWER =
@@ -65,4 +65,4 @@ BOWER =
       .pipe filter
 
 
-module.exports = {APP, DST, BOWER}
+module.exports = {APP, DEST, BOWER}
