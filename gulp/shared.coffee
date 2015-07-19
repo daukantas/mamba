@@ -16,6 +16,8 @@ APP =
     'app'
   entries: ->
     ["#{@base()}/grid/index.js"]
+  cjsx: ->
+    "#{@base()}/**/*.cjsx"
   jsx: ->
     "#{@base()}/**/*.jsx"
   template: ->
