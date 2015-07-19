@@ -1,8 +1,6 @@
 gulp = require 'gulp'
 
-{DST} = require '../shared'
-
-bower_files = require 'main-bower-files'
+{DST, BOWER} = require '../shared'
 
 concat = require 'gulp-concat'
 uglify = require 'gulp-uglify'
@@ -11,19 +9,6 @@ rename = require 'gulp-rename'
 
 concat_CSS = require 'gulp-concat-css'
 minify_CSS = require 'gulp-minify-css'
-
-
-BOWER =
-
-  source: bower_files()
-
-  dest: ->
-    'public/bower'
-
-  stream: (filter) ->
-    gulp
-      .src @source
-      .pipe filter
 
 
 gulp.task 'bower:js', ->
@@ -35,8 +20,8 @@ gulp.task 'bower:js', ->
   BOWER.stream(only_js)
     .pipe concat('bower.js')
     .pipe uglify()
-    .pipe rename('bower.min.js')
-    .pipe gulp.dest(BOWER.dest())
+    .pipe rename(DST.BOWER.jsfile())
+    .pipe gulp.dest(DST.BOWER.base())
 
 gulp.task 'bower:css', ->
   onlyCSS = filter([
@@ -46,7 +31,7 @@ gulp.task 'bower:css', ->
   BOWER.stream(onlyCSS)
     .pipe concat_CSS('bower.css')
     .pipe minify_CSS()
-    .pipe rename('bower.min.css')
-    .pipe gulp.dest(BOWER.dest())
+    .pipe rename(DST.BOWER.cssfile())
+    .pipe gulp.dest(DST.BOWER.base())
 
 gulp.task 'bower', gulp.parallel('bower:js', 'bower:css')

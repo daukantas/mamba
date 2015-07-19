@@ -1,3 +1,7 @@
+gulp = require 'gulp'
+bower_files = require 'main-bower-files'
+
+
 path_suffix = (suffix) ->
   (suffix && ('/' + suffix )) || ''
 
@@ -15,24 +19,50 @@ APP =
   js: (suffix) ->
     "#{@_base()}/js#{path_suffix(suffix)}"
 
+  template: ->
+    "#{@_base()}/index.html"
 
 DST =
-  _base: ->
+  base: ->
     'public'
 
   js: (suffix) ->
-    "#{@_base()}/js#{path_suffix(suffix)}"
+    "#{@base()}/js#{path_suffix(suffix)}"
 
-  _js_file: (file, options) ->
+  _file: (file, options) ->
     if options.fullpath
-      file = @js(file)
+      file = "#{@base()}/#{file}"
     file
 
   srcmap: (options = {fullpath: false}) ->
-    @_js_file('mamba.js.map', options)
+    @_file('js/mamba.js.map', options)
 
   bundle: (options = {fullpath: false}) ->
-    @_js_file('mamba.js', options)
+    @_file('js/mamba.js', options)
+
+  template: ->
+    "#{@base()}/index.html"
+
+  BOWER:
+
+    base: ->
+      'public/bower'
+
+    jsfile: (options = {fullpath: false}) ->
+      DST._file.call(@, 'bower.min.js', options)
+
+    cssfile: (options = {fullpath: false}) ->
+      DST._file.call(@, 'bower.min.css', options)
 
 
-module.exports = {APP, DST}
+BOWER =
+
+  source: bower_files()
+
+  stream: (filter) ->
+    gulp
+      .src @source
+      .pipe filter
+
+
+module.exports = {APP, DST, BOWER}

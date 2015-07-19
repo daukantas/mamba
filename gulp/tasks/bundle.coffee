@@ -18,14 +18,14 @@ gulp.task 'bundle:production', (done) ->
     .plugin 'minifyify',
       map: DST.srcmap()
       output: DST.srcmap(fullpath: true)
-    .bundle (_, minified, map) ->
+    .bundle (_, minified, srcmap) ->
       # this is necessary to set the correct paths to sources
       # in web inspectors; couldn't find a way to do this
       # through minifyify's API
-      map = JSON.parse map
-      map.sourceRoot = MAP_SOURCE_ROOT
+      srcmap = JSON.parse srcmap
+      srcmap.sourceRoot = MAP_SOURCE_ROOT
 
-      fs.writeFile DST.srcmap(fullpath: true), JSON.stringify map
+      fs.writeFile DST.srcmap(fullpath: true), JSON.stringify srcmap
       fs.writeFile DST.bundle(fullpath: true), minified
       done?()
 
