@@ -7,4 +7,4 @@ gulp.task 'react', ->
   gulp
   .src APP.jsx()
   .pipe react()
-  .pipe gulp.dest(APP.js())
+  .pipe gulp.dest(APP.base())

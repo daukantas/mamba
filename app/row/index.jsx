@@ -1,17 +1,17 @@
 var React = require('react');
-var Cell = require('./cell');
+var Cell = require('../cell');
 var _ = require('underscore');
 
 
-var Row = React.createClass({displayName: "Row",
+var Row = React.createClass({
 
   render: function() {
     var cells = _.times(this.props.row_length, function() {
-      return React.createElement(Cell, null);
+      return <Cell />;
     });
 
     return (
-      React.createElement("div", {className: "row"}, cells)
+      <div className="row">{cells}</div>
     );
   }
 

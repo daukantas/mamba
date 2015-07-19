@@ -12,16 +12,14 @@ PATHS =
 
 
 APP =
-  _base: ->
+  base: ->
     'app'
   entries: ->
-    [@js('grid.js')]
+    ["#{@base()}/grid/index.js"]
   jsx: ->
-    "#{@_base()}/jsx/**.jsx"
-  js: (suffix) ->
-    "#{@_base()}/js#{PATHS.suffix(suffix)}"
+    "#{@base()}/**/*.jsx"
   template: ->
-    "#{@_base()}/index.html"
+    "#{@base()}/index.html"
 
 DEST =
   base: ->

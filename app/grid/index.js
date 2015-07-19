@@ -1,5 +1,5 @@
 var React = require('react');
-var Row = require('./row');
+var Row = require('../row');
 var _ = require('underscore');
 
 var Grid = React.createClass({displayName: "Grid",
