@@ -1,5 +1,5 @@
 gulp = require 'gulp'
-{SRC, DST} = require '../shared'
+{APP, DST} = require '../shared'
 
 browserify = require 'browserify'
 exorcist = require 'exorcist'
@@ -10,11 +10,11 @@ buffer = require 'vinyl-buffer'
 fs = require 'fs'
 
 
-map_source_root = '/'
+MAP_SOURCE_ROOT = '/'
 
 
 gulp.task 'bundle:production', (done) ->
-  browserify(entries: SRC.entries(), debug: true)
+  browserify(entries: APP.entries(), debug: true)
   .plugin 'minifyify',
     map: DST.srcmap()
     output: DST.srcmap(fullpath: true)
@@ -23,7 +23,7 @@ gulp.task 'bundle:production', (done) ->
     # in web inspectors; couldn't find a way to do this
     # through minifyify's API
     map = JSON.parse map
-    map.sourceRoot = map_source_root
+    map.sourceRoot = MAP_SOURCE_ROOT
 
     fs.writeFile DST.srcmap(fullpath: true), JSON.stringify map
     fs.writeFile DST.bundle(fullpath: true), minified
@@ -31,9 +31,9 @@ gulp.task 'bundle:production', (done) ->
 
 
 gulp.task 'bundle:development', ->
-  browserify(entries: SRC.entries(), debug: true)
+  browserify(entries: APP.entries(), debug: true)
   .bundle()
-  .pipe exorcist(DST.srcmap(fullpath: true), null, map_source_root)
+  .pipe exorcist(DST.srcmap(fullpath: true), null, MAP_SOURCE_ROOT)
   .pipe source(DST.bundle())
   .pipe buffer()
   .pipe gulp.dest(DST.js())

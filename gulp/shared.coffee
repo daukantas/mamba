@@ -2,9 +2,9 @@ path_suffix = (suffix) ->
   (suffix && ('/' + suffix )) || ''
 
 
-SRC =
+APP =
   _base: ->
-    'src'
+    'app'
 
   entries: ->
     [@js('grid.js')]
@@ -35,4 +35,4 @@ DST =
     @_js_file('mamba.js', options)
 
 
-module.exports = {SRC, DST}
+module.exports = {APP, DST}
