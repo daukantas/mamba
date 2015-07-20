@@ -24,7 +24,7 @@ BUILD =
   base: ->
     'build'
   entries: ->
-    ["#{@base()}/grid/index.js"]
+    ["#{@base()}/app.js"]
 
 
 DEST =
