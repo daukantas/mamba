@@ -1,7 +1,12 @@
 class Mamba
 
-  constructor: ({x, y}) ->
-    @_head = {x, y}
+  @at_position: ({x, y}) ->
+    mamba = new Mamba()
+    mamba._head = {x, y}
+    mamba
+
+  constructor: ->
+    @_head = null
     @_impulse = null
     @_length = 1
 
@@ -12,4 +17,10 @@ class Mamba
   length: ->
     @_length
 
-module.exports = Mamba
+  head: ->
+    @_head
+
+  grow: ->
+    @_length++
+
+module.exports = {at_position: Mamba.at_position}
