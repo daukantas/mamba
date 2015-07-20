@@ -21,12 +21,11 @@ class GameLoop
     82: '_restart'
 
   constructor: (@$, @Mamba, @settings) ->
-    @_start()
 
   _bind_keyevents: ->
     @$(document).keyup @_keyhandler
 
-  _start: ->
+  start: ->
     @_mamba = @Mamba.at_position(@settings.GRID.start_position())
     @_bind_keyevents(@_keyhandler)
 
@@ -42,9 +41,8 @@ class GameLoop
 
   _restart: ->
     @$(document).off('keyup', @_keyhandler)
-    @_start()
+    @start()
     console.info('Restarted game!')
-
 
 
 $ = window.$
@@ -53,6 +51,7 @@ if $?
   Mamba = require './mamba'
   settings = require './settings'
 
-  new GameLoop($, Mamba, settings)
+  gameloop = new GameLoop($, Mamba, settings)
+  gameloop.start()
 else
   throw new Error "Couldn't find window.$, are you sure jQuery is loaded?"
