@@ -7,6 +7,7 @@ class Mamba
 
   impulse: ({x, y}) ->
     @_impulse = {x, y}
+    console.info "Moving {x: #{@_impulse.x}, y: #{@_impulse.y}}!"
 
   length: ->
     @_length

@@ -1,11 +1,14 @@
-unless window.$?
+$ = window.$
+
+unless $?
   throw new Error 'jQuery must be loaded.'
 
 
 _ = require 'underscore'
 
-Mamba = require '../mamba'
-{GRID} = require '../settings'
+Mamba = require './mamba'
+Grid = require './grid'
+{GRID} = require './settings'
 
 
 impulse_map =
@@ -29,7 +32,9 @@ mamba = new Mamba(GRID.start_position())
 
 
 # TODO: clean this up when restarting the game
-$.keyup (event) ->
+$(document).keyup (event) ->
   impulse = impulse_map[event.keyCode]
   if impulse?
     mamba.impulse(impulse)
+  else
+    event.preventDefault()
