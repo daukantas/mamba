@@ -1,5 +1,6 @@
 Grid = require './grid'
-
+Mamba = require './mamba'
+settings = require './settings'
 
 class GameLoop
 
@@ -20,7 +21,7 @@ class GameLoop
   @control_map =
     82: '_restart'
 
-  @dependencies = ['$', 'Mamba', 'settings']
+  @dependencies = ['$']
 
   constructor: (dependencies = {}) ->
     for dependency in @constructor.dependencies
@@ -34,7 +35,7 @@ class GameLoop
     @$(document).keyup @_keyhandler
 
   start: ->
-    @_mamba = @Mamba.at_position(@settings.GRID.start_position())
+    @_mamba = Mamba.at_position(settings.GRID.start_position())
     @_bind_keyevents(@_keyhandler)
 
   # bound to the instance, for convenience & cleanup
@@ -56,10 +57,7 @@ class GameLoop
 $ = window.$
 
 if $?
-  Mamba = require './mamba'
-  settings = require './settings'
-
-  gameloop = new GameLoop({$, Mamba, settings})
+  gameloop = new GameLoop({$})
   gameloop.start()
 else
   throw new Error "Couldn't find window.$, are you sure jQuery is loaded?"
