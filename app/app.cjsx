@@ -55,4 +55,4 @@ if $?
 
   new GameLoop($, Mamba, settings)
 else
-  throw new Error 'jQuery must be loaded.'
+  throw new Error "Couldn't find window.$, are you sure jQuery is loaded?"
