@@ -1,9 +1,3 @@
-$ = window.$
-
-unless $?
-  throw new Error 'jQuery must be loaded.'
-
-
 _ = require 'underscore'
 
 Mamba = require './mamba'
@@ -11,7 +5,9 @@ Grid = require './grid'
 {GRID} = require './settings'
 
 
-impulse_map =
+class GameLoop
+
+  @impulse_map =
     37:
       x: -1
       y: 0
@@ -25,16 +21,33 @@ impulse_map =
       x: 0
       y: -1
 
+  @control_map =
+    82: 'restart'
 
-# Create a new Mamba and Grid
-mamba = new Mamba(GRID.start_position())
+  constructor: (@$) ->
+    @_mamba = Mamba.at_position(GRID.start_position())
+    @_bind_keyevents()
+
+  _bind_keyevents: ->
+    # TODO: clean this up when restarting the game
+    @$(document).keyup (event) =>
+      keycode = event.which
+      impulse = @constructor.impulse_map[keycode]
+      control = @constructor.control_map[keycode]
+      if impulse?
+        @_mamba.impulse(impulse)
+      else if control?
+        @[control]()
+
+  restart: ->
+    @_mamba = Mamba.at_position(GRID.start_position())
+    console.info('Restarting game!')
 
 
 
-# TODO: clean this up when restarting the game
-$(document).keyup (event) ->
-  impulse = impulse_map[event.keyCode]
-  if impulse?
-    mamba.impulse(impulse)
-  else
-    event.preventDefault()
+$ = window.$
+
+if $?
+  new GameLoop($)
+else
+  throw new Error 'jQuery must be loaded.'
