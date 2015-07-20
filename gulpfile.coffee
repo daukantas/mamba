@@ -6,6 +6,7 @@ gulp = require 'gulp'
 
 build_common = [
   'cjsx'
+  'sass'
 ]
 
 
