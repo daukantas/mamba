@@ -6,6 +6,9 @@ bower_components
 app/**/*.js
 app/**/*.css
 
-public
+public/css
+public/js
+public/bower
+public/*.html
 
 notes.md
