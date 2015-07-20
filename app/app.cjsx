@@ -20,7 +20,15 @@ class GameLoop
   @control_map =
     82: '_restart'
 
-  constructor: (@$, @Mamba, @settings) ->
+  @dependencies = ['$', 'Mamba', 'settings']
+
+  constructor: (dependencies = {}) ->
+    for dependency in @constructor.dependencies
+      if dependencies[dependency]?
+        @[dependency] = dependencies[dependency]
+      else
+        throw new Error("GameLoop needs dependency: #{dependency}")
+    @
 
   _bind_keyevents: ->
     @$(document).keyup @_keyhandler
@@ -51,7 +59,7 @@ if $?
   Mamba = require './mamba'
   settings = require './settings'
 
-  gameloop = new GameLoop($, Mamba, settings)
+  gameloop = new GameLoop({$, Mamba, settings})
   gameloop.start()
 else
   throw new Error "Couldn't find window.$, are you sure jQuery is loaded?"
