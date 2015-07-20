@@ -3,8 +3,7 @@ bower_components
 .idea
 *.log
 
-app/**/*.js
-app/**/*.css
+build
 
 public/css
 public/js

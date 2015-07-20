@@ -3,7 +3,7 @@ cjsx = require 'gulp-cjsx'
 gutil = require 'gulp-util'
 
 
-{APP} = require '../shared'
+{APP, BUILD} = require '../shared'
 
 
 gulp.task 'cjsx', ->
@@ -11,4 +11,4 @@ gulp.task 'cjsx', ->
     .src APP.cjsx()
     .pipe cjsx(bare: true)
       .on 'error', gutil.log
-    .pipe gulp.dest APP.base()
+    .pipe gulp.dest BUILD.base()

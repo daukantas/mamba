@@ -14,12 +14,17 @@ PATHS =
 APP =
   base: ->
     'app'
-  entries: ->
-    ["#{@base()}/grid/index.js"]
   cjsx: ->
     "#{@base()}/**/*.cjsx"
   template: ->
     "#{@base()}/index.html"
+
+
+BUILD =
+  base: ->
+    'build'
+  entries: ->
+    ["#{@base()}/grid/index.js"]
 
 DEST =
   base: ->
@@ -54,4 +59,4 @@ BOWER =
       .pipe filter
 
 
-module.exports = {APP, DEST, BOWER}
+module.exports = {APP, BOWER, BUILD, DEST}

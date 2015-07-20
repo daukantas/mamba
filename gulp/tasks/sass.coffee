@@ -1,11 +1,11 @@
 gulp = require 'gulp'
 sass = require 'gulp-sass'
 
-{APP} = require '../shared'
+{APP, BUILD} = require '../shared'
 
 
 gulp.task 'sass', ->
   gulp
     .src "#{APP.base()}/**/*.scss"
     .pipe sass()
-    .pipe gulp.dest(APP.base())
+    .pipe gulp.dest(BUILD.base())

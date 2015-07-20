@@ -1,5 +1,5 @@
 gulp = require 'gulp'
-{APP, DEST} = require '../shared'
+{APP, BUILD, DEST} = require '../shared'
 
 browserify = require 'browserify'
 exorcist = require 'exorcist'
@@ -14,7 +14,7 @@ MAP_SOURCE_ROOT = '/'
 
 
 gulp.task 'bundle:production', (done) ->
-  browserify(entries: APP.entries(), debug: true)
+  browserify(entries: BUILD.entries(), debug: true)
     .plugin 'minifyify',
       map: DEST.srcmap()
       output: DEST.srcmap(fullpath: true)
@@ -31,9 +31,9 @@ gulp.task 'bundle:production', (done) ->
 
 
 gulp.task 'bundle:development', ->
-  browserify(entries: APP.entries(), debug: true)
-  .bundle()
-  .pipe exorcist(DEST.srcmap(fullpath: true), null, MAP_SOURCE_ROOT)
-  .pipe source(DEST.bundle())
-  .pipe buffer()
-  .pipe gulp.dest(DEST.js())
+  browserify(entries: BUILD.entries(), debug: true)
+    .bundle()
+    .pipe exorcist(DEST.srcmap(fullpath: true), null, MAP_SOURCE_ROOT)
+    .pipe source(DEST.bundle())
+    .pipe buffer()
+    .pipe gulp.dest(DEST.js())
