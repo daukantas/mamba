@@ -11,7 +11,7 @@ Row = React.createClass
 
   render: ->
     cells = _.times @props.length, ->
-      <Cell content={Cell.Grub}/>
+      <Cell content={Cell.Item}/>
 
     <div className="row">{cells}</div>
 

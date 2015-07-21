@@ -16,9 +16,9 @@ class CellType
     @name
 
 
-class Grub extends CellType
+class Item extends CellType
 
-  name: "grub"
+  name: "item"
 
 
 class Void extends CellType
@@ -37,7 +37,7 @@ class Snake extends CellType
 
 
 module.exports =
-  Grub: new Grub
+  Item: new Item
   Wall: new Wall
   Void: new Void
   Snake: new Snake

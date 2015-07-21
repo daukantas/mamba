@@ -10,8 +10,8 @@ Cell = React.createClass
     content: React.PropTypes.oneOf(_.values cell_types).isRequired
 
   statics: _.extend {}, cell_types, type_classmap: (content) ->
-     if content is @Grub
-       'grub-cell'
+     if content is @Item
+       'item-cell'
      else if content is @Void
        'void-cell'
      else if content is @Wall
