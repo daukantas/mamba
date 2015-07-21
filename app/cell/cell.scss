@@ -5,4 +5,6 @@ $cell_side: $row_height;
 .cell {
   height: $cell_side;
   width: $cell_side;
+
+  display: inline-block;
 }
