@@ -5,9 +5,12 @@ _ = require('underscore');
 
 Row = React.createClass
 
+  # TODO: implement me. You shouldn't always have to re-render...
+  shouldComponentUpdate: ->
+    true
+
   render: ->
-    cells = _.times @props.row_length, ->
-      <Cell />
+    cells = _.times @props.length, ->
       <Cell content={Cell.Grub}/>
 
     <div className="row">{cells}</div>

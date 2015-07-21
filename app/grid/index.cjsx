@@ -9,7 +9,7 @@ Grid = React.createClass
 
   render: ->
     rows = _.times(@props.dimension, ->
-      <Row row_length={@props.dimension} />
+      <Row length={@props.dimension} />
     , @)
 
     <div className="grid">{rows}</div>
