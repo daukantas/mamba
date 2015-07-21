@@ -36,14 +36,16 @@ DEST =
     "#{@base()}/js#{PATHS.suffix(suffix)}"
   css: (suffix) ->
     "#{@base()}/css#{PATHS.suffix(suffix)}"
-  css_bundle: ->
-    "#{@base()}/css/app.css"
-  _parse_base: (options) ->
+  css_bundle: (options = {fullpath: false})->
+    PATHS.build_filepath('app.css', base: @_parse_base_css(options))
+  _parse_base_js: (options) ->
     (options.fullpath && "#{@base()}/js") || ''
+  _parse_base_css: (options) ->
+    (options.fullpath && "#{@base()}/css") || ''
   srcmap: (options = {fullpath: false}) ->
-    PATHS.build_filepath('mamba.js.map', base: @_parse_base(options))
+    PATHS.build_filepath('mamba.js.map', base: @_parse_base_js(options))
   bundle: (options = {fullpath: false}) ->
-    PATHS.build_filepath('mamba.js', base: @_parse_base(options))
+    PATHS.build_filepath('mamba.js', base: @_parse_base_js(options))
   template: ->
     "#{@base()}/index.html"
 

@@ -6,9 +6,14 @@ rename = require 'gulp-rename'
 {APP, BOWER, DEST} = require '../shared'
 
 
+strip_base = (filepath) ->
+  filepath.replace("/#{DEST.base()}/", '')
+
 inject_script = (filepath) ->
-  path = filepath.replace("/#{DEST.base()}/", '')
-  "<script src='#{path}'></script>"
+  "<script src='#{strip_base(filepath)}'></script>"
+
+inject_css = (filepath) ->
+  "<link rel='stylesheet' href='#{strip_base(filepath)}'>"
 
 
 gulp.task 'inject:bower', ->
@@ -36,4 +41,14 @@ gulp.task 'inject:js', ->
     .pipe gulp.dest(DEST.base())
 
 
-gulp.task 'inject', gulp.series('inject:bower', 'inject:js')
+gulp.task 'inject:css', ->
+  source_css = gulp.src DEST.css_bundle(), read: false
+
+  gulp
+    .src DEST.template()
+    .pipe inject(source_css, transform: inject_css)
+    .pipe gulp.dest(DEST.base())
+
+
+# This can't be done in parallel because of race conditions!
+gulp.task 'inject', gulp.series('inject:bower', 'inject:js', 'inject:css')

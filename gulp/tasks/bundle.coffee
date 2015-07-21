@@ -2,9 +2,10 @@ gulp = require 'gulp'
 {APP, BUILD, DEST} = require '../shared'
 
 minify_css = require 'gulp-minify-css'
-concat_css = require 'gulp-concat-css'
+concat = require 'gulp-concat'
 
 browserify = require 'browserify'
+sourcemaps = require 'gulp-sourcemaps'
 exorcist = require 'exorcist'
 minifify = require 'minifyify'
 
@@ -48,22 +49,22 @@ gulp.task 'bundle:js:development', ->
 
 
 ###
-  CSS bundling tasks
+  CSS bundling tasks; no sourcemaps
 ###
 
 cat_css_stream = ->
   gulp
-  .src(BUILD.css())
-  .pipe concat_css(DEST.css("app.css"))
+    .src(BUILD.css())
+    .pipe concat(DEST.css_bundle())
 
 gulp.task 'bundle:css:production', ->
   cat_css_stream()
-  .pipe minify_css()
-  .pipe gulp.dest('./')
+    .pipe minify_css()
+    .pipe gulp.dest(DEST.css())
 
 gulp.task 'bundle:css:development', ->
   cat_css_stream()
-  .pipe gulp.dest('./')
+    .pipe gulp.dest(DEST.css())
 
 
 gulp.task 'bundle:development',
