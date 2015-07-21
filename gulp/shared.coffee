@@ -25,6 +25,8 @@ BUILD =
     'build'
   entries: ->
     ["#{@base()}/app.js"]
+  css: ->
+    "#{@base()}/**/*.css"
 
 
 DEST =
@@ -32,6 +34,10 @@ DEST =
     'public'
   js: (suffix) ->
     "#{@base()}/js#{PATHS.suffix(suffix)}"
+  css: (suffix) ->
+    "#{@base()}/css#{PATHS.suffix(suffix)}"
+  css_bundle: ->
+    "#{@base()}/css/app.css"
   _parse_base: (options) ->
     (options.fullpath && "#{@base()}/js") || ''
   srcmap: (options = {fullpath: false}) ->
