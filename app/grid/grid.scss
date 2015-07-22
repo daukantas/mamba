@@ -1,10 +1,9 @@
-$grid_side: 600px;
 $grid_background: gray;
 
 
 .grid {
-  height: $grid_side;
-  width: $grid_side;
+  height: 100%;
+  width: 75%;
   background-color: $grid_background;
 
   margin-left: auto;

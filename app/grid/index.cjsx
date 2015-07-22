@@ -5,7 +5,7 @@ _ = require('underscore');
 Grid = React.createClass
 
   getDefaultProps: ->
-    dimension: 50
+    dimension: 30
 
   render: ->
     rows = _.times(@props.dimension, ->

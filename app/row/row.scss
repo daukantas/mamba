@@ -1,7 +1,7 @@
 @import "../grid/grid";
 
 $row_height: 20px;
-$row_width: $grid_side;
+$row_width: 100%;
 
 .row {
   height: $row_height;

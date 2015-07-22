@@ -22,7 +22,7 @@ Cell = React.createClass
   render: ->
     content_class = @constructor.type_classmap(@props.content)
 
-    <div className="cell #{content_class}">Cell</div>
+    <div className="cell #{content_class}"></div>
 
 
 module.exports = {Cell}
