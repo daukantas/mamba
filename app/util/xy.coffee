@@ -15,16 +15,19 @@ class XY
 
 all_xy = {}
 
-value_of = (row, col) ->
-  unless all_xy[row]?[col]?
-    all_xy[row] ||= {}
-    all_xy[row][col] = XY.value_of(row, col)
-  all_xy[row][col]
+module.exports =
 
-random = ->
-# implementation:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-  row = Math.floor(Math.random() * (settings.GRID.dimension + 1));
-  col = Math.floor(Math.random() * (settings.GRID.dimension + 1));
-  value_of(row, col)
+  value_of: (row, col) ->
+    unless all_xy[row]?[col]?
+      all_xy[row] ||= {}
+      all_xy[row][col] = XY.value_of(row, col)
+    all_xy[row][col]
 
-module.exports = {value_of, random}
+  random: ->
+  # implementation:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+    row = Math.floor(Math.random() * (settings.GRID.dimension + 1));
+    col = Math.floor(Math.random() * (settings.GRID.dimension + 1));
+    @value_of(row, col)
+
+  add: (xy1, xy2) ->
+    @value_of(xy1.x + xy2.x, xy1.y + xy2.y)
