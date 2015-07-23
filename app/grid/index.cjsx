@@ -1,18 +1,34 @@
 React = require('react');
-Row = require('../row');
 _ = require('underscore');
+
+Row = require('../row');
+settings = require '../settings'
+
 
 Grid = React.createClass
 
-  getDefaultProps: ->
-    dimension: 34
+  componentWillReceiveProps: (next_props) ->
+    console.log "Receiving props #{next_props}"
+    @setState stopped: !!next_props.reset
+
+  shouldComponentUpdate: (next_props, next_state) ->
+    console.log "Should update? next_state: #{next_state}, next_props: #{next_props}"
+    next_state.stopped
 
   render: ->
-    rows = _.times(@props.dimension, ->
-      <Row length={@props.dimension} />
+    rows = _.times(settings.GRID.dimension, ->
+      <Row length={settings.GRID.dimension} head={@props.head}/>
     , @)
 
     <div className="grid">{rows}</div>
 
 
-React.render <Grid />, document.getElementById('mamba');
+module.exports =
+
+  html_element: (@_html_element) ->
+    @
+
+  render: (props) ->
+    unless @_html_element?
+      throw new Error("Set HTMLElement html_element before rendering!")
+    React.render <Grid {... props}/>, @_html_element
