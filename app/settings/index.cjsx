@@ -6,4 +6,4 @@ exports.GRID =
     {x: @dimension / 2, y: @dimension / 2}
 
 
-exports.refresh_milliseconds = 100
+exports.render_interval = 100
