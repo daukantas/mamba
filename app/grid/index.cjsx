@@ -30,13 +30,28 @@ Grid = React.createClass
     true
 
   componentWillMount: (props) ->
-    @setState rows: @refresh_rows()
+    @setState rows: @reset_rows()
 
   componentWillReceiveProps: (props) ->
     if props.reset
-      @setState rows: @refresh_rows()
+      @setState rows: @reset_rows()
+    else if props.mamba.moving()
+      @setState rows: @update_rows()
 
-  refresh_rows: ->
+  update_rows: ->
+    for row in @constructor.dimension
+      cells = for col in @constructor.dimension
+        if @props.mamba.meets xy.value_of(row, col)
+          Cell.Snake
+        else
+          old_cell = @state.rows[row].props.cells[col]
+          if old_cell is Cell.Snake
+            Cell.Void
+          else
+            old_cell
+      <Row cells={cells} row={row} key={"row-#{row}"} />
+
+  reset_rows: ->
     for row in @constructor.dimension
       cells = for col in @constructor.dimension
         if @props.mamba.meets xy.value_of(row, col)
