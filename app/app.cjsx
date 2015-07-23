@@ -36,7 +36,7 @@ class Game
       .handle()
     @_renderer = renderer
       .mount(grid_node)
-      .loop(@_renderprops)
+      .render(_.extend @_renderprops(), reset: true)
 
   _reset_mamba: ->
     @_mamba = Mamba.at_position(settings.GRID.start_position())
