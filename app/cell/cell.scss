@@ -2,10 +2,27 @@
 
 $cell_side: $row_height;
 
-.cell {
+@mixin cell($background_color) {
   height: $cell_side;
   width: $cell_side;
 
   display: inline-block;
   border: 1px solid black;
+  background-color: $background_color;
+}
+
+.item-cell {
+  @include cell(green);
+}
+
+.void-cell {
+  @include cell(light-gray);
+}
+
+.snake-cell {
+  @include cell(brown);
+}
+
+.wall-cell {
+  @include cell(black);
 }

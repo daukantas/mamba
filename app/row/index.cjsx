@@ -11,7 +11,16 @@ Row = React.createClass
 
   render: ->
     cells = _.times @props.length, ->
-      <Cell content={Cell.Item}/>
+      random = Math.random()
+      if random < .25
+        content = Cell.Item
+      else if random < .50
+        content = Cell.Void
+      else if random < .75
+        content = Cell.Wall
+      else
+        content = Cell.Snake
+      <Cell content={content}/>
 
     <div className="row">{cells}</div>
 
