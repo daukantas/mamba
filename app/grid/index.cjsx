@@ -1,21 +1,26 @@
 React = require 'react'
 _ = require 'underscore'
 
-Mamba = require '../mamba'
+Mamba = require '../mamba'    # can't require this?!
 Row = require '../row'
 Cell = require '../cell'
+
+xy = require '../util/xy'     # strangely, cannot require util
 settings = require '../settings'
 
 
 DIMENSION = settings.GRID.dimension
 
-
 Grid = React.createClass
 
   propTypes:
     reset: React.PropTypes.bool
-    mamba: React.PropTypes.instanceOf(Mamba)
+    # mamba: React.PropTypes.instanceOf(Mamba)
     mode: React.PropTypes.objectOf(React.PropTypes.number)
+
+
+  statics:
+    dimension: [0...DIMENSION]
 
   # TODO:
   #   - if the player isn't close to the row, don't do update
@@ -32,10 +37,9 @@ Grid = React.createClass
       @setState rows: @refresh_rows()
 
   refresh_rows: ->
-    for row in [0...DIMENSION]
-      cells = for col in [0...DIMENSION]
-        # TODO: use a data structure with a fast 'in' operator
-        if @props.mamba.meets({x: row, y: col})
+    for row in @constructor.dimension
+      cells = for col in @constructor.dimension
+        if @props.mamba.meets xy.value_of(row, col)
           Cell.Snake
         else
           chance = Math.random()

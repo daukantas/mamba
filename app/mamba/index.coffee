@@ -1,30 +1,33 @@
 Immutable = require 'immutable'
+{xy} = require '../util'
 
 
 class Mamba
 
-  @at_position: (xy) ->
-    new Mamba([xy])
-
-  constructor: (xy_pairs) ->
-    @_front = xy_pairs[0]
-    @_frame = Immutable.Set.of(xy_pairs...)
+  constructor: (xy_list) ->
+    @_front = xy_list[0]
+    @_frame = Immutable.Set(xy_list)
     @_motion = null
+    @
 
-  move: ({x, y}) ->
-    @_motion = {x, y}
+  @at_position: (xy) ->
+    new @([xy])
+
+  move: (xy) ->
+    @_motion = xy
 
   length: ->
-    @_coors.size()
+    @_frame.size
 
   head: ->
     @_front
 
   grow: ->
-    @_front = {x: @_front.x + @motion.x, y: @_front.y + @motion.y}
+    @_front = xy.value_of(@_front.x + @motion.x, @_front.y + @motion.y)
     @_frame.add(@_front)
 
-  meets: ({x, y}) ->
-    @_frame.has {x, y}
+  meets: (xy) ->
+    @_frame.has xy
+
 
 module.exports = Mamba

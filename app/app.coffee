@@ -1,6 +1,6 @@
 Mamba = require './mamba'
 settings = require './settings'
-{keyhandler, renderer} = require './util'
+{keyhandler, renderer, xy} = require './util'
 
 _ = require 'underscore'
 $ = window.$
@@ -13,18 +13,10 @@ class Game
   ###
 
   @motion_keys =
-    37:
-      x: -1
-      y: 0
-    38:
-      x: 0
-      y: 1
-    39:
-      x: 1
-      y: 0
-    40:
-      x: 0
-      y: -1
+    37: xy.value_of(-1, 0)
+    38: xy.value_of(0, +1)
+    39: xy.value_of(+1, 0)
+    40: xy.value_of(0, -1)
 
   @method_keys =
     82: '__restart'
@@ -39,7 +31,7 @@ class Game
       .render(_.extend @_renderprops(), reset: true)
 
   _reset_mamba: ->
-    @_mamba = Mamba.at_position(settings.GRID.start_position())
+    @_mamba = Mamba.at_position(xy.random())
 
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]
