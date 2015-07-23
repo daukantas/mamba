@@ -1,9 +1,10 @@
 $grid_background: gray;
+$grid_size: 748px;
 
 
 .grid {
   height: 100%;
-  width: 75%;
+  width: $grid_size;
   background-color: $grid_background;
 
   margin-left: auto;
