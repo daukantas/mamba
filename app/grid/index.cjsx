@@ -35,7 +35,7 @@ Grid = React.createClass
     for row in [0...DIMENSION]
       cells = for col in [0...DIMENSION]
         # TODO: use a data structure with a fast 'in' operator
-        if _.isEqual(@props.mamba.head(), {x: row, y: col})
+        if @props.mamba.meets({x: row, y: col})
           Cell.Snake
         else
           chance = Math.random()
