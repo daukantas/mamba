@@ -13,10 +13,10 @@ class Game
   ###
 
   @motion_keys =
-    37: xy.value_of(-1, 0)
-    38: xy.value_of(0, +1)
-    39: xy.value_of(+1, 0)
-    40: xy.value_of(0, -1)
+    37: xy.value_of(0, -1)  # L
+    38: xy.value_of(-1, 0)  # U
+    39: xy.value_of(0, +1)  # R
+    40: xy.value_of(+1, 0)  # D
 
   @method_keys =
     82: '__restart'
