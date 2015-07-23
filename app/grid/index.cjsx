@@ -7,7 +7,7 @@ Cell = require '../cell'
 settings = require '../settings'
 
 
-DIM = settings.GRID.dimension
+DIMENSION = settings.GRID.dimension
 
 
 Grid = React.createClass
@@ -17,9 +17,6 @@ Grid = React.createClass
     mamba: React.PropTypes.instanceOf(Mamba)
     mode: React.PropTypes.objectOf(React.PropTypes.number)
 
-  componentWillReceiveProps: (next_props) ->
-    @setState reset: !!next_props.reset
-
   # TODO:
   #   - if the player isn't close to the row, don't do update
   #   - if reset is true, update and reset
@@ -27,25 +24,32 @@ Grid = React.createClass
   shouldComponentUpdate: (next_props, next_state) ->
     true
 
-  cells: (row) ->
-    _.times(DIM, (column) ->
-      # TODO: use a data structure with a fast 'in' operator
-      if _.isEqual(@props.mamba.head(), {x: row, y: column})
-        return Cell.Snake
+  componentWillMount: (props) ->
+    @setState rows: @refresh_rows()
 
-      chance = Math.random()
+  componentWillReceiveProps: (props) ->
+    if props.reset
+      @setState rows: @refresh_rows()
 
-      if chance < @props.mode.wall
-        Cell.Wall
-      else if chance < @props.mode.item
-        Cell.Item
-      else
-        Cell.Void
-    , @)
+  refresh_rows: ->
+    for row in [0...DIMENSION]
+      cells = for col in [0...DIMENSION]
+        # TODO: use a data structure with a fast 'in' operator
+        if _.isEqual(@props.mamba.head(), {x: row, y: col})
+          Cell.Snake
+        else
+          chance = Math.random()
+          if chance < @props.mode.wall
+            Cell.Wall
+          else if chance < @props.mode.item
+            Cell.Item
+          else
+            Cell.Void
+      <Row cells={cells} row={row} key={"row-#{row}"} />
 
   render: ->
     <div className="grid">
-      {(<Row cells={@cells(row)} row={row} key={"row-#{row}"} /> for row in [0..DIM])}
+      {@state.rows}
     </div>
 
 
