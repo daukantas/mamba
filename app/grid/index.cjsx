@@ -7,7 +7,7 @@ Cell = require '../cell'
 settings = require '../settings'
 
 
-DIMENSION = settings.GRID.dimension
+DIM = settings.GRID.dimension
 
 
 Grid = React.createClass
@@ -27,8 +27,8 @@ Grid = React.createClass
   shouldComponentUpdate: (next_props, next_state) ->
     true
 
-  row_cells: (row) ->
-    _.times(DIMENSION, (column) ->
+  cells: (row) ->
+    _.times(DIM, (column) ->
       # TODO: use a data structure with a fast 'in' operator
       if _.isEqual(@props.mamba.head(), {x: row, y: column})
         return Cell.Snake
@@ -44,11 +44,9 @@ Grid = React.createClass
     , @)
 
   render: ->
-    rows = _.times(DIMENSION, (row) ->
-      <Row cells={@row_cells(row)} row={row} key={"row-#{row}"} />
-    , @)
-
-    <div className="grid">{rows}</div>
+    <div className="grid">
+      {(<Row cells={@cells(row)} row={row} key={"row-#{row}"} /> for row in [0..DIM])}
+    </div>
 
 
 module.exports =

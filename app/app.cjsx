@@ -42,13 +42,13 @@ class Game
     @_mamba = Mamba.at_position(settings.GRID.start_position())
 
   _keyup: (keycode) =>
-    impulse = @constructor.motion_keys[keycode]
-    control = @constructor.method_keys[keycode]
-    if impulse?
+    motion = @constructor.motion_keys[keycode]
+    method = @constructor.method_keys[keycode]
+    if motion?
       (!@_renderer.looping()) && @_renderer.loop(@_renderprops)
-      @_mamba.impulse(impulse)
-    else if control?
-      @[control]()
+      @_mamba.impulse(motion)
+    else if method?
+      @[method]()
 
   __restart: ->
     @_reset_mamba()
