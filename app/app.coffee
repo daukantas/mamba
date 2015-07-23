@@ -37,8 +37,7 @@ class Game
     motion = @constructor.motion_keys[keycode]
     method = @constructor.method_keys[keycode]
     if motion?
-      (!@_renderer.looping()) && @_renderer.loop(@_renderprops)
-      @_mamba.move(motion)
+      @_renderer.loop(_.compose @_renderprops, => @_mamba.move(motion))
     else if method?
       @[method]()
 
