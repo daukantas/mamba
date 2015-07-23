@@ -12,7 +12,7 @@ class Game
     Has-one Keyhandler
   ###
 
-  @impulse_keymap =
+  @motion_keys =
     37:
       x: -1
       y: 0
@@ -26,32 +26,33 @@ class Game
       x: 0
       y: -1
 
-  @control_keymap =
-    82: '_restart'
+  @method_keys =
+    82: '__restart'
 
   constructor: (grid_node) ->
     @_reset_mamba()
-    @_keyhandler = keyhandler.from_handler(@_keyup, $)
+    @_keyhandler = keyhandler
+      .from_handler(@_keyup, $)
       .handle()
-    @_renderer = renderer.mount(grid_node)
+    @_renderer = renderer
+      .mount(grid_node)
       .loop(@_renderprops)
 
   _reset_mamba: ->
     @_mamba = Mamba.at_position(settings.GRID.start_position())
 
   _keyup: (keycode) =>
-    impulse = @constructor.impulse_keymap[keycode]
-    control = @constructor.control_keymap[keycode]
+    impulse = @constructor.motion_keys[keycode]
+    control = @constructor.method_keys[keycode]
     if impulse?
       (!@_renderer.looping()) && @_renderer.loop(@_renderprops)
       @_mamba.impulse(impulse)
     else if control?
       @[control]()
 
-  _restart: ->
+  __restart: ->
     @_reset_mamba()
     @_renderer.reset(@_renderprops())
-    @_keyhandler.reset()
 
   _renderprops: =>
     mamba: @_mamba
