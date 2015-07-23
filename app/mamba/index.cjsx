@@ -23,4 +23,4 @@ class Mamba
   grow: ->
     @_length++
 
-module.exports = {at_position: Mamba.at_position}
+module.exports = Mamba

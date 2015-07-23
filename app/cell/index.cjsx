@@ -25,4 +25,4 @@ Cell = React.createClass
     <div className="#{content_class}"></div>
 
 
-module.exports = {Cell}
+module.exports = Cell

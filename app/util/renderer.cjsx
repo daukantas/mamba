@@ -17,7 +17,7 @@ class Renderer
   loop: (props_fn) ->
     @_clear()
     @_interval = setInterval(
-      _.compose(@_render, props_fn), settings.render_interval)
+      _.compose(@_render, props_fn), settings.RENDER.interval)
     @
 
   reset: (props = {}) ->
@@ -26,7 +26,7 @@ class Renderer
     @
 
   _render: (props = {}) =>
-    Grid.render _.defaults(props, reset: false)
+    Grid.render _.defaults(props, {reset: false})
 
   _clear: ->
     clearInterval @_interval
