@@ -15,7 +15,7 @@ APP =
   base: ->
     'app'
   cjsx: ->
-    "#{@base()}/**/*.cjsx"
+    "#{@base()}/**/*.{cjsx,coffee}"
   template: ->
     "#{@base()}/index.html"
 
