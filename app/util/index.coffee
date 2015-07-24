@@ -1,6 +1,6 @@
 keyhandler = require './keyhandler'
 renderer = require './renderer'
-xy = require './xy'
+position = require './position'
 
 
-module.exports = {keyhandler, renderer, xy}
+module.exports = {keyhandler, renderer, position}

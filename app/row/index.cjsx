@@ -4,7 +4,7 @@ _ = require 'underscore'
 Cell = require '../cell'
 Mamba = require '../mamba' # can't require this!
 settings = require '../settings'
-xy = require '../util/xy'
+position = require '../util/position'
 
 Row = React.createClass
 
@@ -30,7 +30,7 @@ Row = React.createClass
 
   reset: (props) ->
     for col in settings.GRID.range()
-      if props.mamba.meets xy.value_of(props.row, col)
+      if props.mamba.meets position.value_of(props.row, col)
         Cell.Snake
       else
         @random_cell(props.mode)
@@ -46,7 +46,7 @@ Row = React.createClass
 
   update: (props) ->
     for cell, col in @state.cells
-      if props.mamba.meets(xy.value_of(props.row, col))
+      if props.mamba.meets(position.value_of(props.row, col))
         if cell isnt Cell.Void
           @props.collision(cell, props.row, col)
         Cell.Snake
@@ -55,7 +55,9 @@ Row = React.createClass
 
   render: ->
     <div className="row">
-      {(<Cell key="cell-#{@props.row}-#{col}"} content={cell}/> for cell, col in @state.cells)}
+      {for cell, col in @state.cells
+        (<Cell key="cell-#{@props.row}-#{col}"} content={cell}/>)
+      }
     </div>
 
 

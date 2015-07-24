@@ -1,5 +1,5 @@
 Immutable = require 'immutable'
-{xy} = require '../util'
+{position} = require '../util'
 settings = require '../settings'
 
 
@@ -10,26 +10,26 @@ class Mamba
     @_motion = null
     @
 
-  @at_position: (xy_obj) ->
-    new @([xy_obj])
+  @at_position: (xy) ->
+    new @([xy])
 
-  impulse: (xy_obj) ->
-    @_motion = xy_obj
+  impulse: (xy) ->
+    @_motion = xy
 
   move: ->
     if @_motion?
-      @_frame = @_frame.map (xy_obj) =>
-        xy.add(xy_obj, @_motion)
+      @_frame = @_frame.map (xy) =>
+        position.add(xy, @_motion)
 
   length: ->
     @_frame.size
 
   grow: ->
-    @_front = xy.add(@_front, @_motion)
+    @_front = position.add(@_front, @_motion)
     @_frame.add(@_front)
 
-  meets: (xy_obj) ->
-    @_frame.has xy_obj
+  meets: (xy) ->
+    @_frame.has xy
 
   moving: ->
     @_motion?

@@ -24,7 +24,7 @@ module.exports =
     all_xy[row][col]
 
   random: ->
-  # implementation:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+    # implementation:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
     row = Math.floor(Math.random() * settings.GRID.dimension);
     col = Math.floor(Math.random() * settings.GRID.dimension);
     @value_of(row, col)
