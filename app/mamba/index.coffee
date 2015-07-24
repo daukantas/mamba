@@ -13,10 +13,13 @@ class Mamba
   @at_position: (xy_obj) ->
     new @([xy_obj])
 
-  move: (xy_obj) ->
+  impulse: (xy_obj) ->
     @_motion = xy_obj
-    @_frame = @_frame.map (xy_obj) =>
-      xy.add(xy_obj, @_motion)
+
+  move: ->
+    if @_motion?
+      @_frame = @_frame.map (xy_obj) =>
+        xy.add(xy_obj, @_motion)
 
   length: ->
     @_frame.size

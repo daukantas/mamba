@@ -71,12 +71,21 @@ Grid = React.createClass
     </div>
 
 
+GRID = null
+
 module.exports =
 
   html_element: (@_html_element) ->
     @
 
   render: (props) ->
-    unless @_html_element?
+    if !@_html_element?
       throw new Error("Set HTMLElement html_element before rendering!")
-    React.render <Grid {... props}/>, @_html_element
+    else if GRID?
+      throw new Error("Grid's already been rendered!")
+    GRID = React.render <Grid {... props}/>, @_html_element
+
+  set_props: (props) ->
+    if !GRID?
+      throw new Error("Grid hasn't been rendered!")
+    GRID.setProps(props)
