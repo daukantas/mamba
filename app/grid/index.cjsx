@@ -34,7 +34,11 @@ module.exports =
       throw new Error("Grid's already been rendered!")
     GRID = React.render <Grid {... props}/>, @_html_element
 
-  set_props: (props) ->
+  # This is supposed to be an anti-pattern, but I
+  # don't find it difficult to reason about.
+  #
+  # https://facebook.github.io/react/docs/component-api.html
+  set_props: (props, callback) ->
     if !GRID?
       throw new Error("Grid hasn't been rendered!")
-    GRID.setProps(props)
+    GRID.setProps(props, callback)
