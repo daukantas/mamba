@@ -25,8 +25,8 @@ module.exports =
 
   random: ->
   # implementation:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-    row = Math.floor(Math.random() * (settings.GRID.dimension + 1));
-    col = Math.floor(Math.random() * (settings.GRID.dimension + 1));
+    row = Math.floor(Math.random() * settings.GRID.dimension);
+    col = Math.floor(Math.random() * settings.GRID.dimension);
     @value_of(row, col)
 
   add: (xy1, xy2) ->
