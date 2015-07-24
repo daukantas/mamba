@@ -12,9 +12,11 @@ Row = React.createClass
     true
 
   propTypes:
-    mamba: React.PropTypes.any.isRequired
     reset: React.PropTypes.bool.isRequired
-    mode: React.PropTypes.objectOf(React.PropTypes.number)
+    mamba: React.PropTypes.any.isRequired
+    mode: React.PropTypes.objectOf(React.PropTypes.number).isRequired
+    collision: React.PropTypes.func.isRequired
+
     row: React.PropTypes.number.isRequired
 
   componentWillMount: ->
@@ -31,17 +33,22 @@ Row = React.createClass
       if props.mamba.meets xy.value_of(props.row, col)
         Cell.Snake
       else
-        chance = Math.random()
-        if chance < @props.mode.wall
-          Cell.Wall
-        else if chance < @props.mode.item
-          Cell.Item
-        else
-          Cell.Void
+        @random_cell(props.mode)
+
+  random_cell: (mode) ->
+      random = Math.random()
+      if random < mode.wall
+        Cell.Wall
+      else if random < mode.item
+        Cell.Item
+      else
+        Cell.Void
 
   update: (props) ->
     for cell, col in @state.cells
-      if props.mamba.meets xy.value_of(props.row, col)
+      if props.mamba.meets(xy.value_of(props.row, col))
+        if cell isnt Cell.Void
+          @props.collision(cell, props.row, col)
         Cell.Snake
       else
         ((cell is Cell.Snake) && Cell.Void) || cell

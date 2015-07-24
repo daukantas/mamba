@@ -50,9 +50,14 @@ class Game
     @_mamba.move()
     @_renderprops()
 
+
   _renderprops: =>
     mamba: @_mamba
     mode: settings.MODE.easy
+    collision: @_collision
+
+  _collision: (cell, row, col) ->
+    console.log "Collision! #{cell.toString()}, #{row}, #{col}"
 
 
 if $?

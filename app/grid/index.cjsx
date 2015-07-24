@@ -9,9 +9,10 @@ settings = require '../settings'
 Grid = React.createClass
 
   propTypes:
-    reset: React.PropTypes.bool
+    reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
-    mode: React.PropTypes.objectOf(React.PropTypes.number)
+    mode: React.PropTypes.objectOf(React.PropTypes.number).isRequired
+    collision: React.PropTypes.func.isRequired
 
   render: ->
     range = settings.GRID.range()
