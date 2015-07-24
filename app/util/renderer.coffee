@@ -15,25 +15,25 @@ class Renderer
     @_interval?
 
   loop: (props_returning_fn) ->
-    @_stop_render()
+    @stop()
     @_interval = setInterval(
       _.compose(@update, props_returning_fn), settings.RENDER.interval)
     @
 
   reset: (props = {}) ->
     Grid.set_props(_.extend props, reset: true)
-    @_stop_render()
+    @stop()
     @
 
   render: (props = {}) ->
-    Grid.render _.defaults(props, {reset: false})
+    Grid.render _.defaults(props, {reset: true})
     @
 
   update: (props = {}) ->
     Grid.set_props _.defaults(props, {reset: false})
     @
 
-  _stop_render: ->
+  stop: ->
     clearInterval @_interval
     @_interval = null
 
