@@ -1,4 +1,5 @@
 Mamba = require './mamba'
+Cell = require './cell'
 settings = require './settings'
 {keyhandler, renderer, xy} = require './util'
 
@@ -28,7 +29,7 @@ class Game
       .handle()
     @_renderer = renderer
       .mount(grid_node)
-      .render(_.extend @_renderprops(), reset: true)
+      .render(@_renderprops())
 
   _reset_mamba: ->
     @_mamba = Mamba.at_position(xy.random())
@@ -36,13 +37,14 @@ class Game
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]
     method = @constructor.method_keys[keycode]
-    if motion?
+    if motion && !@_lost
       @_mamba.impulse(motion)
       (!@_renderer.looping()) && @_renderer.loop(@_renderloop_hook)
     else if method?
       @[method]()
 
   __restart: ->
+    @_lost = false
     @_reset_mamba()
     @_renderer.reset(@_renderprops())
 
@@ -50,15 +52,16 @@ class Game
     @_mamba.move()
     @_renderprops()
 
-
   _renderprops: =>
     mamba: @_mamba
     mode: settings.MODE.easy
     collision: @_collision
 
-  _collision: (cell, row, col) ->
+  _collision: (cell, row, col) =>
     console.log "Collision! #{cell.toString()}, #{row}, #{col}"
-
+    if cell is Cell.Wall
+      @_lost = true
+      @_renderer.stop()
 
 if $?
   new Game $('#mamba')[0]
