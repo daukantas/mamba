@@ -3,71 +3,20 @@ _ = require 'underscore'
 
 Mamba = require '../mamba' # can't require this!
 Row = require '../row'
-Cell = require '../cell'
-
-xy = require '../util/xy'  # can't require from ../util
 settings = require '../settings'
 
-
-DIMENSION = settings.GRID.dimension
 
 Grid = React.createClass
 
   propTypes:
     reset: React.PropTypes.bool
+    mamba: React.PropTypes.any.isRequired
     mode: React.PropTypes.objectOf(React.PropTypes.number)
 
-
-  statics:
-    dimension: [0...DIMENSION]
-
-  # TODO:
-  #   - if the player isn't close to the row, don't do update
-  #   - if reset is true, update and reset
-  #   - if an item was consumed, update and reset
-  shouldComponentUpdate: (next_props, next_state) ->
-    true
-
-  componentWillMount: (props) ->
-    @setState rows: @reset()
-
-  componentWillReceiveProps: (props) ->
-    if props.reset
-      @setState rows: @reset()
-    else if props.mamba.moving()
-      @setState rows: @update()
-
-  update: ->
-    for row in @constructor.dimension
-      cells = for col in @constructor.dimension
-        if @props.mamba.meets xy.value_of(row, col)
-          Cell.Snake
-        else
-          old_cell = @state.rows[row].props.cells[col]
-          if old_cell is Cell.Snake
-            Cell.Void
-          else
-            old_cell
-      <Row cells={cells} row={row} key={"row-#{row}"} />
-
-  reset: ->
-    for row in @constructor.dimension
-      cells = for col in @constructor.dimension
-        if @props.mamba.meets xy.value_of(row, col)
-          Cell.Snake
-        else
-          chance = Math.random()
-          if chance < @props.mode.wall
-            Cell.Wall
-          else if chance < @props.mode.item
-            Cell.Item
-          else
-            Cell.Void
-      <Row cells={cells} row={row} key={"row-#{row}"} />
-
   render: ->
+    range = settings.GRID.range()
     <div className="grid">
-      {@state.rows}
+      {<Row {... @props} row={row} key={"row-#{row}"} /> for row in range}
     </div>
 
 

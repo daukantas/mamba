@@ -1,30 +1,54 @@
-React = require('react');
-Cell = require('../cell');
-_ = require('underscore');
+React = require 'react'
+_ = require 'underscore'
 
+Cell = require '../cell'
+Mamba = require '../mamba' # can't require this!
+settings = require '../settings'
+xy = require '../util/xy'
 
 Row = React.createClass
 
-  # TODO: implement me.
-  #
-  #   - if the player is close (based on head and length), don't re-render
-  #
-  shouldComponentUpdate: ->
+  shouldComponentUpdate: (next_props, next_state)->
     true
 
   propTypes:
-    cells: React.PropTypes.array
+    mamba: React.PropTypes.any.isRequired
+    reset: React.PropTypes.bool.isRequired
+    mode: React.PropTypes.objectOf(React.PropTypes.number)
     row: React.PropTypes.number.isRequired
 
-  # TODO:
-  #
-  #   - if reset, re-render
-  #
-  render: ->
-    {row, cells} = @props
+  componentWillMount: ->
+    @setState cells: @reset()
 
+  componentWillReceiveProps: (next_props) ->
+    if next_props.reset
+      @setState cells: @reset()
+    else
+      @setState cells: @update()
+
+  reset: ->
+    for col in settings.GRID.range()
+      if @props.mamba.meets xy.value_of(@props.row, col)
+        Cell.Snake
+      else
+        chance = Math.random()
+        if chance < @props.mode.wall
+          Cell.Wall
+        else if chance < @props.mode.item
+          Cell.Item
+        else
+          Cell.Void
+
+  update: ->
+    for cell, col in @state.cells
+      if @props.mamba.meets xy.value_of(@props.row, col)
+        Cell.Snake
+      else
+        cell
+
+  render: ->
     <div className="row">
-      {(<Cell key="cell-#{row}-#{col}"} content={cell}/> for cell, col in cells)}
+      {(<Cell key="cell-#{@props.row}-#{col}"} content={cell}/> for cell, col in @state.cells)}
     </div>
 
 
