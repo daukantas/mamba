@@ -1,11 +1,11 @@
 React = require 'react'
 _ = require 'underscore'
 
-Mamba = require '../mamba'    # can't require this?!
+Mamba = require '../mamba' # can't require this!
 Row = require '../row'
 Cell = require '../cell'
 
-xy = require '../util/xy'     # strangely, cannot require util
+xy = require '../util/xy'  # can't require from ../util
 settings = require '../settings'
 
 
@@ -15,7 +15,6 @@ Grid = React.createClass
 
   propTypes:
     reset: React.PropTypes.bool
-    # mamba: React.PropTypes.instanceOf(Mamba)
     mode: React.PropTypes.objectOf(React.PropTypes.number)
 
 
@@ -30,15 +29,15 @@ Grid = React.createClass
     true
 
   componentWillMount: (props) ->
-    @setState rows: @reset_rows()
+    @setState rows: @reset()
 
   componentWillReceiveProps: (props) ->
     if props.reset
-      @setState rows: @reset_rows()
+      @setState rows: @reset()
     else if props.mamba.moving()
-      @setState rows: @update_rows()
+      @setState rows: @update()
 
-  update_rows: ->
+  update: ->
     for row in @constructor.dimension
       cells = for col in @constructor.dimension
         if @props.mamba.meets xy.value_of(row, col)
@@ -51,7 +50,7 @@ Grid = React.createClass
             old_cell
       <Row cells={cells} row={row} key={"row-#{row}"} />
 
-  reset_rows: ->
+  reset: ->
     for row in @constructor.dimension
       cells = for col in @constructor.dimension
         if @props.mamba.meets xy.value_of(row, col)
