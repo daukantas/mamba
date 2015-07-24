@@ -1,3 +1,3 @@
 module.exports =
 
-  dimension: 34
+  dimension: 30
