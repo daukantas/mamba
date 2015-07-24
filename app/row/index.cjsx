@@ -18,17 +18,17 @@ Row = React.createClass
     row: React.PropTypes.number.isRequired
 
   componentWillMount: ->
-    @setState cells: @reset()
+    @setState cells: @reset(@props)
 
   componentWillReceiveProps: (next_props) ->
     if next_props.reset
-      @setState cells: @reset()
+      @setState cells: @reset(next_props)
     else
-      @setState cells: @update()
+      @setState cells: @update(next_props)
 
-  reset: ->
+  reset: (props) ->
     for col in settings.GRID.range()
-      if @props.mamba.meets xy.value_of(@props.row, col)
+      if props.mamba.meets xy.value_of(props.row, col)
         Cell.Snake
       else
         chance = Math.random()
@@ -39,12 +39,12 @@ Row = React.createClass
         else
           Cell.Void
 
-  update: ->
+  update: (props) ->
     for cell, col in @state.cells
-      if @props.mamba.meets xy.value_of(@props.row, col)
+      if props.mamba.meets xy.value_of(props.row, col)
         Cell.Snake
       else
-        cell
+        ((cell is Cell.Snake) && Cell.Void) || cell
 
   render: ->
     <div className="row">
