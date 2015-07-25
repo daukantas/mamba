@@ -8,9 +8,6 @@ position = require '../util/position'
 
 Row = React.createClass
 
-  shouldComponentUpdate: (next_props, next_state)->
-    true
-
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
