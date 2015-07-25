@@ -35,6 +35,8 @@ Row = React.createClass
     @state.cells.withMutations callback
 
   _create_cells: (props) ->
+    if @state?.cells?
+      throw new Error "state.cells already exists; use ._update_cells()"
     Immutable.List.of (for col in settings.GRID.range()
       if props.mamba.meets position.value_of(props.row, col)
         Cell.Snake
