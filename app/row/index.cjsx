@@ -39,7 +39,7 @@ Row = React.createClass
       if props.mamba.meets position.value_of(props.row, col)
         Cell.Snake
       else
-        @random_cell(props.mode))...
+        @_random_cell(props.mode))...
 
   reset: (props, options = {initial: false}) ->
     if options.initial
@@ -50,7 +50,7 @@ Row = React.createClass
           if props.mamba.meets position.value_of(props.row, col)
             cells.set(col, Cell.Snake)
           else
-            cells.set(col, @random_cell(props.mode))
+            cells.set(col, @_random_cell(props.mode))
 
   update: (props) ->
     @_update_cells (cells) =>
@@ -62,7 +62,7 @@ Row = React.createClass
         else if cell is Cell.Snake
           cells.set(col, Cell.Void)
 
-  random_cell: (mode) ->
+  _random_cell: (mode) ->
     random = Math.random()
     if random < mode.wall
       Cell.Wall
