@@ -27,7 +27,7 @@ Row = React.createClass
       @setState cells: @update(next_props)
 
   shouldComponentUpdate: (next_props, next_state) ->
-    next_props.reset or (not next_state.cells.equals @state.cells)
+    next_props.reset or (next_state.cells isnt @state.cells)
 
   _update_cells: (callback) ->
     unless @state?.cells?
