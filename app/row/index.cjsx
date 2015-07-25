@@ -34,7 +34,7 @@ Row = React.createClass
       throw new Error "state.cells doesn't exist"
     @state.cells.withMutations callback
 
-  _make_cells: (props) ->
+  _create_cells: (props) ->
     Immutable.List.of (for col in settings.GRID.range()
       if props.mamba.meets position.value_of(props.row, col)
         Cell.Snake
@@ -43,7 +43,7 @@ Row = React.createClass
 
   reset: (props, options = {initial: false}) ->
     if options.initial
-      @_make_cells(props)
+      @_create_cells(props)
     else
       @_update_cells (cells) =>
         cells.forEach (cell, col) =>
