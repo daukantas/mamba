@@ -18,7 +18,7 @@ Row = React.createClass
     row: React.PropTypes.number.isRequired
 
   componentWillMount: ->
-    @setState cells: @reset(@props)
+    @setState cells: @reset(@props, initial: true)
 
   componentWillReceiveProps: (next_props) ->
     if next_props.reset
@@ -27,28 +27,33 @@ Row = React.createClass
       @setState cells: @update(next_props)
 
   shouldComponentUpdate: (next_props, next_state) ->
-    if next_props.reset
-      return true
-    !next_state.cells.equals(@state.cells)
+    next_props.reset or (not next_state.cells.equals @state.cells)
 
-  reset: (props) ->
-    if @state?.cells?
-      @state.cells.withMutations (cells) =>
+  _update_cells: (callback) ->
+    unless @state?.cells?
+      throw new Error "state.cells doesn't exist"
+    @state.cells.withMutations callback
+
+  _make_cells: (props) ->
+    Immutable.List.of (for col in settings.GRID.range()
+      if props.mamba.meets position.value_of(props.row, col)
+        Cell.Snake
+      else
+        @random_cell(props.mode))...
+
+  reset: (props, options = {initial: false}) ->
+    if options.initial
+      @_make_cells(props)
+    else
+      @_update_cells (cells) =>
         cells.forEach (cell, col) =>
           if props.mamba.meets position.value_of(props.row, col)
             cells.set(col, Cell.Snake)
           else
             cells.set(col, @random_cell(props.mode))
-    else
-      cells = (for col in settings.GRID.range()
-        if props.mamba.meets position.value_of(props.row, col)
-          Cell.Snake
-        else
-          @random_cell(props.mode))
-      Immutable.List.of(cells...)
 
   update: (props) ->
-    @state.cells.withMutations (cells) =>
+    @_update_cells (cells) =>
       cells.forEach (cell, col) =>
         if props.mamba.meets(position.value_of(props.row, col))
           if cell isnt Cell.Void
