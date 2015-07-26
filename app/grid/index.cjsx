@@ -11,7 +11,6 @@ Grid = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
-    mode: React.PropTypes.objectOf(React.PropTypes.number).isRequired
     collision: React.PropTypes.func.isRequired
 
   render: ->

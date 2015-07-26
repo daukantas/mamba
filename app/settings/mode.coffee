@@ -11,3 +11,7 @@ module.exports =
   hard:
     wall: .5
     item: 1.0
+
+  get: ->
+    # no-op for now
+    @easy

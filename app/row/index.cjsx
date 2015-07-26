@@ -12,7 +12,6 @@ Row = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
-    mode: React.PropTypes.objectOf(React.PropTypes.number).isRequired
     collision: React.PropTypes.func.isRequired
 
     row: React.PropTypes.number.isRequired
@@ -41,7 +40,7 @@ Row = React.createClass
       if props.mamba.meets position.value_of(props.row, col)
         Cell.Snake
       else
-        @_random_cell(props.mode))...
+        Cell.random())...
 
   reset: (props, options = {initial: false}) ->
     if options.initial
@@ -52,7 +51,7 @@ Row = React.createClass
           if props.mamba.meets position.value_of(props.row, col)
             cells.set(col, Cell.Snake)
           else
-            cells.set(col, @_random_cell(props.mode))
+            cells.set(col, Cell.random())
 
   update: (props) ->
     @_update_cells (cells) =>
@@ -64,20 +63,10 @@ Row = React.createClass
         else if cell is Cell.Snake
           cells.set(col, Cell.Void)
 
-  _random_cell: (mode) ->
-    random = Math.random()
-    if random < mode.wall
-      Cell.Wall
-    else if random < mode.item
-      Cell.Item
-    else
-      Cell.Void
-
   render: ->
     <div className="row">
       {@state.cells.map (cell, col) =>
-        (<Cell key="cell-#{@props.row}-#{col}"} content={cell}/>)
-      }
+        (<Cell key="cell-#{@props.row}-#{col}"} content={cell}/>)}
     </div>
 
 
