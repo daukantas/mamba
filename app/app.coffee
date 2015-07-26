@@ -58,6 +58,7 @@ class Game
     _.defaults props,
       mamba: @_mamba
       on_collision: @_on_collision
+      lost: false
 
   _on_collision: (cell) =>
     if cell is Cell.Collision
