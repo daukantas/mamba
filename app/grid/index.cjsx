@@ -3,18 +3,28 @@ _ = require 'underscore'
 
 Mamba = require '../mamba' # can't require this :(
 Row = require '../row'
-settings = require '../settings'
+{GRID} = require '../settings'
 
 
 Grid = React.createClass
-
-  shouldComponentUpdate: ->
-    @props.mamba.moving()
 
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
     collided: React.PropTypes.func.isRequired
+
+  statics:
+    out_of_bounds: (xy) ->
+      xy.x < 0 ||
+      xy.y < 0 ||
+      xy.x >= GRID.dimension ||
+      xy.y >= GRID.dimension
+
+  shouldComponentUpdate: ->
+    @props.mamba.moving() && (not @state?.out_of_bounds)
+
+  componentWillReceiveProps: (next_props) ->
+    @setState out_of_bounds: @constructor.out_of_bounds next_props.mamba.head()
 
   render: ->
     <div className="grid">
