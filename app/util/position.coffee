@@ -1,5 +1,5 @@
 settings = require '../settings'
-
+random = require './random'
 
 class XY
 
@@ -24,9 +24,8 @@ module.exports =
     all_xy[row][col]
 
   random: ->
-    # implementation:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-    row = Math.floor(Math.random() * settings.GRID.dimension);
-    col = Math.floor(Math.random() * settings.GRID.dimension);
+    row = random.int(0, settings.GRID.dimension);
+    col = random.int(0, settings.GRID.dimension);
     @value_of(row, col)
 
   add: (xy1, xy2) ->
