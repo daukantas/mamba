@@ -50,8 +50,8 @@ Cell = React.createClass
     if new_cell is Cell.Snake
       if old_cell is cells.Item
         @props.collided cells.Item
-    else if new_cell is Cell.Collision
-      @props.collided cells.Collision
+      else if old_cell is cells.Wall
+        @props.collided cells.Collision
 
   render: ->
     <div className="#{@constructor.classmap.get(@props.content)}"></div>

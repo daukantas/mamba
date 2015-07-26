@@ -57,10 +57,7 @@ Row = React.createClass
     @_update_cells (cells) =>
       cells.forEach (cell, col) =>
         if props.mamba.meets position.value_of(props.row, col)
-          if (cell is Cell.Item) || (cell is Cell.Void)
-            cells.set col, Cell.Snake
-          else if cell isnt Cell.Snake
-            cells.set col, Cell.Collision
+          cells.set col, Cell.Snake
         else if cell is Cell.Snake
           cells.set col, Cell.Void
 
