@@ -30,7 +30,7 @@ Grid = React.createClass
 
   componentWillReceiveProps: (next_props) ->
     # Saving this in @state fails; it won't be "ready" in shouldComponentUpdate
-    if @constructor.out_of_bounds(next_props.mamba)
+    if !next_props.lost && @constructor.out_of_bounds(next_props.mamba)
       @props.on_collision Cell.Collision
 
   render: ->
