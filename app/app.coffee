@@ -33,7 +33,7 @@ class Game
 
   _reset_mamba: ->
     @_mamba = Mamba.at_position(
-      position.random(settings.GRID.dimension))
+      position.random(settings.GRID.dimension - 1))
 
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]
