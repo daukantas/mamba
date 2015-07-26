@@ -21,6 +21,9 @@ class Mamba
   impulse: (xy) ->
     @_motion = xy
 
+  head: ->
+    @_frame.first()
+
   move: ->
     if @_motion?
       new_front = position.add(@_frame.first(), @_motion)
