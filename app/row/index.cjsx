@@ -11,6 +11,7 @@ Row = React.createClass
 
   propTypes:
     reset: React.PropTypes.bool.isRequired
+    lost: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
     on_collision: React.PropTypes.func.isRequired
 
@@ -26,7 +27,12 @@ Row = React.createClass
       @setState cells: @update(next_props)
 
   shouldComponentUpdate: (next_props, next_state) ->
-    next_props.reset or (next_state.cells isnt @state.cells)
+    if next_props.lost
+      true
+    else if next_props.reset
+      true
+    else
+      (next_state.cells isnt @state.cells)
 
   _update_cells: (callback) ->
     unless @state?.cells?
@@ -62,10 +68,11 @@ Row = React.createClass
           cells.set col, Cell.Void
 
   render: ->
-    {row, on_collision} = @props
+    {row, lost, on_collision} = @props
     <div className="row">
       {@state.cells.map (cell, col) =>
-        (<Cell on_collision={on_collision} key="cell-#{row}-#{col}"} content={cell}/>)}
+        (<Cell on_collision={on_collision} lost={lost}
+               key="cell-#{row}-#{col}" content={cell}/>)}
     </div>
 
 

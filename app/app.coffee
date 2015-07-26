@@ -23,6 +23,7 @@ class Game
     82: '__restart'
 
   constructor: (grid_node) ->
+    @_lost = false
     @_reset_mamba()
     @_keyhandler = keyhandler
       .from_handler(@_keyup, $)
@@ -58,16 +59,15 @@ class Game
     _.defaults props,
       mamba: @_mamba
       on_collision: @_on_collision
-      lost: false
+      lost: @_lost
 
   _on_collision: (cell) =>
     if cell is Cell.Wall
+      @_lost = true
       @_mamba.motion(null)
       @_mamba.rewind()    # this is a hack for the view-layer; no cell-overlap during collision
-      @_renderer.update(@_renderprops(lost: true), =>
-        @_lost = true
+      @_renderer.update @_renderprops(), =>
         @_renderer.stop()
-      )
     else if cell is Cell.Item
       @_mamba.grow()
 

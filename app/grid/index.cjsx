@@ -12,6 +12,7 @@ Grid = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
+    lost: React.PropTypes.bool.isRequired
     on_collision: React.PropTypes.func.isRequired
 
   statics:
@@ -23,7 +24,9 @@ Grid = React.createClass
       head.y >= GRID.dimension
 
   shouldComponentUpdate: (next_props) ->
-    if next_props.reset
+    if next_props.lost
+      true
+    else if next_props.reset
       true
     else
       @props.mamba.moving()

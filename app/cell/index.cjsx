@@ -10,6 +10,7 @@ Cell = React.createClass
   propTypes:
     content: React.PropTypes.oneOf(_.values cells).isRequired
     on_collision: React.PropTypes.func.isRequired
+    lost: React.PropTypes.bool.isRequired
 
   statics: _.extend {}, cells
   , classmap: Immutable.Map([
@@ -54,10 +55,11 @@ Cell = React.createClass
         @props.on_collision cells.Wall
         @setState collided: true
 
-  render: ->
-    content = ((@state?.collided is true) && cells.Wall) || @props.content
+  shouldComponentUpdate: (next_props, next_state) ->
+    next_props.lost || (not @_has_wall_collision(next_props))
 
-    <div className="#{@constructor.classmap.get(content)}"></div>
+  render: ->
+    <div className="#{@constructor.classmap.get(@props.content)}"></div>
 
 
 module.exports = Cell
