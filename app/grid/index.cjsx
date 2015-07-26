@@ -1,7 +1,7 @@
 React = require 'react'
 _ = require 'underscore'
 
-Mamba = require '../mamba' # can't require this!
+Mamba = require '../mamba' # can't require this :(
 Row = require '../row'
 settings = require '../settings'
 

@@ -2,7 +2,7 @@ React = require 'react'
 _ = require 'underscore'
 
 Cell = require '../cell'
-Mamba = require '../mamba' # can't require this!
+Mamba = require '../mamba' # can't require this :(
 settings = require '../settings'
 position = require '../util/position'
 Immutable = require 'immutable'

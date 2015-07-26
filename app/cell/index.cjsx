@@ -1,6 +1,7 @@
 React = require 'react'
 cell_types = require './types'
 {MODE} = require '../settings'
+Random = require '../util/random' # can't require util
 
 _ = require 'underscore'
 
