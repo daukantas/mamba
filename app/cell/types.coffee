@@ -36,8 +36,14 @@ class Snake extends CellType
   name: "snake"
 
 
+class Collision extends CellType
+
+  name: "collision"
+
+
 module.exports =
   Item: new Item
   Wall: new Wall
   Void: new Void
   Snake: new Snake
+  Collision: new Collision

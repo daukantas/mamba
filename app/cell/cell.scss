@@ -20,9 +20,13 @@ $cell_side: $row_height;
 }
 
 .snake-cell {
-  @include cell(brown);
+  @include cell(orange);
 }
 
 .wall-cell {
   @include cell(black);
+}
+
+.collision-cell {
+  @include cell(red);
 }
