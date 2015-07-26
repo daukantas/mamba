@@ -51,10 +51,13 @@ Cell = React.createClass
       if old_cell is cells.Item
         @props.on_collision cells.Item
       else if old_cell is cells.Wall
-        @props.on_collision cells.Collision
+        @props.on_collision cells.Wall
+        @setState collided: true
 
   render: ->
-    <div className="#{@constructor.classmap.get(@props.content)}"></div>
+    content = ((@state?.collided is true) && cells.Wall) || @props.content
+
+    <div className="#{@constructor.classmap.get(content)}"></div>
 
 
 module.exports = Cell

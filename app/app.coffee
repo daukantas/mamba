@@ -39,7 +39,7 @@ class Game
     motion = @constructor.motion_keys[keycode]
     method = @constructor.method_keys[keycode]
     if motion && !@_lost
-      @_mamba.impulse(motion)
+      @_mamba.motion(motion)
       (!@_renderer.looping()) && @_renderer.loop(
         @_renderloop_hook, settings.RENDER.interval)
     else if method?
@@ -61,7 +61,9 @@ class Game
       lost: false
 
   _on_collision: (cell) =>
-    if cell is Cell.Collision
+    if cell is Cell.Wall
+      @_mamba.motion(null)
+      @_mamba.rewind()    # this is a hack for the view-layer; no cell-overlap during collision
       @_renderer.update(@_renderprops(lost: true), =>
         @_lost = true
         @_renderer.stop()

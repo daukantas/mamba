@@ -16,7 +16,7 @@ Grid = React.createClass
 
   statics:
     out_of_bounds: (mamba) ->
-      head = mamba.next_head()
+      head = mamba.head()
       head.x < 0 ||
       head.y < 0 ||
       head.x >= GRID.dimension ||
@@ -31,7 +31,7 @@ Grid = React.createClass
   componentWillReceiveProps: (next_props) ->
     # Saving this in @state fails; it won't be "ready" in shouldComponentUpdate
     if !next_props.lost && @constructor.out_of_bounds(next_props.mamba)
-      @props.on_collision Cell.Collision
+      @props.on_collision Cell.Wall
 
   render: ->
     <div className="grid">

@@ -10,7 +10,8 @@ settings = require '../settings'
 class Mamba
 
   constructor: (xy_list) ->
-    @_frame = Immutable.OrderedSet(xy_list)
+    @_this_frame = Immutable.OrderedSet(xy_list)
+    @_last_frame = null
     @_front = xy_list[0]
     @_length = 1
     @
@@ -18,17 +19,18 @@ class Mamba
   @at_position: (xy) ->
     new @([xy])
 
-  impulse: (xy) ->
+  motion: (xy) ->
     @_motion = xy
 
   head: ->
-    @_frame.first()
+    @_this_frame.first()
 
   move: ->
-    if @_motion?
-      new_front = @next_head()
-      new_frame = @_frame.take(@_length - 1)
-      @_frame = Immutable.OrderedSet.of(new_front, (new_frame.toJS())...)
+    if @moving()
+      new_front = position.add(@_this_frame.first(), @_motion)
+      new_this_frame = @_this_frame.take(@_length - 1)
+      @_last_frame = @_this_frame
+      @_this_frame = Immutable.OrderedSet.of(new_front, (new_this_frame.toJS())...)
 
   length: ->
     @_length
@@ -37,13 +39,10 @@ class Mamba
     @_length++
 
   meets: (xy) ->
-    @_frame.has xy
+    @_this_frame.has xy
 
-  next_head: ->
-    if @_motion?
-      position.add(@_frame.first(), @_motion)
-    else
-      @_frame.first()
+  rewind: ->
+    @_this_frame = (@_last_frame? && @_last_frame) || @_this_frame
 
   moving: ->
     @_motion?
