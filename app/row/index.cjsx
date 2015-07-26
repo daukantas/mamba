@@ -64,9 +64,10 @@ Row = React.createClass
           cells.set(col, Cell.Void)
 
   render: ->
+    {row, collided} = @props
     <div className="row">
       {@state.cells.map (cell, col) =>
-        (<Cell key="cell-#{@props.row}-#{col}"} content={cell}/>)}
+        (<Cell collided={collided} key="cell-#{row}-#{col}"} content={cell}/>)}
     </div>
 
 

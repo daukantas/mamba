@@ -6,11 +6,11 @@ Immutable = require 'immutable'
 
 _ = require 'underscore'
 
-
 Cell = React.createClass
 
   propTypes:
     content: React.PropTypes.oneOf(_.values cell_types).isRequired
+    collided: React.PropTypes.func.isRequired
 
   statics: _.extend {}, cell_types
   , type_classmap: (content) ->
