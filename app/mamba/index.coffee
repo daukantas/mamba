@@ -25,6 +25,8 @@ class Mamba
         @_motion = xy
       else if position.negate(xy) isnt @_motion
         @_motion = xy
+    else
+      @_motion = null
 
   head: ->
     @_this_frame.first()
