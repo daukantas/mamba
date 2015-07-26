@@ -2,7 +2,7 @@ React = require 'react'
 _ = require 'underscore'
 
 Cell = require '../cell'
-Mamba = require '../mamba' # can't require this :(
+Snake = require '../snake' # can't require this :(
 settings = require '../settings'
 position = require '../util/position'
 Immutable = require 'immutable'
@@ -12,7 +12,7 @@ Row = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     lost: React.PropTypes.bool.isRequired
-    mamba: React.PropTypes.any.isRequired
+    snake: React.PropTypes.any.isRequired
     on_collision: React.PropTypes.func.isRequired
 
     row: React.PropTypes.number.isRequired
@@ -34,16 +34,16 @@ Row = React.createClass
     else
       (next_state.cells isnt @state.cells)
 
-  _update_cells: (callback) ->
+  _batch_update: (callback) ->
     unless @state?.cells?
       throw new Error "state.cells doesn't exist"
     @state.cells.withMutations callback
 
   _create_cells: (props) ->
     if @state?.cells?
-      throw new Error "state.cells already exists; use ._update_cells()"
+      throw new Error "state.cells already exists; use ._batch_update()"
     Immutable.List.of (for col in settings.GRID.range()
-      if props.mamba.meets position.value_of(props.row, col)
+      if props.snake.meets position.value_of(props.row, col)
         Cell.Snake
       else
         Cell.random())...
@@ -52,17 +52,17 @@ Row = React.createClass
     if options.initial
       @_create_cells(props)
     else
-      @_update_cells (cells) =>
+      @_batch_update (cells) =>
         cells.forEach (cell, col) =>
-          if props.mamba.meets position.value_of(props.row, col)
+          if props.snake.meets position.value_of(props.row, col)
             cells.set col, Cell.Snake
           else
             cells.set col, Cell.random()
 
   update: (props) ->
-    @_update_cells (cells) =>
+    @_batch_update (cells) =>
       cells.forEach (cell, col) =>
-        if props.mamba.meets position.value_of(props.row, col)
+        if props.snake.meets position.value_of(props.row, col)
           if cell isnt Cell.Void
             if cell is Cell.Item
               cells.set col, Cell.Snake

@@ -7,7 +7,7 @@ settings = require '../settings'
 
   Backed by an Immutable.OrderedSet, so .meets(xy) and moveare fast.
 ###
-class Mamba
+class Snake
 
   constructor: (xy_list) ->
     @_this_frame = Immutable.OrderedSet(xy_list)
@@ -54,4 +54,4 @@ class Mamba
     @_motion?
 
 
-module.exports = Mamba
+module.exports = Snake

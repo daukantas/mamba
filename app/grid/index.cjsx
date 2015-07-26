@@ -1,7 +1,7 @@
 React = require 'react'
 _ = require 'underscore'
 
-Mamba = require '../mamba' # can't require this :(
+Snake = require '../snake' # can't require this :(
 Row = require '../row'
 Cell = require '../cell'
 {GRID} = require '../settings'
@@ -11,13 +11,13 @@ Grid = React.createClass
 
   propTypes:
     reset: React.PropTypes.bool.isRequired
-    mamba: React.PropTypes.any.isRequired
+    snake: React.PropTypes.any.isRequired
     lost: React.PropTypes.bool.isRequired
     on_collision: React.PropTypes.func.isRequired
 
   statics:
-    out_of_bounds: (mamba) ->
-      head = mamba.head()
+    out_of_bounds: (snake) ->
+      head = snake.head()
       head.x < 0 ||
       head.y < 0 ||
       head.x >= GRID.dimension ||
@@ -29,11 +29,11 @@ Grid = React.createClass
     else if next_props.reset
       true
     else
-      @props.mamba.moving()
+      @props.snake.moving()
 
   componentWillReceiveProps: (next_props) ->
     # Saving this in @state fails; it won't be "ready" in shouldComponentUpdate
-    if !next_props.lost && @constructor.out_of_bounds(next_props.mamba)
+    if !next_props.lost && @constructor.out_of_bounds(next_props.snake)
       @props.on_collision Cell.Wall
 
   render: ->

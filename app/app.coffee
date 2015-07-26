@@ -1,4 +1,4 @@
-Mamba = require './mamba'
+Snake = require './snake'
 Cell = require './cell'
 settings = require './settings'
 {keyhandler, renderer, position} = require './util'
@@ -24,7 +24,7 @@ class Game
 
   constructor: (grid_node) ->
     @_lost = false
-    @_reset_mamba()
+    @_reset_snake()
     @_keyhandler = keyhandler
       .from_handler(@_keyup, $)
       .handle()
@@ -32,15 +32,15 @@ class Game
       .mount(grid_node)
       .render(@_renderprops())
 
-  _reset_mamba: ->
-    @_mamba = Mamba.at_position(
+  _reset_snake: ->
+    @_snake = Snake.at_position(
       position.random(settings.GRID.dimension - 1))
 
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]
     method = @constructor.method_keys[keycode]
     if motion && !@_lost
-      @_mamba.motion(motion)
+      @_snake.motion(motion)
       (!@_renderer.looping()) && @_renderer.loop(
         @_renderloop_hook, settings.RENDER.interval)
     else if method?
@@ -48,28 +48,28 @@ class Game
 
   __restart: ->
     @_lost = false
-    @_reset_mamba()
+    @_reset_snake()
     @_renderer.reset(@_renderprops())
 
   _renderloop_hook: =>
-    @_mamba.move()
+    @_snake.move()
     @_renderprops()
 
   _renderprops: (props = {}) =>
     _.defaults props,
-      mamba: @_mamba
+      snake: @_snake
       on_collision: @_on_collision
       lost: @_lost
 
   _on_collision: (cell) =>
     if cell is Cell.Wall
       @_lost = true
-      @_mamba.motion(null)
-      @_mamba.rewind()    # this is a hack for the view-layer; no cell-overlap during collision
+      @_snake.motion(null)
+      @_snake.rewind()    # this is a hack for the view-layer; no cell-overlap during collision
       @_renderer.update @_renderprops(), =>
         @_renderer.stop()
     else if cell is Cell.Item
-      @_mamba.grow()
+      @_snake.grow()
 
 if $?
   new Game $('#mamba')[0]
