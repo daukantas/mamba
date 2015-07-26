@@ -3,6 +3,7 @@ _ = require 'underscore'
 
 Mamba = require '../mamba' # can't require this :(
 Row = require '../row'
+Cell = require '../cell'
 {GRID} = require '../settings'
 
 
@@ -21,11 +22,18 @@ Grid = React.createClass
       head.x >= GRID.dimension ||
       head.y >= GRID.dimension
 
-  shouldComponentUpdate: ->
-    @props.mamba.moving() && (not @state?.out_of_bounds)
+  shouldComponentUpdate: (next_props) ->
+    if @constructor.out_of_bounds(next_props.mamba)
+      false
+    else if next_props.reset
+      true
+    else
+      @props.mamba.moving()
 
   componentWillReceiveProps: (next_props) ->
-    @setState out_of_bounds: @constructor.out_of_bounds(next_props.mamba)
+    # Saving this in @state fails; it won't be "ready" in shouldComponentUpdate
+    if @constructor.out_of_bounds(next_props.mamba)
+      @props.collided Cell.Collision
 
   render: ->
     <div className="grid">
