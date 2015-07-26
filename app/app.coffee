@@ -59,7 +59,7 @@ class Game
       mamba: @_mamba
       on_collision: @_on_collision
 
-  _collided: (cell, row, col) =>
+  _on_collision: (cell) =>
     if cell is Cell.Collision
       @_lost = true
       @_renderer.stop()

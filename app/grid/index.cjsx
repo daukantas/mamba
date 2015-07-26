@@ -12,7 +12,7 @@ Grid = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
-    collided: React.PropTypes.func.isRequired
+    on_collision: React.PropTypes.func.isRequired
 
   statics:
     out_of_bounds: (mamba) ->
@@ -31,7 +31,7 @@ Grid = React.createClass
   componentWillReceiveProps: (next_props) ->
     # Saving this in @state fails; it won't be "ready" in shouldComponentUpdate
     if @constructor.out_of_bounds(next_props.mamba)
-      @props.collided Cell.Collision
+      @props.on_collision Cell.Collision
 
   render: ->
     <div className="grid">

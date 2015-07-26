@@ -12,7 +12,7 @@ Row = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
-    collided: React.PropTypes.func.isRequired
+    on_collision: React.PropTypes.func.isRequired
 
     row: React.PropTypes.number.isRequired
 
@@ -62,10 +62,10 @@ Row = React.createClass
           cells.set col, Cell.Void
 
   render: ->
-    {row, collided} = @props
+    {row, on_collision} = @props
     <div className="row">
       {@state.cells.map (cell, col) =>
-        (<Cell collided={collided} key="cell-#{row}-#{col}"} content={cell}/>)}
+        (<Cell on_collision={on_collision} key="cell-#{row}-#{col}"} content={cell}/>)}
     </div>
 
 

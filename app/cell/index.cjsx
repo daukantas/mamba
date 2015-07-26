@@ -9,7 +9,7 @@ Cell = React.createClass
 
   propTypes:
     content: React.PropTypes.oneOf(_.values cells).isRequired
-    collided: React.PropTypes.func.isRequired
+    on_collision: React.PropTypes.func.isRequired
 
   statics: _.extend {}, cells
   , classmap: Immutable.Map([
@@ -49,9 +49,9 @@ Cell = React.createClass
     ]
     if new_cell is Cell.Snake
       if old_cell is cells.Item
-        @props.collided cells.Item
+        @props.on_collision cells.Item
       else if old_cell is cells.Wall
-        @props.collided cells.Collision
+        @props.on_collision cells.Collision
 
   render: ->
     <div className="#{@constructor.classmap.get(@props.content)}"></div>
