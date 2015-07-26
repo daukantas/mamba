@@ -10,7 +10,7 @@ Cell = React.createClass
   propTypes:
     content: React.PropTypes.oneOf(_.values cells).isRequired
     on_collision: React.PropTypes.func.isRequired
-    lost: React.PropTypes.bool.isRequired
+    lost: React.PropTypes.oneOf([true, false, null]).isRequired
 
   statics: _.extend {}, cells
   , classmap: Immutable.Map([

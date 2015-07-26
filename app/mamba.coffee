@@ -7,7 +7,7 @@ _ = require 'underscore'
 $ = window.$
 
 
-class Game
+class Mamba
   ###
     Has-one Renderer
     Has-one Keyhandler
@@ -23,7 +23,7 @@ class Game
     82: '__restart'
 
   constructor: (grid_node) ->
-    @_lost = false
+    @_lost = null
     @_reset_snake()
     @_keyhandler = keyhandler
       .from_handler(@_keyup, $)
@@ -47,7 +47,7 @@ class Game
       @[method]()
 
   __restart: ->
-    @_lost = false
+    @_lost = null
     @_reset_snake()
     @_renderer.reset(@_renderprops())
 
@@ -72,6 +72,7 @@ class Game
       @_snake.grow()
 
 if $?
-  new Game $('#mamba')[0]
+  ROOT = $('#mamba')[0]
+  window.mamba = new Mamba ROOT
 else
   throw new Error "Couldn't find window.$, are you sure jQuery is loaded?"

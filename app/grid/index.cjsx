@@ -12,7 +12,7 @@ Grid = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     snake: React.PropTypes.any.isRequired
-    lost: React.PropTypes.bool.isRequired
+    lost: React.PropTypes.oneOf([true, false, null]).isRequired
     on_collision: React.PropTypes.func.isRequired
 
   statics:

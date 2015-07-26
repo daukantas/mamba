@@ -11,7 +11,7 @@ Row = React.createClass
 
   propTypes:
     reset: React.PropTypes.bool.isRequired
-    lost: React.PropTypes.bool.isRequired
+    lost: React.PropTypes.oneOf([true, false, null]).isRequired
     snake: React.PropTypes.any.isRequired
     on_collision: React.PropTypes.func.isRequired
 
