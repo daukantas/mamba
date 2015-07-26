@@ -11,7 +11,7 @@ Grid = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
-    collision: React.PropTypes.func.isRequired
+    collided: React.PropTypes.func.isRequired
 
   render: ->
     range = settings.GRID.range()

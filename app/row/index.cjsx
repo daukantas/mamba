@@ -12,7 +12,7 @@ Row = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
-    collision: React.PropTypes.func.isRequired
+    collided: React.PropTypes.func.isRequired
 
     row: React.PropTypes.number.isRequired
 
@@ -58,7 +58,7 @@ Row = React.createClass
       cells.forEach (cell, col) =>
         if props.mamba.meets(position.value_of(props.row, col))
           if cell isnt Cell.Void
-            @props.collision(cell, props.row, col)
+            @props.collided(cell, props.row, col)
           cells.set(col, Cell.Snake)
         else if cell is Cell.Snake
           cells.set(col, Cell.Void)

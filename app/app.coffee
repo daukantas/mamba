@@ -54,14 +54,14 @@ class Game
 
   _renderprops: =>
     mamba: @_mamba
-    mode: settings.MODE.easy
-    collision: @_collision
+    collided: @_collided
 
-  _collision: (cell, row, col) =>
-    console.log "Collision! #{cell.toString()}, #{row}, #{col}"
+  _collided: (cell, row, col) =>
     if cell is Cell.Wall
       @_lost = true
       @_renderer.stop()
+    else if cell is Cell.Item
+      @_mamba.grow()
 
 if $?
   new Game $('#mamba')[0]
