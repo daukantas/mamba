@@ -34,9 +34,9 @@ class Mamba
   move: ->
     if @moving()
       new_front = position.add(@_this_frame.first(), @_motion)
-      new_this_frame = @_this_frame.take(@_length - 1)
+      new_frame = @_this_frame.take(@_length - 1)
       @_last_frame = @_this_frame
-      @_this_frame = Immutable.OrderedSet.of(new_front, (new_this_frame.toJS())...)
+      @_this_frame = Immutable.OrderedSet.of(new_front, (new_frame.toJS())...)
 
   length: ->
     @_length

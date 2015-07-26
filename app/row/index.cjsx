@@ -18,7 +18,7 @@ Row = React.createClass
     row: React.PropTypes.number.isRequired
 
   componentWillMount: ->
-    @setState cells: @reset @props, initial: true
+    @setState(cells: @reset(@props, initial: true))
 
   componentWillReceiveProps: (next_props) ->
     if next_props.reset
