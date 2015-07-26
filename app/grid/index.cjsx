@@ -16,16 +16,14 @@ Grid = React.createClass
 
   statics:
     out_of_bounds: (mamba) ->
-      head = mamba.head()
+      head = mamba.next_head()
       head.x < 0 ||
       head.y < 0 ||
       head.x >= GRID.dimension ||
       head.y >= GRID.dimension
 
   shouldComponentUpdate: (next_props) ->
-    if @constructor.out_of_bounds(next_props.mamba)
-      false
-    else if next_props.reset
+    if next_props.reset
       true
     else
       @props.mamba.moving()
