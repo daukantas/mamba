@@ -1,3 +1,3 @@
 exports.GRID = require './grid'
-exports.MODE = (require './mode').get()
+exports.LEVEL = (require './level').get()
 exports.RENDER = require './render'
