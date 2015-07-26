@@ -26,7 +26,7 @@ class Mamba
 
   move: ->
     if @_motion?
-      new_front = position.add(@_frame.first(), @_motion)
+      new_front = @next_head()
       new_frame = @_frame.take(@_length - 1)
       @_frame = Immutable.OrderedSet.of(new_front, (new_frame.toJS())...)
 
@@ -38,6 +38,12 @@ class Mamba
 
   meets: (xy) ->
     @_frame.has xy
+
+  next_head: ->
+    if @_motion?
+      position.add(@_frame.first(), @_motion)
+    else
+      @_frame.first()
 
   moving: ->
     @_motion?
