@@ -23,7 +23,7 @@ Grid = React.createClass
     </div>
 
 
-GRID = null
+__GRID__ = null
 
 module.exports =
 
@@ -33,15 +33,15 @@ module.exports =
   render: (props) ->
     if !@_html_element?
       throw new Error("Set HTMLElement html_element before rendering!")
-    else if GRID?
+    else if __GRID__?
       throw new Error("Grid's already been rendered!")
-    GRID = React.render <Grid {... props}/>, @_html_element
+    __GRID__ = React.render <Grid {... props}/>, @_html_element
 
   # This is supposed to be an anti-pattern, but I
   # don't find it difficult to reason about.
   #
   # https://facebook.github.io/react/docs/component-api.html
   set_props: (props, callback) ->
-    if !GRID?
+    if !__GRID__?
       throw new Error("Grid hasn't been rendered!")
-    GRID.setProps(props, callback)
+    __GRID__.setProps(props, callback)
