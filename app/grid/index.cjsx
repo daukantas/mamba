@@ -14,17 +14,18 @@ Grid = React.createClass
     collided: React.PropTypes.func.isRequired
 
   statics:
-    out_of_bounds: (xy) ->
-      xy.x < 0 ||
-      xy.y < 0 ||
-      xy.x >= GRID.dimension ||
-      xy.y >= GRID.dimension
+    out_of_bounds: (mamba) ->
+      head = mamba.head()
+      head.x < 0 ||
+      head.y < 0 ||
+      head.x >= GRID.dimension ||
+      head.y >= GRID.dimension
 
   shouldComponentUpdate: ->
     @props.mamba.moving() && (not @state?.out_of_bounds)
 
   componentWillReceiveProps: (next_props) ->
-    @setState out_of_bounds: @constructor.out_of_bounds next_props.mamba.head()
+    @setState out_of_bounds: @constructor.out_of_bounds(next_props.mamba)
 
   render: ->
     <div className="grid">
