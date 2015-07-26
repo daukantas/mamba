@@ -29,3 +29,6 @@ module.exports =
 
   add: (xy1, xy2) ->
     @value_of(xy1.x + xy2.x, xy1.y + xy2.y)
+
+  negate: (xy) ->
+    @value_of(-xy.x, -xy.y)

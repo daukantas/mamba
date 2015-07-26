@@ -20,7 +20,11 @@ class Mamba
     new @([xy])
 
   motion: (xy) ->
-    @_motion = xy
+    if xy?
+      if !@_motion?
+        @_motion = xy
+      else if position.negate(xy) isnt @_motion
+        @_motion = xy
 
   head: ->
     @_this_frame.first()
