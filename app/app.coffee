@@ -59,8 +59,6 @@ class Game
     collided: @_collided
 
   _collided: (cell, row, col) =>
-    if cell is Cell.Wall
-    console.log "Collision #{cell}"
     if cell is Cell.Collision
       @_lost = true
       @_renderer.stop()

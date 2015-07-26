@@ -17,11 +17,11 @@ Row = React.createClass
     row: React.PropTypes.number.isRequired
 
   componentWillMount: ->
-    @setState cells: @reset(@props, initial: true)
+    @setState cells: @reset @props, initial: true
 
   componentWillReceiveProps: (next_props) ->
     if next_props.reset
-      @setState cells: @reset(next_props)
+      @setState cells: @reset next_props
     else
       @setState cells: @update(next_props)
 
@@ -49,19 +49,20 @@ Row = React.createClass
       @_update_cells (cells) =>
         cells.forEach (cell, col) =>
           if props.mamba.meets position.value_of(props.row, col)
-            cells.set(col, Cell.Snake)
+            cells.set col, Cell.Snake
           else
-            cells.set(col, Cell.random())
+            cells.set col, Cell.random()
 
   update: (props) ->
     @_update_cells (cells) =>
       cells.forEach (cell, col) =>
-        if props.mamba.meets(position.value_of(props.row, col))
-          if cell isnt Cell.Void
-            @props.collided(cell, props.row, col)
-          cells.set(col, Cell.Snake)
+        if props.mamba.meets position.value_of(props.row, col)
+          if (cell is Cell.Item) || (cell is Cell.Void)
+            cells.set col, Cell.Snake
+          else if cell isnt Cell.Snake
+            cells.set col, Cell.Collision
         else if cell is Cell.Snake
-          cells.set(col, Cell.Void)
+          cells.set col, Cell.Void
 
   render: ->
     {row, collided} = @props
