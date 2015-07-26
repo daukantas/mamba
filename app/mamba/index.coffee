@@ -2,12 +2,17 @@ Immutable = require 'immutable'
 {position} = require '../util'
 settings = require '../settings'
 
+###
+  Represents an instance of an expandable, movable snake.
 
+  Backed by an Immutable.OrderedSet, so .meets(xy) and moveare fast.
+###
 class Mamba
 
   constructor: (xy_list) ->
-    @_frame = Immutable.Set(xy_list)
-    @_motion = null
+    @_frame = Immutable.OrderedSet(xy_list)
+    @_front = xy_list[0]
+    @_length = 1
     @
 
   @at_position: (xy) ->
@@ -18,15 +23,15 @@ class Mamba
 
   move: ->
     if @_motion?
-      @_frame = @_frame.map (xy) =>
-        position.add(xy, @_motion)
+      new_front = position.add(@_frame.first(), @_motion)
+      new_frame = @_frame.take(@_length - 1)
+      @_frame = Immutable.OrderedSet.of(new_front, (new_frame.toJS())...)
 
   length: ->
-    @_frame.size
+    @_length
 
   grow: ->
-    @_front = position.add(@_front, @_motion)
-    @_frame.add(@_front)
+    @_length++
 
   meets: (xy) ->
     @_frame.has xy
