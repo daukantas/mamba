@@ -1,7 +1,6 @@
 React = require 'react'
 cells = require './types'
 {LEVEL} = require '../settings'
-Random = require '../util/random' # can't require util
 Immutable = require 'immutable'
 
 _ = require 'underscore'
@@ -37,13 +36,8 @@ Cell = React.createClass
     ])
 
   , random: ->
-    sample = Random.int(0, 100)
-    if LEVEL.get(@Wall).contains(sample)
-      @Wall
-    else if LEVEL.get(@Item).contains(sample)
-      @Item
-    else
-      @Void
+      choice = LEVEL.choice(cells.Wall, cells.Item)
+      (choice? && choice) || @Void
 
   componentWillReceiveProps: (next_props) ->
     [
