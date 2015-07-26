@@ -28,8 +28,8 @@ class Renderer
     Grid.render _.defaults(props, {reset: true})
     @
 
-  update: (props = {}) ->
-    Grid.set_props _.defaults(props, {reset: false})
+  update: (props = {}, callback) ->
+    Grid.set_props(_.defaults(props, {reset: false}), callback)
     @
 
   stop: ->

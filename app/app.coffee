@@ -61,8 +61,10 @@ class Game
 
   _on_collision: (cell) =>
     if cell is Cell.Collision
-      @_lost = true
-      @_renderer.stop()
+      @_renderer.update(@_renderprops(lost: true), =>
+        @_lost = true
+        @_renderer.stop()
+      )
     else if cell is Cell.Item
       @_mamba.grow()
 
