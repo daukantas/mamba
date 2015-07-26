@@ -32,10 +32,9 @@ Cell = React.createClass
     else
       @Void
 
-  render: ->
-    content_class = @constructor.type_classmap(@props.content)
 
-    <div className="#{content_class}"></div>
+  render: ->
+    <div className="#{@constructor.type_classmap(@props.content)}"></div>
 
 
 module.exports = Cell

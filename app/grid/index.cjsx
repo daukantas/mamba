@@ -17,9 +17,9 @@ Grid = React.createClass
     collided: React.PropTypes.func.isRequired
 
   render: ->
-    range = settings.GRID.range()
     <div className="grid">
-      {<Row {... @props} row={row} key={"row-#{row}"} /> for row in range}
+      {for row in GRID.range()
+        <Row {... @props} row={row} key={"row-#{row}"} />}
     </div>
 
 
