@@ -54,9 +54,10 @@ class Game
     @_mamba.move()
     @_renderprops()
 
-  _renderprops: =>
-    mamba: @_mamba
-    collided: @_collided
+  _renderprops: (props = {}) =>
+    _.defaults props,
+      mamba: @_mamba
+      on_collision: @_on_collision
 
   _collided: (cell, row, col) =>
     if cell is Cell.Collision
