@@ -8,6 +8,9 @@ settings = require '../settings'
 
 Grid = React.createClass
 
+  shouldComponentUpdate: ->
+    @props.mamba.moving()
+
   propTypes:
     reset: React.PropTypes.bool.isRequired
     mamba: React.PropTypes.any.isRequired
