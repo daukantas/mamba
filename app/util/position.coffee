@@ -1,4 +1,3 @@
-settings = require '../settings'
 random = require './random'
 
 class XY
@@ -23,9 +22,9 @@ module.exports =
       all_xy[row][col] = XY.value_of(row, col)
     all_xy[row][col]
 
-  random: ->
-    row = random.int(0, settings.GRID.dimension);
-    col = random.int(0, settings.GRID.dimension);
+  random: (max) ->
+    row = random.int(0, max);
+    col = random.int(0, max);
     @value_of(row, col)
 
   add: (xy1, xy2) ->

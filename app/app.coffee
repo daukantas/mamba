@@ -32,14 +32,16 @@ class Game
       .render(@_renderprops())
 
   _reset_mamba: ->
-    @_mamba = Mamba.at_position(position.random())
+    @_mamba = Mamba.at_position(
+      position.random(settings.GRID.dimension))
 
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]
     method = @constructor.method_keys[keycode]
     if motion && !@_lost
       @_mamba.impulse(motion)
-      (!@_renderer.looping()) && @_renderer.loop(@_renderloop_hook)
+      (!@_renderer.looping()) && @_renderer.loop(
+        @_renderloop_hook, settings.RENDER.interval)
     else if method?
       @[method]()
 

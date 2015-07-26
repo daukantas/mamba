@@ -1,5 +1,4 @@
 Grid = require '../grid'
-settings = require '../settings'
 _ = require 'underscore'
 
 class Renderer
@@ -14,10 +13,10 @@ class Renderer
   looping: ->
     @_interval?
 
-  loop: (props_returning_fn) ->
+  loop: (props_returning_fn, milliseconds) ->
     @stop()
     @_interval = setInterval(
-      _.compose(@update, props_returning_fn), settings.RENDER.interval)
+      _.compose(@update, props_returning_fn), milliseconds)
     @
 
   reset: (props = {}) ->
