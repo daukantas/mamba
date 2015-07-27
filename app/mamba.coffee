@@ -1,7 +1,7 @@
 Snake = require './snake'
 Cell = require './cell'
 settings = require './settings'
-{keyhandler, renderer, position} = require './util'
+{keyhandler, renderer, position, game_over} = require './util'
 
 _ = require 'underscore'
 $ = window.$
@@ -23,7 +23,7 @@ class Mamba
     82: '__restart'
 
   constructor: (grid_node) ->
-    @_lost = null
+    @_game_over = null
     @_reset_snake()
     @_keyhandler = keyhandler
       .from_handler(@_keyup, $)
@@ -39,7 +39,7 @@ class Mamba
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]
     method = @constructor.method_keys[keycode]
-    if motion && (@_lost isnt true)
+    if motion && (@_game_over isnt game_over.failure)
       @_snake.motion(motion)
       (!@_renderer.looping()) && @_renderer.loop(
         @_renderloop_hook, settings.RENDER.interval)
@@ -47,7 +47,7 @@ class Mamba
       @[method]()
 
   __restart: ->
-    @_lost = null
+    @_game_over = null
     @_reset_snake()
     @_renderer.reset(@_renderprops())
 
@@ -60,13 +60,13 @@ class Mamba
       snake: @_snake
       on_smash: @_on_smash
       on_reset: @_on_reset
-      lost: @_lost
+      game_over: @_game_over
 
   _on_reset: (@_Items_left) =>
 
   _on_smash: (cell) =>
     if cell is Cell.Wall
-      @_lost = true
+      @_game_over = game_over.failure
       @_snake.motion(null)
       @_snake.rewind() # this is a hack for the UI: no cell-overlap during collision
       @_renderer.update @_renderprops(), =>
@@ -74,6 +74,7 @@ class Mamba
     else if cell is Cell.Item
       @_Items_left--
       if @_Items_left is 0
+        @_game_over = game_over.success
         @_renderer.stop()
       else
         @_snake.grow()
