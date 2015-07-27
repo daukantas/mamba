@@ -32,7 +32,7 @@ Grid = React.createClass
       head.y >= GRID.dimension
 
   shouldComponentUpdate: (next_props) ->
-    if @_impending_loss(next_props)
+    if next_props.game_over?
       true
     else if next_props.reset
       true
@@ -47,14 +47,11 @@ Grid = React.createClass
     if next_props.reset
       @_Items_received = 0
     out_of_bounds = @constructor.out_of_bounds(next_props.snake)
-    if @_no_impending_loss(next_props) && out_of_bounds
+    if @_no_loss(next_props) && out_of_bounds
       @props.on_smash Cell.Wall
 
-  _no_impending_loss: (next_props) ->
+  _no_loss: (next_props) ->
     !next_props.game_over? || next_props.game_over.success
-
-  _impending_loss: (next_props) ->
-    next_props.game_over && !next_props.game_over.success
 
   _on_row_reset: (row_items) ->
     @_Items_received += row_items
@@ -70,12 +67,12 @@ Grid = React.createClass
     @props.on_reset(@_Items_received)
 
   render: ->
-    {reset, snake, on_smash} = @props
+    {reset, snake, on_smash, game_over} = @props
     on_reset = @_on_row_reset
 
     <div className="grid">
       {for row in GRID.range()
-        <Row on_reset={on_reset} reset={reset} row={row}
+        <Row on_reset={on_reset} reset={reset} row={row} game_over={game_over}
              on_smash={on_smash} snake={snake} key={"row-#{row}"} />}
     </div>
 
