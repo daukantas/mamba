@@ -58,10 +58,10 @@ class Mamba
   _renderprops: (props = {}) =>
     _.defaults props,
       snake: @_snake
-      on_collision: @_on_collision
+      on_smash: @_on_smash
       lost: @_lost
 
-  _on_collision: (cell) =>
+  _on_smash: (cell) =>
     if cell is Cell.Wall
       @_lost = true
       @_snake.motion(null)

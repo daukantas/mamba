@@ -32,14 +32,20 @@ Grid = React.createClass
       @props.snake.moving()
 
   componentWillReceiveProps: (next_props) ->
-    # Saving this in @state fails; it won't be "ready" in shouldComponentUpdate
+    # Saving this in @state fails; it won't be "ready"
+    # in shouldComponentUpdate. Note that this isn't
+    # really a Cell.Wall collision - the boundary is
+    # artificial.
     if !next_props.lost && @constructor.out_of_bounds(next_props.snake)
-      @props.on_collision Cell.Wall
+      @props.on_smash Cell.Wall
 
   render: ->
+    {reset, snake, on_smash} = @props
+    on_reset = @_on_row_reset
     <div className="grid">
       {for row in GRID.range()
-        <Row {... @props} row={row} key={"row-#{row}"} />}
+        <Row on_reset={on_reset} reset={reset} row={row}
+             on_smash={on_smash} snake={snake} key={"row-#{row}"} />}
     </div>
 
 

@@ -12,16 +12,18 @@ Row = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     snake: React.PropTypes.any.isRequired
+
     row: React.PropTypes.number.isRequired
 
-    on_collision: React.PropTypes.func.isRequired
+    on_reset: React.PropTypes.func.isRequired
+    on_smash: React.PropTypes.func.isRequired
 
   componentWillMount: ->
     @setState(cells: @reset(@props, initial: true))
 
   componentWillReceiveProps: (next_props) ->
     if next_props.reset
-      @setState cells: @reset next_props
+      @setState cells: @reset(next_props)
     else
       @setState cells: @update(next_props)
 
