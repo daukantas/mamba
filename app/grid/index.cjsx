@@ -5,6 +5,8 @@ Snake = require '../snake' # can't require this :(
 Row = require '../row'
 Cell = require '../cell'
 {GRID} = require '../settings'
+game_over = require '../util/game-over' # again, can't require the top-level module
+
 
 
 Grid = React.createClass
@@ -13,7 +15,10 @@ Grid = React.createClass
     reset: React.PropTypes.bool.isRequired
     snake: React.PropTypes.any.isRequired
 
-    lost: React.PropTypes.oneOf([true, false, null]).isRequired
+    game_over: React.PropTypes.oneOf([
+      game_over.failure
+      game_over.success
+    ])
 
     on_smash: React.PropTypes.func.isRequired
     on_reset: React.PropTypes.func.isRequired
@@ -27,7 +32,7 @@ Grid = React.createClass
       head.y >= GRID.dimension
 
   shouldComponentUpdate: (next_props) ->
-    if next_props.lost
+    if @_impending_loss(next_props)
       true
     else if next_props.reset
       true
@@ -41,8 +46,15 @@ Grid = React.createClass
     # artificial.
     if next_props.reset
       @_Items_received = 0
-    if !next_props.lost && @constructor.out_of_bounds(next_props.snake)
+    out_of_bounds = @constructor.out_of_bounds(next_props.snake)
+    if @_no_impending_loss(next_props) && out_of_bounds
       @props.on_smash Cell.Wall
+
+  _no_impending_loss: (next_props) ->
+    !next_props.game_over? || next_props.game_over.success
+
+  _impending_loss: (next_props) ->
+    next_props.game_over && !next_props.game_over.success
 
   _on_row_reset: (row_items) ->
     @_Items_received += row_items
