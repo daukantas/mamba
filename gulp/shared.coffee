@@ -24,7 +24,7 @@ BUILD =
   base: ->
     'build'
   entries: ->
-    ["#{@base()}/app.js"]
+    ["#{@base()}/mamba.js"]
   css: ->
     "#{@base()}/**/*.css"
 
