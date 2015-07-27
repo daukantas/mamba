@@ -66,19 +66,26 @@ class Mamba
 
   _on_smash: (cell) =>
     if cell is Cell.Wall
-      @_game_over = game_over.failure
-      @_snake.motion(null)
-      @_snake.rewind() # this is a hack for the UI: no cell-overlap during collision
-      @_renderer.update @_renderprops(), =>
-        @_renderer.stop()
+      @_game_over_failure()
     else if cell is Cell.Item
       @_Items_left--
       if @_Items_left is 0
-        @_game_over = game_over.success
-        @_renderer.update @_renderprops(), =>
-          @_renderer.stop()
+        @_game_over_success()
       else
         @_snake.grow()
+
+  _game_over_success: ->
+    @_game_over = game_over.success
+    @_renderer.update @_renderprops(), =>
+      @_renderer.stop()
+
+  _game_over_failure: ->
+    @_game_over = game_over.failure
+    @_snake.motion(null)
+    @_snake.rewind() # this is a hack for the UI: no cell-overlap during collision
+    @_renderer.update @_renderprops(), =>
+      @_renderer.stop()
+
 
 if $?
   ROOT = $('#mamba')[0]

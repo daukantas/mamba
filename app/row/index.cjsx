@@ -90,11 +90,13 @@ Row = React.createClass
 
   _game_over_success_tick: (mutative_cells) ->
     mutative_cells.forEach (cell, col) ->
-      mutative_cells.set col, Cell.Item
+      if cell is Cell.Snake
+        mutative_cells.set col, Cell.Item
 
   _game_over_failure_tick: (mutative_cells) ->
     mutative_cells.forEach (cell, col) ->
-      mutative_cells.set col, Cell.Collision
+      if cell is Cell.Snake
+        mutative_cells.set col, Cell.Collision
 
   _get_random_cell: (options = {increment: false})->
     cell = Cell.random()
