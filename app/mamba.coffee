@@ -39,7 +39,7 @@ class Mamba
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]
     method = @constructor.method_keys[keycode]
-    if motion && !@_lost
+    if motion && (@_lost isnt true)
       @_snake.motion(motion)
       (!@_renderer.looping()) && @_renderer.loop(
         @_renderloop_hook, settings.RENDER.interval)
@@ -55,21 +55,28 @@ class Mamba
     @_snake.move()
     @_renderprops()
 
-  _renderprops: (props = {}) =>
+  _renderprops: (props = {}) ->
     _.defaults props,
       snake: @_snake
       on_smash: @_on_smash
+      on_reset: @_on_reset
       lost: @_lost
+
+  _on_reset: (@_Items_left) =>
 
   _on_smash: (cell) =>
     if cell is Cell.Wall
       @_lost = true
       @_snake.motion(null)
-      @_snake.rewind()    # this is a hack for the view-layer; no cell-overlap during collision
+      @_snake.rewind() # this is a hack for the UI: no cell-overlap during collision
       @_renderer.update @_renderprops(), =>
         @_renderer.stop()
     else if cell is Cell.Item
-      @_snake.grow()
+      @_Items_left--
+      if @_Items_left is 0
+        @_renderer.stop()
+      else
+        @_snake.grow()
 
 if $?
   ROOT = $('#mamba')[0]

@@ -12,8 +12,11 @@ Grid = React.createClass
   propTypes:
     reset: React.PropTypes.bool.isRequired
     snake: React.PropTypes.any.isRequired
+
     lost: React.PropTypes.oneOf([true, false, null]).isRequired
-    on_collision: React.PropTypes.func.isRequired
+
+    on_smash: React.PropTypes.func.isRequired
+    on_reset: React.PropTypes.func.isRequired
 
   statics:
     out_of_bounds: (snake) ->
@@ -36,12 +39,28 @@ Grid = React.createClass
     # in shouldComponentUpdate. Note that this isn't
     # really a Cell.Wall collision - the boundary is
     # artificial.
+    if next_props.reset
+      @_Items_received = 0
     if !next_props.lost && @constructor.out_of_bounds(next_props.snake)
       @props.on_smash Cell.Wall
+
+  _on_row_reset: (row_items) ->
+    @_Items_received += row_items
+
+  componentDidUpdate: ->
+    if @props.reset
+      @_submit_total_Items()
+
+  componentDidMount: ->
+    @_submit_total_Items()
+
+  _submit_total_Items: ->
+    @props.on_reset(@_Items_received)
 
   render: ->
     {reset, snake, on_smash} = @props
     on_reset = @_on_row_reset
+
     <div className="grid">
       {for row in GRID.range()
         <Row on_reset={on_reset} reset={reset} row={row}
