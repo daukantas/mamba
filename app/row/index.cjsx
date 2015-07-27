@@ -4,7 +4,10 @@ _ = require 'underscore'
 Cell = require '../cell'
 Snake = require '../snake' # can't require this :(
 settings = require '../settings'
+
 position = require '../util/position'
+game_over = require '../util/game-over' # again, can't require the top-level module
+
 Immutable = require 'immutable'
 
 Row = React.createClass
@@ -14,6 +17,11 @@ Row = React.createClass
     snake: React.PropTypes.any.isRequired
 
     row: React.PropTypes.number.isRequired
+
+    game_over: React.PropTypes.oneOf([
+      game_over.failure
+      game_over.success
+    ])
 
     on_reset: React.PropTypes.func.isRequired
     on_smash: React.PropTypes.func.isRequired
@@ -52,25 +60,41 @@ Row = React.createClass
     if options.initial
       @_create_cells(props)
     else
-      @_batch_update (cells) =>
-        cells.forEach (cell, col) =>
+      @_batch_update (mutative_cells) =>
+        mutative_cells.forEach (cell, col) =>
           if props.snake.meets position.value_of(props.row, col)
-            cells.set col, Cell.Snake
+            mutative_cells.set col, Cell.Snake
           else
-            cells.set col, @_get_random_cell(increment: true)
+            mutative_cells.set col, @_get_random_cell(increment: true)
 
   update: (props) ->
-    @_batch_update (cells) =>
-      cells.forEach (cell, col) =>
-        if props.snake.meets position.value_of(props.row, col)
-          if cell isnt Cell.Void
-            if cell is Cell.Item
-              cells.set col, Cell.Snake
-            props.on_smash(cell)
-          else
-            cells.set col, Cell.Snake
-        else if cell is Cell.Snake
-          cells.set col, Cell.Void
+    @_batch_update (mutative_cells) =>
+      if props.game_over is game_over.success
+        @_game_over_success_tick(mutative_cells)
+      else if props.game_over is game_over.failure
+        @_game_over_failure_tick(mutative_cells)
+      else
+        @_next_tick(mutative_cells, props)
+
+  _next_tick: (mutative_cells, props) ->
+    mutative_cells.forEach (cell, col) ->
+      if props.snake.meets position.value_of(props.row, col)
+        if cell isnt Cell.Void
+          if cell is Cell.Item
+            mutative_cells.set col, Cell.Snake
+          props.on_smash(cell)
+        else
+          mutative_cells.set col, Cell.Snake
+      else if cell is Cell.Snake
+        mutative_cells.set col, Cell.Void
+
+  _game_over_success_tick: (mutative_cells) ->
+    mutative_cells.forEach (cell, col) ->
+      mutative_cells.set col, Cell.Item
+
+  _game_over_failure_tick: (mutative_cells) ->
+    mutative_cells.forEach (cell, col) ->
+      mutative_cells.set col, Cell.Collision
 
   _get_random_cell: (options = {increment: false})->
     cell = Cell.random()

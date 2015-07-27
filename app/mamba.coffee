@@ -75,7 +75,8 @@ class Mamba
       @_Items_left--
       if @_Items_left is 0
         @_game_over = game_over.success
-        @_renderer.stop()
+        @_renderer.update @_renderprops(), =>
+          @_renderer.stop()
       else
         @_snake.grow()
 
