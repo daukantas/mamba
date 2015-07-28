@@ -53,5 +53,8 @@ class Snake
   moving: ->
     @_motion?
 
+  toString: ->
+    @_this_frame.toString()
+
 
 module.exports = Snake
