@@ -69,7 +69,6 @@ class Mamba
   _on_reset: (@_Items_left) =>
 
   _on_smash: ({smashed, smasher, xy}) =>
-    console.log "smashed: #{smashed}, smasher: #{smasher}"
     if smashed is Cell.Snake and smasher is Cell.Snake and @_snake.head() is xy
       @_game_over_failure()
     else if smashed is Cell.Wall
