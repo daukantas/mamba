@@ -133,9 +133,6 @@ Grid = React.createClass
   _no_loss: (next_props) ->
     !next_props.game_over? || next_props.game_over.success
 
-  _on_row_reset: (row_items) ->
-    @_Items_received += row_items
-
   componentDidUpdate: ->
     if @props.reset
       @_submit_total_Items()
@@ -144,7 +141,7 @@ Grid = React.createClass
     @_submit_total_Items()
 
   _submit_total_Items: ->
-    @props.on_reset(@_Items_received)
+    @props.on_reset(@_Items_created)
 
   _get_row_cells: (row) ->
     @state
