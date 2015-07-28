@@ -54,7 +54,7 @@ Grid = React.createClass
     # really a Cell.Wall collision - the boundary is
     # artificial.
     if @_no_loss(next_props) && @constructor.out_of_bounds(next_props.snake)
-      @props.on_smash Cell.Wall
+      @props.on_smash(smashed: Cell.Wall, smasher: Cell.Snake)
     else if next_props.reset
       @setState cellmap: @reset(next_props.snake)
     else
@@ -102,12 +102,18 @@ Grid = React.createClass
         @_next_tick(mutative_cellmap, next_props)
 
   _next_tick: (mutative_cellmap, next_props) ->
+    {snake, on_smash} = next_props
     mutative_cellmap.forEach (cell, xy) ->
-      if next_props.snake.meets xy
-        if cell isnt Cell.Void
-          if cell is Cell.Item
-            mutative_cellmap.set xy, Cell.Snake
-          next_props.on_smash(cell)
+      if snake.meets xy
+        [smasher, smashed] = [Cell.Snake, cell]
+        if smashed isnt Cell.Void
+          if smashed is Cell.Item
+            mutative_cellmap.set xy, smasher
+          if smashed is Cell.Snake and smasher is Cell.Snake
+            if snake.head() is xy
+              on_smash({smashed, smasher, xy})
+          else
+            on_smash({smashed, smasher, xy})
         else
           mutative_cellmap.set xy, Cell.Snake
       else if cell is Cell.Snake

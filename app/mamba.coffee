@@ -68,10 +68,15 @@ class Mamba
 
   _on_reset: (@_Items_left) =>
 
-  _on_smash: (cell) =>
-    if cell is Cell.Wall
+  _on_smash: ({smashed, smasher, xy}) =>
+    console.log "smashed: #{smashed}, smasher: #{smasher}"
+    if smashed is Cell.Snake and smasher is Cell.Snake and @_snake.head() is xy
       @_game_over_failure()
-    else if cell is Cell.Item
+    else if smashed is Cell.Wall
+      if xy? and @_snake.meets(xy)
+        @_snake.rewind()
+      @_game_over_failure()
+    else if smashed is Cell.Item
       @_Items_left--
       if @_Items_left is 0
         @_game_over_success()
@@ -86,7 +91,6 @@ class Mamba
   _game_over_failure: ->
     @_game_over = game_over.failure
     @_snake.motion(null)
-    @_snake.rewind() # this is a hack for the UI: no cell-overlap during collision
     @_renderer.update @_renderprops(), =>
       @_renderer.stop()
 
