@@ -57,6 +57,8 @@ Grid = React.createClass
       @props.on_smash(smashed: Cell.Wall, smasher: Cell.Snake)
     else if next_props.reset
       @setState cellmap: @reset(next_props.snake)
+    else if next_props.game_over?
+      @setState cellmap: @finish(next_props)
     else
       @setState cellmap: @update(next_props)
 
@@ -65,11 +67,21 @@ Grid = React.createClass
       throw new Error "state.cellmap doesn't exist"
     @state.cellmap.withMutations callback
 
+  finish: (next_props) ->
+    transform_to_cell = if next_props.game_over.success
+      Cell.Item
+    else
+      Cell.Collision
+    @_batch_update (mutative_cellmap) ->
+      mutative_cellmap.forEach (cell, xy) ->
+        if cell is Cell.Snake
+          mutative_cellmap.set xy, transform_to_cell
+
   _create_cellmap: (snake) ->
     if @state?.cellmap?
       throw new Error "state.cells already exists; use ._batch_update()"
     dimspan = GRID.range()
-    cellmap = Immutable.OrderedMap().withMutations (mutable_cellmap) =>
+    cellmap = Immutable.OrderedMap().withMutations (mutative_cellmap) =>
       for row in dimspan
         for col in dimspan
           xy = position.value_of(row, col)
@@ -77,7 +89,7 @@ Grid = React.createClass
             Cell.Snake
           else
             @_get_random_cell(increment: true)
-          mutable_cellmap.set xy, cell
+          mutative_cellmap.set xy, cell
     cellmap
 
   reset: (snake, options = {initial: false}) ->
@@ -94,16 +106,11 @@ Grid = React.createClass
 
   update: (next_props) ->
     @_batch_update (mutative_cellmap) =>
-      if next_props.game_over is game_over.success
-        @_game_over_success_tick(mutative_cellmap)
-      else if next_props.game_over is game_over.failure
-        @_game_over_failure_tick(mutative_cellmap)
-      else
-        @_next_tick(mutative_cellmap, next_props)
+      @_next_tick(mutative_cellmap, next_props)
 
   _next_tick: (mutative_cellmap, next_props) ->
     {snake, on_smash} = next_props
-    mutative_cellmap.forEach (cell, xy) ->
+    mutative_cellmap.forEach (cell, xy) =>
       if snake.meets xy
         [smasher, smashed] = [Cell.Snake, cell]
         if smashed isnt Cell.Void
@@ -118,16 +125,6 @@ Grid = React.createClass
           mutative_cellmap.set xy, Cell.Snake
       else if cell is Cell.Snake
         mutative_cellmap.set xy, Cell.Void
-
-  _game_over_success_tick: (mutative_cellmap) ->
-    mutative_cellmap.forEach (cell, xy) ->
-      if cell is Cell.Snake
-        mutative_cellmap.set xy, Cell.Item
-
-  _game_over_failure_tick: (mutative_cellmap) ->
-    mutative_cellmap.forEach (cell, xy) ->
-      if cell is Cell.Snake
-        mutative_cellmap.set xy, Cell.Collision
 
   _get_random_cell: (options = {increment: false})->
     cell = Cell.random()
