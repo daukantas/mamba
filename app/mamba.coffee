@@ -30,7 +30,7 @@ class Mamba
       .handle()
     @_renderer = renderer
       .mount(grid_node)
-      .render(@_renderprops())
+      .render(@_renderprops(reset: true))
 
   _reset_snake: ->
     @_snake = Snake.at_position(
@@ -49,7 +49,8 @@ class Mamba
   __restart: ->
     @_game_over = null
     @_reset_snake()
-    @_renderer.reset(@_renderprops())
+    @_renderer.update @_renderprops(reset: true), =>
+      @_renderer.stop()
 
   _renderloop_hook: =>
     @_snake.move()
@@ -57,10 +58,13 @@ class Mamba
 
   _renderprops: (props = {}) ->
     _.defaults props,
+      reset: false
       snake: @_snake
+
+      game_over: @_game_over
+
       on_smash: @_on_smash
       on_reset: @_on_reset
-      game_over: @_game_over
 
   _on_reset: (@_Items_left) =>
 
