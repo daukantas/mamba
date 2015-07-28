@@ -19,17 +19,12 @@ class Renderer
       _.compose(@update, props_returning_fn), milliseconds)
     @
 
-  reset: (props = {}) ->
-    Grid.set_props(_.extend props, reset: true)
-    @stop()
-    @
-
   render: (props = {}) ->
-    Grid.render _.defaults(props, {reset: true})
+    Grid.render props
     @
 
   update: (props = {}, callback) ->
-    Grid.set_props(_.defaults(props, {reset: false}), callback)
+    Grid.set_props(props, callback)
     @
 
   stop: ->
