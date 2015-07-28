@@ -114,7 +114,7 @@ Grid = React.createClass
               on_smash({smashed, smasher, xy})
           else
             on_smash({smashed, smasher, xy})
-        else
+        else if smashed isnt Cell.Wall
           mutative_cellmap.set xy, Cell.Snake
       else if cell is Cell.Snake
         mutative_cellmap.set xy, Cell.Void
