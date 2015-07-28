@@ -27,6 +27,7 @@
     "browserify": "^10.2.6",
     "coffee-script": "^1.9.3",
     "exorcist": "^0.4.0",
+    "flux": "^2.0.3",
     "gulp": "gulpjs/gulp.git#4.0",
     "gulp-cjsx": "^3.0.0",
     "gulp-concat": "^2.6.0",
