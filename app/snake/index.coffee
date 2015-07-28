@@ -12,7 +12,6 @@ class Snake
   constructor: (xy_list) ->
     @_this_frame = Immutable.OrderedSet(xy_list)
     @_last_frame = null
-    @_front = xy_list[0]
     @_length = 1
     @
 
