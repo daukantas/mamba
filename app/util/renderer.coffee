@@ -27,9 +27,10 @@ class Renderer
     Grid.set_props(props, callback)
     @
 
-  stop: ->
+  stop: (callback) ->
     clearInterval @_interval
     @_interval = null
+    callback?()
 
 
 module.exports =

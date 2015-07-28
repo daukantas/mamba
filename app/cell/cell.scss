@@ -2,12 +2,17 @@
 
 $cell_side: $row_height;
 
+[class*="-cell"] {
+  transition: background-color .1s ease-in;
+}
+
 @mixin cell($background_color) {
   height: $cell_side;
   width: $cell_side;
 
   display: inline-block;
   border: 1px solid black;
+  border-radius: 4px;
   background-color: $background_color;
 }
 

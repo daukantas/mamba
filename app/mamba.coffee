@@ -72,8 +72,6 @@ class Mamba
     if smashed is Cell.Snake and smasher is Cell.Snake and @_snake.head() is xy
       @_game_over_failure()
     else if smashed is Cell.Wall
-      if xy? and @_snake.meets(xy)
-        @_snake.rewind()
       @_game_over_failure()
     else if smashed is Cell.Item
       @_Items_left--
@@ -90,9 +88,10 @@ class Mamba
   _game_over_failure: ->
     @_game_over = game_over.failure
     @_snake.motion(null)
-    @_renderer.update @_renderprops(), =>
-      @_renderer.stop()
-
+    @_renderer.stop setTimeout =>
+      @_snake.rewind()
+      @_renderer.update(@_renderprops())
+    , settings.RENDER.interval
 
 if $?
   ROOT = $('#mamba')[0]

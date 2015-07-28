@@ -38,7 +38,7 @@ Grid = React.createClass
       head.y >= GRID.dimension
 
   getInitialState: ->
-    cellmap: @reset(@props.snake, initial: true)
+    cellmap: @reset(@props, initial: true)
 
   shouldComponentUpdate: (next_props) ->
     if next_props.game_over?
@@ -56,7 +56,7 @@ Grid = React.createClass
     if @_no_loss(next_props) && @constructor.out_of_bounds(next_props.snake)
       @props.on_smash(smashed: Cell.Wall, smasher: Cell.Snake)
     else if next_props.reset
-      @setState cellmap: @reset(next_props.snake)
+      @setState cellmap: @reset(next_props)
     else if next_props.game_over?
       @setState cellmap: @finish(next_props)
     else
@@ -68,13 +68,14 @@ Grid = React.createClass
     @state.cellmap.withMutations callback
 
   finish: (next_props) ->
-    transform_to_cell = if next_props.game_over.success
+    {game_over, snake} = next_props
+    transform_to_cell = if game_over.success
       Cell.Item
     else
       Cell.Collision
     @_batch_update (mutative_cellmap) ->
       mutative_cellmap.forEach (cell, xy) ->
-        if cell is Cell.Snake
+        if snake.meets(xy)
           mutative_cellmap.set xy, transform_to_cell
 
   _create_cellmap: (snake) ->
@@ -92,7 +93,8 @@ Grid = React.createClass
           mutative_cellmap.set xy, cell
     cellmap
 
-  reset: (snake, options = {initial: false}) ->
+  reset: (next_props, options = {initial: false}) ->
+    {snake} = next_props
     @_Items_created = 0
     if options.initial
       @_create_cellmap(snake)

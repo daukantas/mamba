@@ -1,4 +1,5 @@
-React = require 'react'
+React = require 'react/addons'
+ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 _ = require 'underscore'
 
 Cell = require '../cell'
@@ -33,8 +34,10 @@ Row = React.createClass
   render: ->
     row = @props.index
     <div className="row">
-      {@state.cells.map (cell, col) ->
-        (<Cell key="cell-#{row}-#{col}" content={cell}/>)}
+      <ReactCSSTransitionGroup transitionName='row' transitionAppear={true}>
+        {@state.cells.map (cell, col) ->
+          (<Cell key="cell-#{row}-#{col}" content={cell}/>)}
+      </ReactCSSTransitionGroup>
     </div>
 
 
