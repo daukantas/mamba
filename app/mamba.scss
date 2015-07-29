@@ -1,11 +1,56 @@
 $font-stack: Helvetica, sans-serif;
-$primary: green;
+$primary-color: orange;
 $background-color: black;
 
 body {
   font: 100% $font-stack;
-  color: $primary;
+
+  color: $primary-color;
   background-color: $background-color;
+
+  width: 900px;
+
+  margin-top: 25px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+#title {
+  font-weight: 700;
+  font-size: 4em;
+  margin-bottom: 15px;;
+}
+
+#instructions {
+  text-align: left;
+  float: right;
+  width: 200px;
+  height: 630px;
+  position: relative;
+
+  h2 {
+    margin-top: 0;
+  }
+
+  a {
+    color: lightblue;
+    font-weight: 700;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  .blurb {
+    position: absolute;
+    bottom: 10px;
+    font-size: 16px;
+  }
 }
 
 #mamba {
