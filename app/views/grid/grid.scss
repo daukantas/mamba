@@ -3,12 +3,10 @@ $grid_size: 660px;
 
 
 .grid {
-  height: 100%;
   width: $grid_size;
   background-color: $grid_background;
 
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
+  float: left;
+  clear: right;
 }
 
