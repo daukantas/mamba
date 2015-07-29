@@ -5,9 +5,4 @@ bower_components
 
 build
 
-public/css
-public/js
-public/bower
-public/*.html
-
 notes.md
