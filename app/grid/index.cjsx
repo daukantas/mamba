@@ -54,6 +54,7 @@ Grid = React.createClass
     # really a Cell.Wall collision - the boundary is
     # artificial.
     if @_no_loss(next_props) && @constructor.out_of_bounds(next_props.snake)
+      # prevent infinite recursion using @_no_loss
       @props.on_smash(smashed: Cell.Wall, smasher: Cell.Snake)
     else if next_props.reset
       @setState cellmap: @reset(next_props)
