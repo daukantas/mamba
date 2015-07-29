@@ -42,7 +42,7 @@ gulp.task 'inject:js', ->
 
 
 gulp.task 'inject:css', ->
-  source_css = gulp.src DEST.css_bundle(), read: false
+  source_css = gulp.src DEST.css_bundle(fullpath: true), read: false
 
   gulp
     .src DEST.template()

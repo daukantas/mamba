@@ -37,7 +37,7 @@ DEST =
   css: (suffix) ->
     "#{@base()}/css#{PATHS.suffix(suffix)}"
   css_bundle: (options = {fullpath: false})->
-    PATHS.build_filepath('app.css', base: @_parse_base_css(options))
+    PATHS.build_filepath('mamba.css', base: @_parse_base_css(options))
   _parse_base_js: (options) ->
     (options.fullpath && "#{@base()}/js") || ''
   _parse_base_css: (options) ->
