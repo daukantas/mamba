@@ -1,4 +1,4 @@
-## mamba ##
+## mamba. ##
 
 Flux application with a React UI served from Heroku.
 
