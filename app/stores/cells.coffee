@@ -8,7 +8,7 @@ Cell = require '../cell'
 
 CellStore = Object.create EventEmitter::,
 
-  shouldComponentUpdate: (next_props) ->
+  should_update: (next_props) ->
     if next_props.game_over?
       true
     else if next_props.reset
