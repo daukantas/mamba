@@ -39,7 +39,7 @@ class Mamba
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]
     method = @constructor.method_keys[keycode]
-    if motion && (@_game_over isnt game_over.failure)
+    if motion && !@_game_over?
       @_snake.motion(motion)
       (!@_renderer.looping()) && @_renderer.loop(
         @_renderloop_hook, settings.RENDER.interval)
