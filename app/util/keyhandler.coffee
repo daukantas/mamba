@@ -3,21 +3,18 @@ _ = require 'underscore'
 class Keyhandler
 
   constructor: (handler, @$) ->
-    @_handler = _.compose(handler, @_extract_keycode).bind(@)
+    @_handler = handler
 
   @from_handler: (handler, $) ->
     new @(handler, $)
-
-  reset: ->
-    @$(document).off('keyup', @_handler)
-    @handle()
-    @
 
   _extract_keycode: (ev) ->
     ev.which
 
   handle: ->
-    @$(document).on('keyup', @_handler)
+    @$(document).on 'keydown', (ev) =>
+      @_handler(ev.which)
+      false
     @
 
 
