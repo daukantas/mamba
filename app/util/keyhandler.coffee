@@ -11,10 +11,14 @@ class Keyhandler
   _extract_keycode: (ev) ->
     ev.which
 
-  handle: ->
+  handle: (keycodes, options = {prevent_default: true}) ->
     @$(document).on 'keydown', (ev) =>
-      @_handler(ev.which)
-      false
+      keycode = ev.which
+      if keycodes.has(keycode)
+        @_handler(keycode)
+        not options.prevent_default
+      else
+        ev
     @
 
 
