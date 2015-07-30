@@ -4,6 +4,7 @@ settings = require './settings'
 {keyhandler, renderer, position, game_over} = require './util'
 
 _ = require 'underscore'
+Immutable = require 'immutable'
 $ = window.$
 
 
@@ -27,10 +28,17 @@ class Mamba
     @_reset_snake()
     @_keyhandler = keyhandler
       .from_handler(@_keyup, $)
-      .handle()
+      .handle(@keycodes())
     @_renderer = renderer
       .mount(grid_node)
       .render(@_renderprops(reset: true))
+
+  keycodes: ->
+    unless @_keycodes?
+      motion_keys = _.keys(@constructor.motion_keys).map parseFloat
+      method_keys = _.keys(@constructor.method_keys).map parseFloat
+      @_keycodes = Immutable.Set(method_keys.concat(motion_keys))
+    @_keycodes
 
   _reset_snake: ->
     @_snake = Snake.at_position(
