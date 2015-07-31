@@ -30,4 +30,4 @@ keysender =
   _send_keydown: (keycode) ->
     dispatcher.dispatch Keydown.of(keycode)
 
-module.exports = {keyhandler}
+module.exports = {keysender, Keydown}

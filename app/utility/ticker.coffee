@@ -7,13 +7,13 @@ ticker =
   _interval: null
   _ticking: false
 
-  tick: ->
-    @_interval = setInterval(ACTIONS.tick, TICK.interval)
+  tick: (ticker_fn) ->
+    @_interval = setInterval(ticker_fn, TICK.interval)
 
-  stop: (callback) ->
+  stop: (on_stop) ->
     clearInterval(@_interval)
     @_interval = null
-    callback?()
+    on_stop?()
 
   ticking: ->
     @_ticking

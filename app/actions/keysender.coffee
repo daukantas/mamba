@@ -43,5 +43,8 @@ class Keydown extends Action
     unless _.isObject(payload) && _.isNumber(payload.keycode)
       throw new Error 'Expected payload to have a number keycode property'
 
+  keycode: ->
+    @payload.keycode
+
 
 module.exports = {Keydown: Keydown.of}

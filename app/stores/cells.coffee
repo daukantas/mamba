@@ -1,9 +1,11 @@
 Snake = require '../snake'
+{Keydown} = require '../actions'
 {GRID} = require '../settings'
-
-Immutable = require 'immutable'
-{EventEmitter} = require 'events'
 Cell = require '../cell'
+
+dispatcher = require '../dispatcher'
+{EventEmitter} = require 'events'
+Immutable = require 'immutable'
 
 
 CellStore = Object.create EventEmitter::,
@@ -106,3 +108,9 @@ CellStore = Object.create EventEmitter::,
       @_Items_created ||= 0
       @_Items_created += 1
     cell
+
+
+dispatcher.register (action) ->
+  if action.is Keydown
+    return
+  keycode = action.keycode()
