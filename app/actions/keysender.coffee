@@ -1,33 +1,47 @@
-dispatcher = require '../dispatcher'
-constants = require './constants'
 _ = require 'underscore'
+errors = require '../utility'
 Immutable = require 'immutable'
 
 
-keysender =
+class Action
 
-  $: (@$) ->
+  @abstract_classprops = Immutable.Set([
+    'name'
+    'validate_payload'
+  ])
 
-  listen: (keycodes, options) ->
-    @_validate_listen(keycodes, options)
-    options = _.defaults options, {prevent_default: true}
-    keycodes = Immutable.Set(keycodes)
-    @$(document).keydown (ev) =>
-      normalized_keycode = ev.which
-      if keycodes.has normalized_keycode
-        @_send_keydown normalized_keycode
-      (options.prevent_default && false) || ev
+  __abstract_validated = false
 
-  _validate_listen: (keycodes, options) ->
-    unless @$?
-      throw new Error("jQuery $ is a required dependency")
-    unless Array.isArray(keycodes)
-      throw new Error("keycodes array required")
-    if options? && !_.isObject options
-      throw new Error("options argument should be an object")
+  constructor: (payload) ->
+    if !@constructor.__abstract_validated
+      if @constructor is Action
+        throw new Error "Can't instantiate abstract class Action"
+      else
+        for classprop in @constructor.abstract_classprops
+          unless @constructor[classprop]?
+            throw new errors.NotImplemented("need class property `#{classprop}`")
+        @constructor.__abstract_validated = true
+    @payload = payload
+    @
 
-  _send_keydown: (keycode) ->
-    dispatcher.dispatch {action: constants.KEYUP, keycode}
+  toString: ->
+    @name
 
-module.exports = {keyhandler}
+  @of: (payload) ->
+    @validate_payload(payload)
+    new @constructor(payload)
 
+  @is: (instance) ->
+    instance.constructor is @
+
+
+class Keydown extends Action
+
+  name: 'KEYDOWN'
+
+  validate_payload: (payload) ->
+    unless _.isObject(payload) && _.isNumber(payload.keycode)
+      throw new Error 'Expected payload to have a number keycode property'
+
+
+module.exports = {Keydown: Keydown.of}
