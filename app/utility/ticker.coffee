@@ -1,14 +1,16 @@
 dispatcher = require '../dispatcher'
 {ACTIONS} = require '../actions'
 {TICK} = require '../settings'
+_ = require 'underscore'
 
-ticker =
+Ticker =
 
   _interval: null
-  _ticking: false
 
-  tick: (ticker_fn) ->
-    @_interval = setInterval(ticker_fn, TICK.interval)
+  tick: (on_tick) ->
+    throw new Error("Expected callback function") unless _.isFunction on_tick
+
+    @_interval = setInterval(on_tick, TICK.interval)
 
   stop: (on_stop) ->
     clearInterval(@_interval)
@@ -16,4 +18,7 @@ ticker =
     on_stop?()
 
   ticking: ->
-    @_ticking
+    @_interval?
+
+
+module.exports = Ticker
