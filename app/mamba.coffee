@@ -14,35 +14,7 @@ class Mamba
     Has-one Keyhandler
   ###
 
-  @motion_keys =
-    37: position.value_of(0, -1)  # L
-    38: position.value_of(-1, 0)  # U
-    39: position.value_of(0, +1)  # R
-    40: position.value_of(+1, 0)  # D
 
-  @method_keys =
-    82: '__restart'
-
-  constructor: (grid_node) ->
-    @_game_over = null
-    @_reset_snake()
-    @_keyhandler = keyhandler
-      .from_handler(@_keyup, $)
-      .handle(@keycodes())
-    @_renderer = renderer
-      .mount(grid_node)
-      .render(@_renderprops(reset: true))
-
-  keycodes: ->
-    unless @_keycodes?
-      motion_keys = _.keys(@constructor.motion_keys).map parseFloat
-      method_keys = _.keys(@constructor.method_keys).map parseFloat
-      @_keycodes = Immutable.Set(method_keys.concat(motion_keys))
-    @_keycodes
-
-  _reset_snake: ->
-    @_snake = Snake.at_position(
-      position.random(settings.GRID.dimension - 1))
 
   _keyup: (keycode) =>
     motion = @constructor.motion_keys[keycode]

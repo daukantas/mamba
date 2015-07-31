@@ -1,16 +1,13 @@
 React = require 'react'
-_ = require 'underscore'
 
-Snake = require '../snake' # can't require this :(
 Row = require '../row'
 Cell = require '../cell'
 {GRID} = require '../settings'
 
 game_over = require '../util/game-over' # can't require the top-level module
-position = require '../util/position'   # can't require the top-level module
-
 Immutable = require 'immutable'
 
+CellStore = require '../../stores'
 
 Grid = React.createClass
   ###
@@ -27,6 +24,12 @@ Grid = React.createClass
       head.y < 0 ||
       head.x >= GRID.dimension ||
       head.y >= GRID.dimension
+
+  shouldComponentUpdate: (next_props) ->
+   if next_props.game_over?
+     true
+   else if next_props.reset
+     true
 
   getInitialState: ->
     cellmap: @reset(@props, initial: true)

@@ -2,21 +2,43 @@ Snake = require '../snake'
 {Keydown} = require '../actions'
 {GRID} = require '../settings'
 Cell = require '../cell'
+Grid = require '../views/grid'
 
 dispatcher = require '../dispatcher'
 {EventEmitter} = require 'events'
 Immutable = require 'immutable'
+Ticker = require '../utility'
 
 
 CellStore = Object.create EventEmitter::,
+  ###
+    Manages application state
+  ###
 
-  should_update: (next_props) ->
-    if next_props.game_over?
-      true
-    else if next_props.reset
-      true
-    else
-      @props.snake.moving()
+  motion_keys:
+    37: position.value_of(0, -1)  # L
+    38: position.value_of(-1, 0)  # U
+    39: position.value_of(0, +1)  # R
+    40: position.value_of(+1, 0)  # D
+
+  method_keys:
+    82: '__restart'
+
+  _game_over: null
+
+  _snake: null
+
+  _reset_snake: ->
+    @_snake = Snake.at_position(
+      position.random(settings.GRID.dimension - 1))
+
+  initialize: ->
+    @_reset_snake()
+
+
+    dispatcher.register (action) ->
+      if action.is Keydown
+        keycode = action.keycode()
 
   componentWillReceiveProps: (next_props) ->
   # Saving this in @state fails; it won't be "ready"
@@ -110,7 +132,7 @@ CellStore = Object.create EventEmitter::,
     cell
 
 
-dispatcher.register (action) ->
-  if action.is Keydown
-    return
-  keycode = action.keycode()
+
+
+
+module.exports = CellStore
