@@ -32,13 +32,20 @@ CellStore = Object.create EventEmitter::,
     @_snake = Snake.at_position(
       position.random(settings.GRID.dimension - 1))
 
-  initialize: ->
+  initialize: (html_element) ->
     @_reset_snake()
 
+    Grid
+    .html_element(html_element)
+    .render props
 
     dispatcher.register (action) ->
       if action.is Keydown
         keycode = action.keycode()
+
+  update: (props = {}, callback) ->
+    Grid.set_props(props, callback)
+    @
 
   componentWillReceiveProps: (next_props) ->
   # Saving this in @state fails; it won't be "ready"
