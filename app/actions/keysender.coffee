@@ -1,50 +1,33 @@
+Dispatcher = require '../dispatcher'
 _ = require 'underscore'
-errors = require '../utility'
 Immutable = require 'immutable'
 
-
-class Action
-
-  @abstract_classprops = Immutable.Set([
-    'name'
-    'validate_payload'
-  ])
-
-  __abstract_validated = false
-
-  constructor: (payload) ->
-    if !@constructor.__abstract_validated
-      if @constructor is Action
-        throw new Error "Can't instantiate abstract class Action"
-      else
-        for classprop in @constructor.abstract_classprops
-          unless @constructor[classprop]?
-            throw new errors.NotImplemented("need class property `#{classprop}`")
-        @constructor.__abstract_validated = true
-    @payload = payload
-    @
-
-  toString: ->
-    @name
-
-  @of: (payload) ->
-    @validate_payload(payload)
-    new @constructor(payload)
-
-  @is: (instance) ->
-    instance.constructor is @
+KeyDownAction = require './keydown'
 
 
-class Keydown extends Action
+Keysender =
 
-  name: 'KEYDOWN'
+  $: (@$) ->
 
-  validate_payload: (payload) ->
-    unless _.isObject(payload) && _.isNumber(payload.keycode)
-      throw new Error 'Expected payload to have a number keycode property'
+  listen: (keycodes, options) ->
+    @_validate_listen_args keycodes, options
+    options = _.defaults options, prevent_default: true
+    keycodes = Immutable.Set keycodes
+    @$(document).keydown (ev) =>
+      normalized_keycode = ev.which
+      if keycodes.has normalized_keycode
+        @_send_keydown normalized_keycode
+      (options.prevent_default && false) || ev
 
-  keycode: ->
-    @payload.keycode
+  _validate_listen_args: (keycodes, options) ->
+    unless @$?
+      throw new Error("jQuery $ is a required dependency")
+    unless Array.isArray keycodes
+      throw new Error("keycodes array required")
+    if options? && !_.isObject options
+      throw new Error("options argument should be an object")
 
+  _send_keydown: (keycode) ->
+    Dispatcher.dispatch KeyDownAction.of(keycode)
 
-module.exports = {Keydown: Keydown.of}
+module.exports = Keysender
