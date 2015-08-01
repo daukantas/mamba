@@ -18,7 +18,7 @@ class Snake
   @at_position: (xy) ->
     new @([xy])
 
-  motion: (xy) ->
+  move: (xy) ->
     if xy?
       if !@_motion?
         @_motion = xy
