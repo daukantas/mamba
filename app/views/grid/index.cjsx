@@ -1,48 +1,20 @@
 React = require 'react'
-
 Row = require '../row'
-Cell = require '../cell'
 {GRID} = require '../settings'
-
-game_over = require '../util/game-over' # can't require the top-level module
-Immutable = require 'immutable'
 
 CellStore = require '../../stores'
 
+
 Grid = React.createClass
-  ###
-    @state.cellmap is defined by an Immutable.Map of xy-values to Cells.
-  ###
-
-  propTypes:
-    cellmap: React.PropTypes.oneOf(Immutable.Map)
-
-  statics:
-    out_of_bounds: (snake) ->
-      head = snake.head()
-      head.x < 0 ||
-      head.y < 0 ||
-      head.x >= GRID.dimension ||
-      head.y >= GRID.dimension
-
-  shouldComponentUpdate: (next_props) ->
-   if next_props.game_over?
-     true
-   else if next_props.reset
-     true
 
   getInitialState: ->
-    cellmap: @reset(@props, initial: true)
-
-  componentDidUpdate: ->
-    if @props.reset
-      @_submit_total_Items()
+    cellmap: CellStore.cellmap()
 
   componentDidMount: ->
-    @_submit_total_Items()
+    CellStore.add_change_listener @_on_change
 
-  _submit_total_Items: ->
-    @props.on_reset(@_Items_created)
+  _on_change: ->
+    @setState(cellmap: CellStore.cellmap())
 
   _get_row_cells: (row) ->
     @state

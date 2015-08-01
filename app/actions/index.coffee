@@ -1,5 +1,5 @@
-Keydown = require './keydown'
-Keysender = require './keysender'
+KeyDownAction = require './keydown'
+KeySender = require './keysender'
 
 
-module.exports = {Keydown, Keysender}
+module.exports = {KeyDownAction, KeySender}

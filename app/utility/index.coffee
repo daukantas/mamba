@@ -1,6 +1,6 @@
 keyhandler = require './keyhandler'
 renderer = require './renderer'
-position = require './position'
+xy = require './xy'
 random = require './random'
 game_over = require './game-over'
 errors = require './errors'
@@ -10,7 +10,7 @@ Ticker = require './ticker'
 module.exports = {
   keyhandler
   renderer
-  position
+  xy
   random
   game_over
   errors

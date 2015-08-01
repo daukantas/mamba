@@ -5,7 +5,7 @@ Immutable = require 'immutable'
 KeyDownAction = require './keydown'
 
 
-Keysender =
+KeySender =
   ###
     Object that dispatches a pre-configured collection of keycodes.
 
@@ -38,16 +38,16 @@ Keysender =
       be propagated after dispatching the KeyDownAction.
   ###
   listen: (keycodes, options) ->
-    @_validate_listen_args keycodes, options
+    @_validate_listen keycodes, options
     options = _.defaults options, prevent_default: true
     keycodes = Immutable.Set keycodes
     @$(document).keydown (ev) =>
-      normalized_keycode = ev.which
-      if keycodes.has normalized_keycode
-        @_send_keydown normalized_keycode
+      keycode = ev.which
+      if keycodes.has keycode
+        @_send_keydown keycode
       (options.prevent_default && false) || ev
 
-  _validate_listen_args: (keycodes, options) ->
+  _validate_listen: (keycodes, options) ->
     unless @_initialized?
       throw new Error("Didn't properly initialize; call .initialize first!")
     unless Array.isArray keycodes
@@ -58,4 +58,4 @@ Keysender =
   _send_keydown: (keycode) ->
     Dispatcher.dispatch KeyDownAction.of(keycode)
 
-module.exports = Keysender
+module.exports = KeySender
