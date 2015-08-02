@@ -4,13 +4,14 @@ Immutable = require 'immutable'
 
 KeyDownAction = require './keydown'
 
-initialized = false
+INITIALIZED = false
+MAC_CTRLKEY = Immutable.Set.of 91, 93,
 
 KeySender = Object.create {},
   ###
     Object that dispatches a pre-configured collection of keycodes.
 
-    jQuery is a dependency, mostly for event normalization, but this can be relaxed.
+    jQuery is a dependency for event normalization.
   ###
 
   dependencies:
@@ -22,13 +23,14 @@ KeySender = Object.create {},
   ###
     Initialize with the required dependencies, and start listening for keys.
 
-    @param {object} dependencies - an object with key-value pairs of dependency
-      names to dependency values (no type-checking is done with the values).
+    @param {object} dependencies -
+      an object with key-value pairs of dependency names to dependency values
+      (no type-checking is done with the values).
   ###
   initialize:
     enumerable: true
     value: (dependencies) ->
-      if initialized
+      if INITIALIZED
         @
       else
         unless _.isObject dependencies
@@ -38,31 +40,67 @@ KeySender = Object.create {},
           unless _.has dependencies, external_name
             throw new Error "Couldn't find dependency #{external_name}"
           @[internal_name] = dependencies[external_name]
-      initialized = true
+
+      INITIALIZED = true
+      @$(document).keyup (ev) => @_clear_pressed_keys()
       @
 
   ###
     Listen for a collection of keycodes, and emit the KeyDownAction when caught.
 
-    @param {array} keycodes - an array of numerical keycodes to listen for.
-    @param {object} options - an options dictionary; currently only prevent_default
-      is supported, defaulting to true. when it's true, the keydown event won't
-      be propagated after dispatching the KeyDownAction.
+    @param {array} keycodes -
+      an array of numerical keycodes to listen for.
+    @param {object} options -
+      an options dictionary; currently only prevent_default is supported,
+      defaulting to false. when it's true and ALT, CTRL, SHIFT, or the Mac
+      COMMAND keys aren't pressed, the keydown event won't be propagated
+      after dispatching the KeyDownAction.
   ###
   listen:
+    enumerable: true
     value: (keycodes, options) ->
       @_validate_listen keycodes, options
-      options = _.defaults options, prevent_default: true
+
+      options = _.defaults options, prevent_default: false
       keycodes = Immutable.Set keycodes
-      @$(document).keydown (ev) ->
+
+      @$(document).keydown (ev) =>
         keycode = ev.which
+        @_add_pressed_key(keycode)
+        bubbled = ev
         if keycodes.has keycode
           Dispatcher.dispatch KeyDownAction.of({keycode})
-        (options.prevent_default && false) || ev
+          if @_should_prevent_default(ev, options)
+            bubbled = false
+        bubbled
+
+  _should_prevent_default:
+    value: (ev, options) ->
+      if options.prevent_default
+        if @_pressed_keys.intersect(MAC_CTRLKEY).size
+          false
+        else if ev.altKey || ev.ctrlKey || ev.shiftKey
+          false
+        else
+          true
+      else
+        false
+
+  _pressed_keys:
+    writable: true
+    value: Immutable.Set()
+
+  _add_pressed_key:
+    value: (keycode) ->
+      @_pressed_keys = @_pressed_keys.add(keycode)
+
+  _clear_pressed_keys:
+    value: ->
+      @_pressed_keys = @_pressed_keys.clear()
 
   _validate_listen:
     value: (keycodes, options) ->
-      unless initialized?
+      unless INITIALIZED?
         throw new Error("Didn't properly initialize; call .initialize first!")
       unless Array.isArray keycodes
         throw new Error("keycodes array required")
