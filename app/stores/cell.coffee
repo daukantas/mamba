@@ -35,13 +35,12 @@ CellStore = Object.create EventEmitter::,
   add_change_listener:
     enumerable: true
     value: (listener) ->
-      @addListener @CHANGE_EVENT, listener
+      @addListener @_CHANGE_EVENT, listener
 
-  CHANGE_EVENT:
-    enumerable: true
+  _CHANGE_EVENT:
     value: 'change'
 
-  METHOD_KEYMAP:
+  _METHOD_KEYMAP:
     value: Immutable.Map [
       ['restart', '_restart']
     ]
@@ -56,12 +55,12 @@ CellStore = Object.create EventEmitter::,
           if not Ticker.ticking()
             @_tick()
       else if action.is MethodKeyAction
-        method = @METHOD_KEYMAP.get(action.method())
+        method = @_METHOD_KEYMAP.get(action.method())
         @[method]()
 
   _emit_cells:
     value: ->
-      @emit(@CHANGE_EVENT, cellmap: LIVE_CELLS)
+      @emit(@_CHANGE_EVENT, cellmap: LIVE_CELLS)
 
   _tick:
     value: ->
