@@ -40,11 +40,21 @@ ArrowKeys = React.createClass
   shouldComponentUpdate: (__, next_state) ->
     next_state.active_by_key isnt @state.active_by_key
 
+  componentDidUpdate: ->
+    setTimeout =>
+      @_deactivate()
+    , 500
+
   _on_change: ({keycode}) ->
     active_by_key = @state.active_by_key.withMutations (mutable_keys) ->
       mutable_keys.forEach (active, key) ->
         mutable_keys.set(key, key.keycode() is keycode)
     @setState {active_by_key}
+
+  _deactivate: ->
+    @setState active_by_key: @state.active_by_key.withMutations (mutable_keys) ->
+      mutable_keys.forEach (__, key) ->
+        mutable_keys.set(key, false)
 
   render: ->
     <div className="arrow-keys">
