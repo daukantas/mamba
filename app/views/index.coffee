@@ -1,4 +1,4 @@
 Grid = require './grid'
-Controls = require './controls'
+Keys = require './keys'
 
-module.exports = {Grid, Controls}
+module.exports = {Grid, Keys}

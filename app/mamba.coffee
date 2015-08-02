@@ -1,6 +1,6 @@
-{CellStore, ControlStore} = require './stores'
+{CellStore, KeysStore} = require './stores'
 {KeySender, KEYCODES} = require './actions'
-{Grid, Controls} = require './views'
+{Grid, Keys} = require './views'
 
 $ = window.$
 
@@ -13,12 +13,12 @@ if $?
   .initialize(jQuery: $)
   .listen(KEYCODES, prevent_default: true)
 
-  ControlStore.initialize()
+  KeysStore.initialize()
   CellStore.initialize()
 
   Grid.mount(GRID).render()
 
-  Controls
+  Keys
   .mount_arrow_keys(ARROW_KEYS)
   .mount_restart_key(RESTART_KEY)
   .render_keys()
