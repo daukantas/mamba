@@ -19,7 +19,7 @@ Key = React.createClass
       (@props.pressed && 'pressed') || ''
     ]
 
-    <div className="#{keyname_class} #{pressed_class}">
+    <div className="controls-key #{keyname_class} #{pressed_class}">
       {@props.keytype.symbol()}
     </div>
 
