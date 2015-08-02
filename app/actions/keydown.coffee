@@ -31,7 +31,7 @@ class KeyDownAction extends Action
 
 class MotionKeyAction extends KeyDownAction
 
-  @KEYCODES: Immutable.Map [
+  @KEYCODE_MAP: Immutable.Map [
     [37, XY.left()]
     [38, XY.up()]
     [39, XY.right()]
@@ -39,17 +39,17 @@ class MotionKeyAction extends KeyDownAction
   ]
 
   motion: ->
-    @constructor.KEYCODES.get(@payload.keycode) || null
+    @constructor.KEYCODE_MAP.get(@payload.keycode) || null
 
 
 class MethodKeyAction extends KeyDownAction
 
-  @KEYCODES: Immutable.Map [
+  @KEYCODE_MAP: Immutable.Map [
     [82, 'restart']
   ]
 
   method: ->
-    @constructor.KEYCODES.get(@payload.keycode) || null
+    @constructor.KEYCODE_MAP.get(@payload.keycode) || null
 
 
 module.exports = {
