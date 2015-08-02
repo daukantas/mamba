@@ -14,16 +14,14 @@ Key = React.createClass
     keytype: React.PropTypes.oneOf(_.values Keys).isRequired
 
   render: ->
-    [shortname, pressed] = [
-      @props.keytype.shortname()
+    [keyname_class, pressed_class] = [
+      "#{@props.keytype.shortname()}-key"
       (@props.pressed && 'pressed') || ''
     ]
 
-    <ReactCSSTransitionGroup transitionName='controls-key' transitionAppear={true}>
-      <div className="key #{shortname} #{pressed}">
-        {@props.keytype.symbol()}
-      </div>
-    </ReactCSSTransitionGroup>
+    <div className="#{keyname_class} #{pressed_class}">
+      {@props.keytype.symbol()}
+    </div>
 
 
 ArrowKeys = React.createClass
@@ -50,9 +48,10 @@ ArrowKeys = React.createClass
 
   render: ->
     <div className="arrow-keys">
-      {@state.active_by_key.map (active, key) ->
-        <Key pressed={active} keytype={key}></Key>
-      }
+      {@state.active_by_key.entrySeq().toJS().map (entry, index) ->
+         [key, active] = entry
+         <Key pressed={active} keytype={key} key={index}></Key>
+       }
     </div>
 
 

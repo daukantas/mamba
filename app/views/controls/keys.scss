@@ -14,34 +14,33 @@ $space_between_keys: 5px;
   width: ($key_size * 3) + ($space_between_keys * 4);
   height:($key_size * 2) + ($space_between_keys * 3);
 
-  .key {
+  [class*="-key"] {
     position: absolute;
+  }
 
-    &.left {
-      bottom: 0;
-      left: $space_between_keys;
-    }
+  .left-key {
+    bottom: 0;
+    left: $space_between_keys;
+  }
 
-    &.up {
-      left: $key_size + (2 * $space_between_keys);
-      bottom: $key_size + $space_between_keys;
-    }
+  .up-key {
+    left: $key_size + (2 * $space_between_keys);
+    bottom: $key_size + $space_between_keys;
+  }
 
-    &.down {
-      bottom: 0;
-      left: $key_size + (2 * $space_between_keys);
-    }
+  .down-key {
+    bottom: 0;
+    left: $key_size + (2 * $space_between_keys);
+  }
 
-    &.right {
-      bottom: 0;
-      left: (2 * $key_size) + (3 * $space_between_keys);
-    }
-
+  .right-key {
+    bottom: 0;
+    left: (2 * $key_size) + (3 * $space_between_keys);
   }
 
 }
 
-.key {
+[class*="-key"] {
   background-color: $primary-color;
   color: black;
 
@@ -62,8 +61,4 @@ $space_between_keys: 5px;
     box-shadow: $depressed_box_shadow;
     transform: translateY(3px);
   }
-}
-
-.controls-key-appear, .controls-key-enter.controls-key-enter-active {
-  transition: box-shadow .5s ease-in;
 }
