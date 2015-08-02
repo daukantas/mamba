@@ -2,6 +2,7 @@ Snake = require '../snake'
 {GRID} = require '../settings'
 Cell = require '../views/cell'
 XY = require '../utility/xy'  # can't require utility
+{EventEmitter} = require 'events'
 
 Immutable = require 'immutable'
 
@@ -17,8 +18,7 @@ snake = null
 game_over = null
 num_items = 0
 
-
-module.exports = Object.create null,
+module.exports = Object.create EventEmitter::,
   ###
     Object that manages the state of the curent game.
 
@@ -83,6 +83,22 @@ module.exports = Object.create null,
         not game_over.success
       else
         false
+
+  add_score_listener:
+    enumerable: true
+    value: (listener) ->
+      @addListener @_SCORE_EVENT, listener
+
+  add_game_over_listener:
+    enumerable: true
+    value: (listener) ->
+      @addListener @_GAME_OVER_EVENT, listener
+
+  _SCORE_EVENT:
+    value: 'SCORE'
+
+  _GAME_OVER_EVENT:
+    value: 'GAME_OVER'
 
   _score:
     value: ->
