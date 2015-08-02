@@ -1,7 +1,6 @@
 {EmittingStore} = require './emitter'
 {MotionKeyAction} = require '../actions'
 
-CURRENT_KEY = null
 
 module.exports = Object.create EmittingStore,
 
@@ -13,7 +12,21 @@ module.exports = Object.create EmittingStore,
   _CHANGE_EVENT:
     value: 'CHANGE'
 
+  _post_initialize_hook:
+    value: ->
+      @_current_motion = null
+
+  current_motion:
+    enumerable: true
+    get: ->
+      @_current_motion
+    set: (motion) ->
+      if motion isnt @_current_motion
+        @_current_motion = motion
+        console.log "Detected change #{motion}"
+        @emit @_CHANGE_EVENT, {motion}
+
   _handle_action:
     value: (action) ->
       if action.is_a MotionKeyAction
-        console.log "Motion detected: #{action.motion()}"
+        @current_motion = action.motion()
