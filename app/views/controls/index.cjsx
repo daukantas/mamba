@@ -75,7 +75,7 @@ module.exports = Object.create null,
       __ArrowKeys__ = React.render <ArrowKeys/>, @_arrow_keys_node
       @
 
-  render_restart_key: ->
+  render_restart_key:
     enumerable: true
     value: ->
       if !@_restart_key_node?
@@ -85,7 +85,7 @@ module.exports = Object.create null,
       __RestartKey__ = React.render <RestartKey/>, @_restart_key_node
       @
 
-  render_keys: ->
+  render_keys:
     enumerable: true
     value: ->
       @render_restart_key()
