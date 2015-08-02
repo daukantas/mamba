@@ -7,11 +7,11 @@ Immutable = require 'immutable'
 class KeyDownAction extends Action
 
   @KEYCODES: [
-    37
-    38
-    39
-    40
-    82
+    37 # ←
+    38 # ↑
+    39 # →
+    40 # ↓
+    82 # r
   ]
 
   @MOTION_KEYS: Immutable.Map [

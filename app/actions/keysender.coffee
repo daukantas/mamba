@@ -5,7 +5,10 @@ Immutable = require 'immutable'
 KeyDownAction = require './keydown'
 
 INITIALIZED = false
-MAC_CTRLKEY = Immutable.Set.of 91, 93,
+MAC_COMMAND = Immutable.Set [
+  91 # ⌘
+  93 # ⌘
+]
 
 KeySender = Object.create {},
   ###
@@ -77,7 +80,7 @@ KeySender = Object.create {},
   _should_prevent_default:
     value: (ev, options) ->
       if options.prevent_default
-        if @_pressed_keys.intersect(MAC_CTRLKEY).size
+        if @_pressed_keys.intersect(MAC_COMMAND).size > 0
           false
         else if ev.altKey || ev.ctrlKey || ev.shiftKey
           false
