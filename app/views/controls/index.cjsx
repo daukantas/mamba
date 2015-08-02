@@ -17,7 +17,7 @@ Key = React.createClass
     pressed_class = (@props.pressed && 'pressed') || ''
 
     <ReactCSSTransitionGroup transitionName='controls-key' transitionAppear={true}>
-      <div className="controls-key #{@props.keytype.shortname()} #{pressed_class}">
+      <div className="key #{@props.keytype.shortname()} #{pressed_class}">
         {@props.keytype.symbol()}
       </div>
     </ReactCSSTransitionGroup>
@@ -26,9 +26,11 @@ Key = React.createClass
 Controls = React.createClass
 
   render: ->
-    <div className="key-controls">
-      <div class='key-section'></div>
-
+    <div className="key-container">
+      <Key pressed={true} keytype={Keys.R}></Key>
+      <Key pressed={true} keytype={Keys.LEFT}></Key>
+      <Key pressed={true} keytype={Keys.UP}></Key>
+      <Key pressed={true} keytype={Keys.RIGHT}></Key>
       <Key pressed={true} keytype={Keys.DOWN}></Key>
     </div>
 

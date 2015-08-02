@@ -4,13 +4,24 @@
 $unpressed_box_shadow: 0 5px darkgreen;
 $depressed_box_shadow: 0 3px darkgreen;
 
-$key_size: 35px;
+$key_size: 50px;
+$space_between_keys: 5px;
 
-.controls-key {
+.key-container {
+  position: relative;
+  margin: 5px auto;
+
+  width: ($key_size * 3) + ($space_between_keys * 4);
+  height:($key_size * 2) + ($space_between_keys * 3);
+}
+
+.key {
+  position: absolute;
+
   background-color: $primary-color;
   color: black;
 
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: bold;
 
   width: $key_size;
@@ -18,11 +29,33 @@ $key_size: 35px;
 
   text-align: center;
 
-  margin: 2px;
-
   border-radius: 5px;
   display: block;
   box-shadow: $unpressed_box_shadow;
+
+  &.r {
+    
+  }
+
+  &.left {
+    bottom: 0;
+    left: $space_between_keys;
+  }
+
+  &.up {
+    left: $key_size + (2 * $space_between_keys);
+    bottom: $key_size + $space_between_keys;
+  }
+
+  &.down {
+    bottom: 0;
+    left: $key_size + (2 * $space_between_keys);
+  }
+
+  &.right {
+    bottom: 0;
+    left: (2 * $key_size) + (3 * $space_between_keys);
+  }
 
   &.pressed {
     color: green;
