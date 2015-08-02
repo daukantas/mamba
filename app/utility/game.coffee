@@ -6,7 +6,7 @@ XY = require '../utility/xy'  # can't require utility
 
 Immutable = require 'immutable'
 
-GAME_OVER =
+GAME_OVER_STATES =
 
   failure:
     success: false
@@ -14,73 +14,73 @@ GAME_OVER =
   success:
     success: true
 
-snake = null
-game_over = null
-num_items = 0
+SNAKE = null
+ITEMS = 0
+GAME_OVER = null
 
 module.exports = Object.create EventEmitter::,
   ###
-    Object that manages the state of the curent game.
-
-    This isn't a Flux Store; it's just a helper class.
+    Object that manages the state of the current game.
 
     It doesn't handle Actions, it exposes convenience methods for
     manipulating and reading game state, and lives outside the context
     of Actions.
+
+    This isn't a Flux Store; it's just a helper class.
   ###
 
   reset:
     enumerable: true
     value: ->
-      snake = Snake.at_position XY.random(GRID.dimension - 1)
-      game_over = null
-      num_items = 0
+      SNAKE = Snake.at_position XY.random(GRID.dimension - 1)
+      GAME_OVER = null
+      ITEMS = 0
 
   collision:
     value: (xy) ->
-      snake.meets xy
+      SNAKE.meets xy
 
   collide:
     value: (target, xy) ->
       if target is Cell.Wall
         @_fail()
       else if target is Cell.Snake
-        if snake.head() is xy
+        if SNAKE.head() is xy
           @_fail()
       else if target is Cell.Item
         @_score()
 
   set_motion:
     value: (motion) ->
-      snake.set_motion(motion)
+      SNAKE.set_motion(motion)
 
-  move_snake:
+  move_SNAKE:
     enumerable: true
     value: ->
-      snake.move()
+      SNAKE.move()
 
   out_of_bounds:
     enumerable: true
     value: ->
-      {x, y} = snake.head()
+      {x, y} = SNAKE.head()
       Math.min(x, y) < 0 ||
       Math.max(x, y) >= GRID.dimension
 
   add_item:
     enumerable: true
     value: ->
-      num_items += 1
+      ITEMS += 1
 
   over:
     enumerable: true
     value: ->
-      game_over?
+      GAME_OVER?
 
   failed:
     enumerable: true
     value: ->
-      if game_over?
-        not game_over.success
+      if GAME_OVER?
+        not GAME_OVER.success
       else
         false
 
@@ -102,12 +102,19 @@ module.exports = Object.create EventEmitter::,
 
   _score:
     value: ->
-      snake.grow()
-      num_items -= 1
-      if num_items is 0
-        game_over = GAME_OVER.success
+      SNAKE.grow()
+      ITEMS -= 1
+      @emit @_SCORE_EVENT
+      @_maybe_win()
+
+  _maybe_win:
+    value: ->
+      if ITEMS is 0
+        GAME_OVER = GAME_OVER_STATES.success
+        @emit @_GAME_OVER_EVENT, {GAME_OVER}
 
   _fail:
     value: ->
-      snake.set_motion(null)
-      game_over = GAME_OVER.failure
+      SNAKE.set_motion(null)
+      game_over = GAME_OVER_STATES.failure
+      @emit @_GAME_OVER_EVENT, {game_over}
