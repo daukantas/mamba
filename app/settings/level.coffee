@@ -1,7 +1,7 @@
 Immutable = require 'immutable'
 _ = require 'underscore'
-Cells = require '../cell/types' # can't require cell directly :(
-Random = require './random'
+Cells = require '../views/cell/types' # can't require cell directly :(
+Random = require '../utility/random'
 
 module.exports =
   # A mode is determined by a Map whose keys are Cells,
@@ -21,7 +21,7 @@ module.exports =
     ]
   ])
 
-  choice: (cells...) ->
+  choose: (cells...) ->
     # This number has to be > 100 to see the expected randomness.
     sample = Random.int(0, 1000)
     _.find cells, (cell) =>

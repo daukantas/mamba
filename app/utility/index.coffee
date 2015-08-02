@@ -1,16 +1,12 @@
-renderer = require './renderer'
+GAME_OVER = require './game-over'
 XY = require './xy'
-random = require './random'
 errors = require './errors'
 Ticker = require './ticker'
-GAME_OVER = require './game-over'
 
 
 module.exports = {
-  renderer
-  XY
-  random
   GAME_OVER
+  XY
   errors
   Ticker
 }

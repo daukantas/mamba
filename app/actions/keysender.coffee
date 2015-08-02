@@ -4,6 +4,7 @@ Immutable = require 'immutable'
 
 KeyDownAction = require './keydown'
 
+initialized = false
 
 KeySender =
   ###
@@ -21,13 +22,16 @@ KeySender =
       names to dependency values (no type-checking is done with the values).
   ###
   initialize: (dependencies) ->
-    unless _.isObject dependencies
-      throw new Error 'Pass an object with required dependencies'
-    for dependency in @dependencies
-      unless _.has dependencies, dependency
-        throw new Error "Couldn't find dependency #{dependency}"
-    _.extend(@, _.pick(dependencies, @dependencies.toJS()))
-    @_initialized = true
+    if initialized
+      @
+    else
+      unless _.isObject dependencies
+        throw new Error 'Pass an object with required dependencies'
+      for dependency in @dependencies
+        unless _.has dependencies, dependency
+          throw new Error "Couldn't find dependency #{dependency}"
+      _.extend(@, _.pick(dependencies, @dependencies.toJS()))
+    initialized = true
 
   ###
     Listen for a collection of keycodes, and emit the KeyDownAction when caught.
@@ -41,21 +45,18 @@ KeySender =
     @_validate_listen keycodes, options
     options = _.defaults options, prevent_default: true
     keycodes = Immutable.Set keycodes
-    @$(document).keydown (ev) =>
+    @$(document).keydown (ev) ->
       keycode = ev.which
       if keycodes.has keycode
-        @_send_keydown keycode
+        Dispatcher.dispatch KeyDownAction.of(keycode)
       (options.prevent_default && false) || ev
 
   _validate_listen: (keycodes, options) ->
-    unless @_initialized?
+    unless initialized?
       throw new Error("Didn't properly initialize; call .initialize first!")
     unless Array.isArray keycodes
       throw new Error("keycodes array required")
     if options? && !_.isObject options
       throw new Error("options argument should be an object")
-
-  _send_keydown: (keycode) ->
-    Dispatcher.dispatch KeyDownAction.of(keycode)
 
 module.exports = KeySender

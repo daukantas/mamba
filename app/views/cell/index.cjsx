@@ -1,6 +1,6 @@
 React = require 'react'
 cells = require './types'
-{LEVEL} = require '../settings'
+{LEVEL} = require '../../settings'
 Immutable = require 'immutable'
 
 _ = require 'underscore'
@@ -35,7 +35,7 @@ Cell = React.createClass
     ])
 
   , random: ->
-      choice = LEVEL.choice(cells.Wall, cells.Item)
+      choice = LEVEL.choose(cells.Wall, cells.Item)
       (choice? && choice) || @Void
 
   render: ->

@@ -1,28 +1,40 @@
-Snake = require '../snake'
-{KeyDownAction, KeySender} = require '../actions'
+{KeyDownAction} = require '../actions'
+{Ticker, XY, GAME_OVER} = require '../utility'
 settings = require '../settings'
-Cell = require '../cell'
-Grid = require '../views/grid'
+Snake = require '../snake'
+Cell = require '../views/cell'
 
 dispatcher = require '../dispatcher'
 {EventEmitter} = require 'events'
 Immutable = require 'immutable'
-{Ticker, XY, GAME_OVER} = require '../utility'
 
 
 CHANGE_EVENT = 'change'
 
+INITIALIZED = false
+
 MOTION_KEYS = Immutable.Map [
-  [37, XY.value_of(0, -1)]  # L
-  [38, XY.value_of(-1, 0)]  # U
-  [39, XY.value_of(0, +1)]  # R
-  [40, XY.value_of(+1, 0)]  # D
+  [
+    37
+    XY.LEFT()
+  ]
+  [
+    38
+    XY.UP()
+  ]
+  [
+    39
+    XY.RIGHT()
+  ]
+  [
+    40
+    XY.DOWN()
+  ]
 ]
 
 METHOD_KEYS = Immutable.Map [
   [82, '__restart']
 ]
-
 
 cells = Immutable.OrderedMap().withMutations (mutative_cells) ->
   range = settings.GRID.range()
@@ -32,23 +44,13 @@ cells = Immutable.OrderedMap().withMutations (mutative_cells) ->
 
 snake = null
 game_over = null
-Items = 0
-
-
-initialized = false
-
+Items_remaining = 0
 
 CellStore = Object.create EventEmitter::,
-  ###
-    Projects KeyDownActions into application state.
-
-    if Ticker.ticking()
-      updates application state
-  ###
 
   initialize: ->
-    if initialized
-      throw new Error "Already initialized"
+    if INITIALIZED
+      throw new Error "CellStore already initialized"
     @_reset()
     dispatcher.register (action) =>
       @_handle_action(action)
@@ -82,7 +84,7 @@ CellStore = Object.create EventEmitter::,
     snake.move()
     if (!game_over? || game_over.success) && @_out_of_bounds()
       # prevent infinite recursion with the first condition
-      @_on_smash(smashed: Cell.Wall, smasher: Cell.Snake)
+      @_smash(smashed: Cell.Wall, smasher: Cell.Snake)
     else if game_over?
       @_finish()
     else
@@ -90,15 +92,23 @@ CellStore = Object.create EventEmitter::,
     @emit(CHANGE_EVENT, cellmap: cells)
 
   _reset: ->
+    random_cell_with_increment = ->
+      cell = Cell.random()
+      if cell is Cell.Item && options.increment
+        Items_remaining ||= 0
+        Items_remaining += 1
+      cell
+
     game_over = null
-    Items = 0
+    Items_remaining = 0
     snake = Snake.at_position XY.random(settings.GRID.dimension - 1)
-    cells.withMutations (mutative_cells) =>
-      mutative_cells.forEach (cell, xy) =>
+
+    cells.withMutations (mutative_cells) ->
+      mutative_cells.forEach (cell, xy) ->
         if snake.meets xy
           mutative_cells.set xy, Cell.Snake
         else
-          mutative_cells.set xy, @_get_random_cell(increment: true)
+          mutative_cells.set xy, random_cell_with_increment()
     @emit(CHANGE_EVENT, cellmap: cells)
 
   _finish: ->
@@ -108,9 +118,9 @@ CellStore = Object.create EventEmitter::,
       Cell.Collision
 
     snake.motion(null)
-    snake.rewind()
+    snake.rewind() # rewind one frame so snake doesn't "go through" wall
 
-    Ticker.stop =>
+    Ticker.stop ->
       cells.withMutations (mutative_cells) ->
         mutative_cells.forEach (cell, xy) ->
           if snake.meets(xy)
@@ -126,35 +136,26 @@ CellStore = Object.create EventEmitter::,
               mutative_cells.set xy, smasher
             if smashed is Cell.Snake and smasher is Cell.Snake
               if snake.head() is xy
-                @_on_smash({smashed, smasher, xy})
+                @_smash({smashed, smasher, xy})
             else
-              @_on_smash({smashed, smasher, xy})
+              @_smash({smashed, smasher, xy})
           else if smashed isnt Cell.Wall
             mutative_cells.set xy, Cell.Snake
         else if cell is Cell.Snake
           mutative_cells.set xy, Cell.Void
 
-  _get_random_cell: (options = {increment: false})->
-    cell = Cell.random()
-    if cell is Cell.Item && options.increment
-      Items ||= 0
-      Items += 1
-    cell
-
   __restart: ->
-    Ticker.stop =>
-      @_reset()
-      @emit(CHANGE_EVENT, cellmap: cells)
+    Ticker.stop => @reset()
 
-  _on_smash: ({smashed, smasher, xy}) =>
+  _smash: ({smashed, smasher, xy}) =>
     if smashed is Cell.Snake and smasher is Cell.Snake and snake.head() is xy
-      game_over = game_over.failure
+      game_over = GAME_OVER.failure
     else if smashed is Cell.Wall
-      game_over = game_over.failure
+      game_over = GAME_OVER.failure
     else if smashed is Cell.Item
-      Items--
-      if Items is 0
-        game_over = game_over.success
+      Items_remaining--
+      if Items_remaining is 0
+        game_over = GAME_OVER.success
       else
         snake.grow()
 

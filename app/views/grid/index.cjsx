@@ -1,7 +1,7 @@
 React = require 'react'
 Row = require '../row'
-{GRID} = require '../settings'
 
+{GRID} = require '../../settings'
 CellStore = require '../../stores'
 
 
@@ -31,11 +31,9 @@ Grid = React.createClass
     </div>
 
 
-__GRID__ = null
-
 module.exports =
 
-  html_element: (@_html_element) ->
+  mount: (@_html_element) ->
     @
 
   render: (props) ->
@@ -44,12 +42,3 @@ module.exports =
     else if __GRID__?
       throw new Error("Grid's already been rendered!")
     __GRID__ = React.render <Grid {... props}/>, @_html_element
-
-  # This is supposed to be an anti-pattern, but I
-  # don't find it difficult to reason about.
-  #
-  # https://facebook.github.io/react/docs/component-api.html
-  set_props: (props, callback) ->
-    if !__GRID__?
-      throw new Error("Grid hasn't been rendered!")
-    __GRID__.setProps(props, callback)
