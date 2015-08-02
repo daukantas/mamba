@@ -4,7 +4,7 @@ Cell = require '../views/cell'
 {GRID} = require '../settings'
 
 Dispatcher = require '../dispatcher'
-{EventEmitter} = require 'events'
+{EmittingStore} = require './emitter'
 Immutable = require 'immutable'
 
 LAST_CELLS = null
@@ -14,18 +14,12 @@ LIVE_CELLS = Immutable.OrderedMap().withMutations (mutable_cells) ->
     for col in range
       mutable_cells.set XY.value_of(row, col), null
 
-INITIALIZED = false
+CellStore = Object.create EmittingStore,
 
-CellStore = Object.create EventEmitter::,
-
-  initialize:
-    enumerable: true
+  _post_initialize_hook:
+    enumerable: false
     value: ->
-      if INITIALIZED
-        throw new Error "CellStore already initialized"
       @_reset()
-      Dispatcher.register (action) =>
-        @_handle_action(action)
 
   cellmap:
     enumerable: true
