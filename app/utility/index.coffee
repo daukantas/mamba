@@ -2,6 +2,7 @@ GAME_OVER = require './game-over'
 XY = require './xy'
 errors = require './errors'
 Ticker = require './ticker'
+Random = require './random'
 
 
 module.exports = {
@@ -9,4 +10,5 @@ module.exports = {
   XY
   errors
   Ticker
+  Random
 }

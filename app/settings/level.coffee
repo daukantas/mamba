@@ -1,7 +1,7 @@
 Immutable = require 'immutable'
 _ = require 'underscore'
 Cells = require '../views/cell/types' # can't require cell directly :(
-Random = require '../utility/random'
+Random = require '../utility'
 
 module.exports =
   # A mode is determined by a Map whose keys are Cells,
