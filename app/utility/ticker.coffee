@@ -14,10 +14,10 @@ Ticker =
       throw new Error "Expected callback function for .tick"
     @_interval = setInterval(on_tick, TICK.interval)
 
-  stop: (on_stop) ->
+  stop: (on_stopped) ->
     clearInterval(@_interval)
     @_interval = null
-    on_stop?()
+    on_stopped?()
 
   ticking: ->
     @_interval?

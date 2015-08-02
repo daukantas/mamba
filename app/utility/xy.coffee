@@ -34,14 +34,15 @@ module.exports =
   negate: (xy) ->
     @value_of(-xy.x, -xy.y)
 
-  LEFT: ->
+  left: ->
     @value_of(0, -1)
 
-  RIGHT: ->
+  down: ->
+    @value_of(+1, 0)
+
+  right: ->
     @value_of(0, +1)
 
-  UP: ->
+  up: ->
     @value_of(-1, 0)
 
-  DOWN: ->
-    @value_of(+1, 0)
