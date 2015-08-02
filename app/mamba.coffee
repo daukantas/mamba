@@ -1,11 +1,12 @@
 {CellStore, ControlStore} = require './stores'
 {KeySender, KEYCODES} = require './actions'
-Grid = require './views'
+{Grid, Controls} = require './views'
 
 $ = window.$
 
 if $?
-  ROOT = $('#mamba')[0]
+  GRID = $('#mamba')[0]
+  CONTROLS = $('#controls')[0]
 
   KeySender
   .initialize(jQuery: $)
@@ -14,8 +15,7 @@ if $?
   ControlStore.initialize()
   CellStore.initialize()
 
-  Grid
-  .mount(ROOT)
-  .render()
+  Grid.mount(GRID).render()
+  Controls.mount(CONTROLS).render()
 else
   throw new Error "Couldn't find window.$, are you sure jQuery is loaded?"
