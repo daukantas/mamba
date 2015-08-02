@@ -59,6 +59,11 @@ CellStore = Object.create EventEmitter::,
       dispatcher.register (action) =>
         @_handle_action(action)
 
+  cellmap:
+    enumerable: true
+    value: ->
+      cells
+
   add_change_listener:
     enumerable: true
     value: (listener) ->
@@ -108,9 +113,9 @@ CellStore = Object.create EventEmitter::,
 
       game_over = null
       Items_remaining = 0
-      snake = Snake.at_position XY.random(settings.GRID.dimension - 1)
 
-      cells.withMutations (mutative_cells) ->
+      snake = Snake.at_position XY.random(settings.GRID.dimension - 1)
+      cells = cells.withMutations (mutative_cells) ->
         mutative_cells.forEach (cell, xy) ->
           if snake.meets xy
             mutative_cells.set xy, Cell.Snake
@@ -129,14 +134,14 @@ CellStore = Object.create EventEmitter::,
       snake.rewind() # rewind one frame so snake doesn't "go through" wall
 
       Ticker.stop ->
-        cells.withMutations (mutative_cells) ->
+        cells = cells.withMutations (mutative_cells) ->
           mutative_cells.forEach (cell, xy) ->
             if snake.meets(xy)
               mutative_cells.set xy, transform_to_cell
 
   _update:
     value: ->
-      cells.withMutations (mutative_cells) ->
+      cells = cells.withMutations (mutative_cells) ->
         mutative_cells.forEach (cell, xy) ->
           if snake.meets xy
             [smasher, smashed] = [Cell.Snake, cell]

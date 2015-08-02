@@ -1,4 +1,4 @@
-random = require './random'
+Random = require './random'
 
 
 class XY
@@ -24,8 +24,8 @@ module.exports =
     all_xy[row][col]
 
   random: (max) ->
-    row = random.int(0, max)
-    col = random.int(0, max)
+    row = Random.int(0, max)
+    col = Random.int(0, max)
     @value_of(row, col)
 
   add: (xy1, xy2) ->

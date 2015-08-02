@@ -2,7 +2,7 @@ React = require 'react'
 Row = require '../row'
 
 {GRID} = require '../../settings'
-CellStore = require '../../stores'
+{CellStore} = require '../../stores'
 
 
 Grid = React.createClass
