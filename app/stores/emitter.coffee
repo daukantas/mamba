@@ -1,5 +1,6 @@
 {EventEmitter} = require 'events'
 {NotImplemented} = require '../utility'
+Dispatcher = require '../dispatcher'
 
 
 module.exports = EmittingStore: Object.create EventEmitter::,
