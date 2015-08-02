@@ -1,4 +1,4 @@
-{KeyDownAction} = require '../actions'
+{MotionKeyAction, MethodKeyAction} = require '../actions'
 {Ticker, XY, GAME} = require '../utility'
 Cell = require '../views/cell'
 {GRID} = require '../settings'
@@ -43,21 +43,21 @@ CellStore = Object.create EventEmitter::,
 
   METHOD_KEYMAP:
     value: Immutable.Map [
-      ['restart', '__restart']
+      ['restart', '_restart']
     ]
 
   _handle_action:
     value: (action) ->
-      if action.is KeyDownAction
+      if action.is MotionKeyAction
         motion = action.motion()
-        method = action.method()
 
         if motion? && not GAME.over()
           GAME.set_motion(motion)
           if not Ticker.ticking()
             @_tick()
-        else if method?
-          @[@METHOD_KEYMAP.get(method)]()
+      else if action.is MethodKeyAction
+        method = @METHOD_KEYMAP.get(action.method())
+        @[method]()
 
   _emit_cells:
     value: ->
@@ -134,7 +134,7 @@ CellStore = Object.create EventEmitter::,
           else if previous_cell is Cell.Snake
             mutable_cells.set xy, Cell.Void
 
-  __restart:
+  _restart:
     value: ->
       Ticker.stop => @_reset()
 

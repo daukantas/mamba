@@ -2,7 +2,7 @@ Dispatcher = require '../dispatcher'
 _ = require 'underscore'
 Immutable = require 'immutable'
 
-KeyDownAction = require './keydown'
+{KeyDownAction} = require './keydown'
 
 INITIALIZED = false
 MAC_COMMAND = Immutable.Set [
@@ -63,16 +63,17 @@ KeySender = Object.create {},
     enumerable: true
     value: (keycodes, options) ->
       @_validate_listen keycodes, options
-
+      keycodes = Immutable.Set(keycodes)
       options = _.defaults options, prevent_default: false
-      keycodes = Immutable.Set keycodes
 
       @$(document).keydown (ev) =>
-        keycode = ev.which
-        @_add_pressed_key(keycode)
         bubbled = ev
+        keycode = ev.which
+
+        @_add_pressed_key(keycode)
+
         if keycodes.has keycode
-          Dispatcher.dispatch KeyDownAction.of({keycode})
+          Dispatcher.dispatch KeyDownAction({keycode})
           if @_should_prevent_default(ev, options)
             bubbled = false
         bubbled
@@ -105,9 +106,10 @@ KeySender = Object.create {},
     value: (keycodes, options) ->
       unless INITIALIZED?
         throw new Error("Didn't properly initialize; call .initialize first!")
-      unless Array.isArray keycodes
-        throw new Error("keycodes array required")
+      unless keycodes instanceof Immutable.Iterable|| Array.isArray(keycodes)
+        throw new Error("keycodes Immutable.Iterable/array required")
       if options? && !_.isObject options
         throw new Error("options argument should be an object")
+
 
 module.exports = KeySender

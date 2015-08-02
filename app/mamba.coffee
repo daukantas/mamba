@@ -1,5 +1,5 @@
 {CellStore} = require './stores'
-{KeySender, KeyDownAction} = require './actions'
+{KeySender, KEYCODES} = require './actions'
 Grid = require './views'
 
 $ = window.$
@@ -9,7 +9,7 @@ if $?
 
   KeySender
   .initialize(jQuery: $)
-  .listen(KeyDownAction.KEYCODES, prevent_default: true)
+  .listen(KEYCODES, prevent_default: true)
 
   CellStore.initialize()
 
