@@ -13,7 +13,9 @@ Key = React.createClass
 
   render: ->
     console.log "Rendering #{@props.keytype.symbol()}"
-    <div className="controls-key">
+    pressed_class = (@props.pressed && 'pressed') || ''
+
+    <div className="controls-key #{@props.keytype.shortname()} #{pressed_class}">
       {@props.keytype.symbol()}
     </div>
 
@@ -22,11 +24,12 @@ Controls = React.createClass
 
   render: ->
     <div className="key-controls">
+      <div class='key-section'></div>
       <Key pressed={true} keytype={Keys.R}></Key>
-      <Key pressed={true} keytype={Keys.Left}></Key>
-      <Key pressed={true} keytype={Keys.Up}></Key>
-      <Key pressed={true} keytype={Keys.Right}></Key>
-      <Key pressed={true} keytype={Keys.Down}></Key>
+      <Key pressed={true} keytype={Keys.LEFT}></Key>
+      <Key pressed={true} keytype={Keys.UP}></Key>
+      <Key pressed={true} keytype={Keys.RIGHT}></Key>
+      <Key pressed={true} keytype={Keys.DOWN}></Key>
     </div>
 
 

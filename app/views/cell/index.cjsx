@@ -13,30 +13,30 @@ Cell = React.createClass
   statics: _.extend {}, cells
   , classmap: Immutable.Map([
       [
-        cells.Item
+        cells.ITEM
         'item-cell'
       ]
       [
-        cells.Void
+        cells.VOID
         'void-cell'
       ]
       [
-        cells.Wall
+        cells.WALL
         'wall-cell'
       ]
       [
-        cells.Snake
+        cells.SNAKE
         'snake-cell'
       ]
       [
-        cells.Collision
+        cells.COLLISION
         'collision-cell'
       ]
     ])
 
   , random: ->
-      choice = LEVEL.choose(cells.Wall, cells.Item)
-      (choice? && choice) || @Void
+      choice = LEVEL.choose(cells.WALL, cells.ITEM)
+      (choice? && choice) || @VOID
 
   render: ->
     <div className="#{@constructor.classmap.get(@props.content)}"></div>

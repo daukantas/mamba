@@ -12,11 +12,11 @@ module.exports =
 
   setting: Immutable.Map([
     [
-      Cells.Wall
+      Cells.WALL
       Immutable.Range(0, 15)
     ]
     [
-      Cells.Item
+      Cells.ITEM
       Immutable.Range(40, 55)
     ]
   ])

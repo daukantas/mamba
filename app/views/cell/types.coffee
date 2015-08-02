@@ -40,8 +40,8 @@ class Collision extends CellType
 
 
 module.exports =
-  Item: new Item
-  Wall: new Wall
-  Void: new Void
-  Snake: new Snake
-  Collision: new Collision
+  ITEM: new Item
+  WALL: new Wall
+  VOID: new Void
+  SNAKE: new Snake
+  COLLISION: new Collision

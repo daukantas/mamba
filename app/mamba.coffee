@@ -6,7 +6,7 @@ $ = window.$
 
 if $?
   GRID = $('#mamba')[0]
-  CONTROLS = $('#controls')[0]
+  CONTROLS = $('#keys')[0]
 
   KeySender
   .initialize(jQuery: $)

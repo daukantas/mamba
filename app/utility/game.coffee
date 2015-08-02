@@ -41,12 +41,12 @@ module.exports = Object.create null,
 
   collide:
     value: (target, xy) ->
-      if target is Cell.Wall
+      if target is Cell.WALL
         @_fail()
-      else if target is Cell.Snake
+      else if target is Cell.SNAKE
         if SNAKE.head() is xy
           @_fail()
-      else if target is Cell.Item
+      else if target is Cell.ITEM
         @_score()
 
   set_motion:

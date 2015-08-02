@@ -67,7 +67,7 @@ CellStore = Object.create EmittingStore,
       @_update()
 
       if GAME.out_of_bounds()
-        GAME.collide Cell.Wall
+        GAME.collide Cell.WALL
       if GAME.over()
         @_finish()
       else
@@ -79,7 +79,7 @@ CellStore = Object.create EmittingStore,
     value: ->
       random_cell = ->
         cell = Cell.random()
-        if cell is Cell.Item
+        if cell is Cell.ITEM
           GAME.add_item()
         cell
 
@@ -88,7 +88,7 @@ CellStore = Object.create EmittingStore,
       @_batch_mutate (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
           if GAME.collision xy
-            mutable_cells.set xy, Cell.Snake
+            mutable_cells.set xy, Cell.SNAKE
           else
             mutable_cells.set xy, random_cell()
 
@@ -97,14 +97,14 @@ CellStore = Object.create EmittingStore,
   _finish:
     value: ->
       if GAME.failed()
-        transform_to_cell = Cell.Collision
+        transform_to_cell = Cell.COLLISION
         @_rewind()
       else
-        transform_to_cell = Cell.Item
+        transform_to_cell = Cell.ITEM
 
       @_batch_mutate (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
-          if cell is Cell.Snake
+          if cell is Cell.SNAKE
             mutable_cells.set xy, transform_to_cell
 
   _batch_mutate:
@@ -123,14 +123,14 @@ CellStore = Object.create EmittingStore,
       @_batch_mutate (mutable_cells) =>
         mutable_cells.forEach (previous_cell, xy) =>
           if GAME.collision xy
-            if previous_cell is Cell.Void
-              mutable_cells.set xy, Cell.Snake
+            if previous_cell is Cell.VOID
+              mutable_cells.set xy, Cell.SNAKE
             else
-              if previous_cell is Cell.Item
-                mutable_cells.set xy, Cell.Snake
+              if previous_cell is Cell.ITEM
+                mutable_cells.set xy, Cell.SNAKE
               GAME.collide previous_cell, xy
-          else if previous_cell is Cell.Snake
-            mutable_cells.set xy, Cell.Void
+          else if previous_cell is Cell.SNAKE
+            mutable_cells.set xy, Cell.VOID
 
   _restart:
     value: ->
