@@ -21,30 +21,30 @@ body {
   margin-bottom: 15px;;
 }
 
-#instructions {
+#sidebar {
   text-align: left;
   float: right;
   width: 200px;
   height: 630px;
   position: relative;
 
-  .controls {
-    display: inline-block;
+  #controls {
+
+    > div {
+      display: inline-block;
+      width: 100px;
+    }
 
     .labels {
-
-      width: 100px;
-
-      div {
+      > div {
         font-size: 2em;
         margin-top: 0;
         margin-bottom: 20px;
       }
-
     }
 
     #keys {
-      width: 100px;
+
     }
 
   }
