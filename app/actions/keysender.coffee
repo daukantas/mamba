@@ -74,6 +74,7 @@ KeySender = Object.create {},
 
         if keycodes.has keycode
           Dispatcher.dispatch KeyDownAction({keycode})
+
           if @_should_prevent_default(ev, options)
             bubbled = false
         bubbled

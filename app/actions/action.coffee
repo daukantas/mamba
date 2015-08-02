@@ -28,13 +28,13 @@ class Action
   toString: ->
     @constructor.name
 
-  @of: (payload) ->
+  @value_of: (payload) ->
     @__validate_class()
     @validate_payload(payload)
-    @post_of_hook(payload)
+    @post_value_of_hook(payload)
 
   # Subclass can override this
-  @post_of_hook: (payload) ->
+  @post_value_of_hook: (payload) ->
     new @(payload)
 
   is_a: (klass) ->
