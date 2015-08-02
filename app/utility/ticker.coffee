@@ -9,18 +9,18 @@ Ticker =
 
   _interval: null
 
-  tick: (on_tick) ->
-    unless _.isFunction on_tick
+  tick: (callback) ->
+    unless _.isFunction callback
       throw new Error "Expected callback function for .tick"
-    @_interval = setInterval(on_tick, TICK.interval)
+    @_timeout = setTimeout(callback, TICK.interval)
 
-  stop: (on_stopped) ->
-    clearInterval(@_interval)
-    @_interval = null
-    on_stopped?()
+  stop: (on_cleared) ->
+    clearTimeout(@_timeout)
+    @_timeout = null
+    on_cleared?()
 
   ticking: ->
-    @_interval?
+    @_timeout?
 
 
 module.exports = Ticker

@@ -58,22 +58,22 @@ CellStore = Object.create EventEmitter::,
 
         if motion? && not game_over?
           snake.set_motion(motion)
-          if not Ticker.ticking()
-            Ticker.tick =>
-              @_tick()
-            , settings.TICK.interval
+          (not Ticker.ticking()) && @_tick()
         else if method?
           @[METHOD_KEYMAP.get(method)]()
 
   _tick:
     value: ->
-      if (not game_over?) && @_out_of_bounds()
-        # prevent infinite recursion with the first condition
+      @_update()
+
+      if @_out_of_bounds()
         @_collision(Cell.Wall)
-      else if game_over?
+      if game_over?
         @_finish()
       else
-        @_update()
+        Ticker.tick =>
+          @_tick()
+        , settings.TICK.interval
       @emit(CHANGE_EVENT, cellmap: cells)
 
   _reset:
@@ -99,8 +99,6 @@ CellStore = Object.create EventEmitter::,
 
   _finish:
     value: ->
-      snake.move(null)
-
       transform_to_cell = if game_over.success
         Cell.Item
       else
@@ -109,11 +107,10 @@ CellStore = Object.create EventEmitter::,
       # rewind one frame so snake doesn't "go through" wall
       (not game_over.success) && snake.rewind()
 
-      Ticker.stop ->
-        cells = cells.withMutations (mutative_cells) ->
-          mutative_cells.forEach (cell, xy) ->
-            if snake.meets(xy)
-              mutative_cells.set xy, transform_to_cell
+      cells = cells.withMutations (mutative_cells) ->
+        mutative_cells.forEach (__, xy) ->
+          if snake.meets(xy)
+            mutative_cells.set xy, transform_to_cell
 
   _update:
     value: ->
@@ -134,12 +131,11 @@ CellStore = Object.create EventEmitter::,
             mutative_cells.set xy, Cell.Void
 
   _collision:
-    value: (smashed) ->
-      if smashed is Cell.Snake
+    value: (target) ->
+      if target is Cell.Snake || target is Cell.Wall
+        snake.move(null)
         game_over = GAME_OVER.failure
-      else if smashed is Cell.Wall
-        game_over = GAME_OVER.failure
-      else if smashed is Cell.Item
+      else if target is Cell.Item
         Items_remaining--
         if Items_remaining is 0
           game_over = GAME_OVER.success
