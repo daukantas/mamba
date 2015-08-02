@@ -7,13 +7,13 @@ Dispatcher = require '../dispatcher'
 {EventEmitter} = require 'events'
 Immutable = require 'immutable'
 
-CELLS = Immutable.OrderedMap().withMutations (mutative_cells) ->
+LAST_CELLS = null
+LIVE_CELLS = Immutable.OrderedMap().withMutations (mutable_cells) ->
   range = GRID.range()
   for row in range
     for col in range
-      mutative_cells.set XY.value_of(row, col), null
+      mutable_cells.set XY.value_of(row, col), null
 
-last_cells = null
 INITIALIZED = false
 
 CellStore = Object.create EventEmitter::,
@@ -30,7 +30,7 @@ CellStore = Object.create EventEmitter::,
   cellmap:
     enumerable: true
     value: ->
-      CELLS
+      LIVE_CELLS
 
   add_change_listener:
     enumerable: true
@@ -52,26 +52,30 @@ CellStore = Object.create EventEmitter::,
         motion = action.motion()
         method = action.method()
 
-        if motion? && not GAME.game_over()
+        if motion? && not GAME.over()
           GAME.set_motion(motion)
           if not Ticker.ticking()
             @_tick()
         else if method?
           @[@METHOD_KEYMAP.get(method)]()
 
+  _emit_cells:
+    value: ->
+      @emit(@CHANGE_EVENT, cellmap: LIVE_CELLS)
+
   _tick:
     value: ->
-      last_cells = CELLS
+      LAST_CELLS = LIVE_CELLS
       @_update()
 
       if GAME.out_of_bounds()
-        GAME.collide(Cell.Wall)
-      if GAME.game_over()
+        GAME.collide Cell.Wall
+      if GAME.over()
         @_finish()
       else
         Ticker.tick => @_tick()
 
-      @emit(@CHANGE_EVENT, cellmap: CELLS)
+      @_emit_cells()
 
   _reset:
     value: ->
@@ -83,50 +87,52 @@ CellStore = Object.create EventEmitter::,
 
       GAME.reset()
 
-      CELLS = CELLS.withMutations (mutative_cells) ->
-        mutative_cells.forEach (cell, xy) ->
+      @_batch_mutate (mutable_cells) ->
+        mutable_cells.forEach (cell, xy) ->
           if GAME.collision xy
-            mutative_cells.set xy, Cell.Snake
+            mutable_cells.set xy, Cell.Snake
           else
-            mutative_cells.set xy, random_cell()
+            mutable_cells.set xy, random_cell()
 
-      @emit(@CHANGE_EVENT, cellmap: CELLS)
+      @_emit_cells()
 
   _finish:
     value: ->
-      transform_to_cell = if GAME.failed()
-        Cell.Collision
-      else
-        Cell.Item
-
       if GAME.failed()
+        transform_to_cell = Cell.Collision
         @_rewind()
+      else
+        transform_to_cell = Cell.Item
 
-      CELLS = CELLS.withMutations (mutative_cells) ->
-        mutative_cells.forEach (cell, xy) ->
+      @_batch_mutate (mutable_cells) ->
+        mutable_cells.forEach (cell, xy) ->
           if cell is Cell.Snake
-            mutative_cells.set xy, transform_to_cell
+            mutable_cells.set xy, transform_to_cell
+
+  _batch_mutate:
+    value: (mutator) ->
+      LIVE_CELLS = LIVE_CELLS.withMutations mutator
 
   _rewind:
     value: ->
-      CELLS = last_cells
-      last_cells = null
+      LIVE_CELLS = LAST_CELLS
+      LAST_CELLS = null
 
   _update:
     value: ->
       GAME.move_snake()
 
-      CELLS = CELLS.withMutations (mutative_cells) =>
-        mutative_cells.forEach (previous_cell, xy) =>
+      @_batch_mutate (mutable_cells) =>
+        mutable_cells.forEach (previous_cell, xy) =>
           if GAME.collision xy
             if previous_cell is Cell.Void
-              mutative_cells.set xy, Cell.Snake
+              mutable_cells.set xy, Cell.Snake
             else
               if previous_cell is Cell.Item
-                mutative_cells.set xy, Cell.Snake
+                mutable_cells.set xy, Cell.Snake
               GAME.collide previous_cell, xy
           else if previous_cell is Cell.Snake
-            mutative_cells.set xy, Cell.Void
+            mutable_cells.set xy, Cell.Void
 
   __restart:
     value: ->
