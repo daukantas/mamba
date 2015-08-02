@@ -1,4 +1,4 @@
-GAME_OVER = require './game-over'
+GAME = require './game'
 XY = require './xy'
 errors = require './errors'
 Ticker = require './ticker'
@@ -6,7 +6,7 @@ Random = require './random'
 
 
 module.exports = {
-  GAME_OVER
+  GAME
   XY
   errors
   Ticker

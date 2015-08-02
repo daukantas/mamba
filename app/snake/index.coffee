@@ -1,5 +1,5 @@
 Immutable = require 'immutable'
-{XY} = require '../utility'
+XY = require '../utility/xy'
 settings = require '../settings'
 
 ###

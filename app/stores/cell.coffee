@@ -1,33 +1,20 @@
 {KeyDownAction} = require '../actions'
-{Ticker, XY, GAME_OVER} = require '../utility'
-settings = require '../settings'
-Snake = require '../snake'
+{Ticker, XY, GAME} = require '../utility'
 Cell = require '../views/cell'
+{GRID} = require '../settings'
 
 Dispatcher = require '../dispatcher'
 {EventEmitter} = require 'events'
 Immutable = require 'immutable'
 
-
-CHANGE_EVENT = 'change'
-
-INITIALIZED = false
-
-METHOD_KEYMAP = Immutable.Map [
-  ['restart', '__restart']
-]
-
-cells = Immutable.OrderedMap().withMutations (mutative_cells) ->
-  range = settings.GRID.range()
+CELLS = Immutable.OrderedMap().withMutations (mutative_cells) ->
+  range = GRID.range()
   for row in range
     for col in range
       mutative_cells.set XY.value_of(row, col), null
 
-snake = null
-game_over = null
-Items_remaining = 0
-
-CellStore_props =
+last_cells = null
+INITIALIZED = false
 
 CellStore = Object.create EventEmitter::,
 
@@ -43,12 +30,21 @@ CellStore = Object.create EventEmitter::,
   cellmap:
     enumerable: true
     value: ->
-      cells
+      CELLS
 
   add_change_listener:
     enumerable: true
     value: (listener) ->
-      @addListener CHANGE_EVENT, listener
+      @addListener @CHANGE_EVENT, listener
+
+  CHANGE_EVENT:
+    enumerable: true
+    value: 'change'
+
+  METHOD_KEYMAP:
+    value: Immutable.Map [
+      ['restart', '__restart']
+    ]
 
   _handle_action:
     value: (action) ->
@@ -56,101 +52,85 @@ CellStore = Object.create EventEmitter::,
         motion = action.motion()
         method = action.method()
 
-        if motion? && not game_over?
-          snake.set_motion(motion)
-          (not Ticker.ticking()) && @_tick()
+        if motion? && not GAME.game_over()
+          GAME.set_motion(motion)
+          if not Ticker.ticking()
+            @_tick()
         else if method?
-          @[METHOD_KEYMAP.get(method)]()
+          @[@METHOD_KEYMAP.get(method)]()
 
   _tick:
     value: ->
+      last_cells = CELLS
       @_update()
 
-      if @_out_of_bounds()
-        @_collision(Cell.Wall)
-      if game_over?
+      if GAME.out_of_bounds()
+        GAME.collide(Cell.Wall)
+      if GAME.game_over()
         @_finish()
       else
-        Ticker.tick =>
-          @_tick()
-        , settings.TICK.interval
-      @emit(CHANGE_EVENT, cellmap: cells)
+        Ticker.tick => @_tick()
+
+      @emit(@CHANGE_EVENT, cellmap: CELLS)
 
   _reset:
     value: ->
       random_cell = ->
         cell = Cell.random()
         if cell is Cell.Item
-          Items_remaining ||= 0
-          Items_remaining += 1
+          GAME.add_item()
         cell
 
-      game_over = null
-      Items_remaining = 0
+      GAME.reset()
 
-      snake = Snake.at_position XY.random(settings.GRID.dimension - 1)
-      cells = cells.withMutations (mutative_cells) ->
+      CELLS = CELLS.withMutations (mutative_cells) ->
         mutative_cells.forEach (cell, xy) ->
-          if snake.meets xy
+          if GAME.collision xy
             mutative_cells.set xy, Cell.Snake
           else
             mutative_cells.set xy, random_cell()
-      @emit(CHANGE_EVENT, cellmap: cells)
+
+      @emit(@CHANGE_EVENT, cellmap: CELLS)
 
   _finish:
     value: ->
-      transform_to_cell = if game_over.success
-        Cell.Item
-      else
+      transform_to_cell = if GAME.failed()
         Cell.Collision
+      else
+        Cell.Item
 
-      # rewind one frame so snake doesn't "go through" wall
-      (not game_over.success) && snake.rewind()
+      if GAME.failed()
+        @_rewind()
 
-      cells = cells.withMutations (mutative_cells) ->
-        mutative_cells.forEach (__, xy) ->
-          if snake.meets(xy)
+      CELLS = CELLS.withMutations (mutative_cells) ->
+        mutative_cells.forEach (cell, xy) ->
+          if cell is Cell.Snake
             mutative_cells.set xy, transform_to_cell
+
+  _rewind:
+    value: ->
+      CELLS = last_cells
+      last_cells = null
 
   _update:
     value: ->
-      snake.move()
+      GAME.move_snake()
 
-      cells = cells.withMutations (mutative_cells) =>
+      CELLS = CELLS.withMutations (mutative_cells) =>
         mutative_cells.forEach (previous_cell, xy) =>
-          if snake.meets xy
-            if previous_cell is Cell.Item
-              @_collision(Cell.Item)
-            else if previous_cell is Cell.Snake
-              if snake.head() is xy
-                @_collision(Cell.Snake)
-            else if previous_cell is Cell.Wall
-              @_collision(Cell.Wall)
-            mutative_cells.set xy, Cell.Snake
+          if GAME.collision xy
+            if previous_cell is Cell.Void
+              mutative_cells.set xy, Cell.Snake
+            else
+              if previous_cell is Cell.Item
+                mutative_cells.set xy, Cell.Snake
+              GAME.collide previous_cell, xy
           else if previous_cell is Cell.Snake
             mutative_cells.set xy, Cell.Void
-
-  _collision:
-    value: (target) ->
-      if target is Cell.Snake || target is Cell.Wall
-        snake.move(null)
-        game_over = GAME_OVER.failure
-      else if target is Cell.Item
-        Items_remaining--
-        if Items_remaining is 0
-          game_over = GAME_OVER.success
-        else
-          snake.grow()
 
   __restart:
     value: ->
       Ticker.stop => @_reset()
-
-  _out_of_bounds:
-    value: ->
-      {x, y} = snake.head()
-      Math.min(x, y) < 0 ||
-      Math.max(x, y) >= settings.GRID.dimension
 
 
 module.exports = CellStore
