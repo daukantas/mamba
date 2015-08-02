@@ -1,0 +1,19 @@
+$key_size: 35px;
+
+.controls-key {
+  background-color: beige;
+  color: black;
+
+  font-size: 2em;
+  font-weight: bold;
+
+  width: $key_size;
+  height: $key_size;
+
+  text-align: center;
+
+  margin: 2px;
+
+  border-radius: 5px;
+  display: block;
+}
