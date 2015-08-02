@@ -152,9 +152,9 @@ CellStore = Object.create EventEmitter::,
 
   _out_of_bounds:
     value: ->
-      {head_x, head_y} = snake.head()
-      Math.max(head_x, head_y) < 0 ||
-      Math.min(head_x, head_y) >= settings.GRID.dimension
+      {x, y} = snake.head()
+      Math.min(x, y) < 0 ||
+      Math.max(x, y) >= settings.GRID.dimension
 
 
 module.exports = CellStore
