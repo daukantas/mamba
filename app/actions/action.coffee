@@ -5,9 +5,9 @@ Immutable = require 'immutable'
 
 class Action
 
-  @abstract_classprops = Immutable.Set([
+  @abstract_classprops = Immutable.Set [
     'validate_payload'
-  ])
+  ]
 
   __abstract_validated = false
 
