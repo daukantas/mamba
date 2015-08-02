@@ -37,8 +37,8 @@ class Action
   @post_of_hook: (payload) ->
     new @(payload)
 
-  is: (klass) ->
-    @constructor is klass
+  is_a: (klass) ->
+    @ instanceof klass
 
 
 module.exports = Action

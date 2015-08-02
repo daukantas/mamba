@@ -41,14 +41,14 @@ CellStore = Object.create EmittingStore,
 
   _handle_action:
     value: (action) ->
-      if action.is MotionKeyAction
+      if action.is_a MotionKeyAction
         motion = action.motion()
 
         if motion? && not GAME.over()
           GAME.set_motion(motion)
           if not Ticker.ticking()
             @_tick()
-      else if action.is MethodKeyAction
+      else if action.is_a MethodKeyAction
         method = @_METHOD_KEYMAP.get(action.method())
         @[method]()
 
