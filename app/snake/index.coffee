@@ -1,5 +1,5 @@
 Immutable = require 'immutable'
-{position} = require '../util'
+XY = require '../utility/xy'
 settings = require '../settings'
 
 ###
@@ -18,11 +18,11 @@ class Snake
   @at_position: (xy) ->
     new @([xy])
 
-  motion: (xy) ->
+  set_motion: (xy) ->
     if xy?
       if !@_motion?
         @_motion = xy
-      else if position.negate(xy) isnt @_motion
+      else if XY.negate(xy) isnt @_motion
         @_motion = xy
     else
       @_motion = null
@@ -32,7 +32,7 @@ class Snake
 
   move: ->
     if @moving()
-      new_front = position.add(@_this_frame.first(), @_motion)
+      new_front = XY.add(@_this_frame.first(), @_motion)
       new_frame = @_this_frame.take(@_length - 1)
       @_last_frame = @_this_frame
       @_this_frame = Immutable.OrderedSet.of(new_front, (new_frame.toJS())...)

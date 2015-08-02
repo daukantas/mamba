@@ -1,7 +1,5 @@
 _ = require 'underscore'
-
-
-class NotImplemented extends Error
+{errors} = require '../../utility'
 
 
 class CellType
@@ -9,8 +7,8 @@ class CellType
   constructor: ->
     if @constructor == CellType
       throw new Error "Can't instantiate abstract class CellType"
-    else if !@name
-      throw new NotImplemented("`name` property not implemented")
+    else if !@constructor.name
+      throw new errors.NotImplemented("`name` property not implemented")
 
   toString: ->
     @name
