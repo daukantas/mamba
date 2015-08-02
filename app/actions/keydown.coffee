@@ -55,10 +55,4 @@ class MethodKeyAction extends KeyDownAction
     @constructor.KEYCODE_MAP.get(@payload.keycode) || null
 
 
-module.exports = {
-  KEYCODES: KeyDownAction.KEYCODES,
-
-  KeyDownAction: KeyDownAction.value_of.bind(KeyDownAction),
-
-  MotionKeyAction, MethodKeyAction
-}
+module.exports = {KeyDownAction, MotionKeyAction, MethodKeyAction}

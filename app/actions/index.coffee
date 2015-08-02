@@ -1,5 +1,8 @@
-{KEYCODES, MotionKeyAction, MethodKeyAction} = require './keydown'
+{MotionKeyAction, MethodKeyAction, KeyDownAction} = require './keydown'
 KeySender = require './keysender'
 
 
-module.exports = {KEYCODES, MotionKeyAction, MethodKeyAction, KeySender}
+module.exports = {
+  KEYCODES: KeyDownAction.KEYCODES,
+  MotionKeyAction, MethodKeyAction, KeyDownAction, KeySender
+}

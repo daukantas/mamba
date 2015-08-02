@@ -2,6 +2,7 @@ React = require 'react'
 ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 {ControlStore} = require '../../stores'
 Keys = require './keys'
+{errors} = require '../../utility'
 
 Immutable = require 'immutable'
 _ = require 'underscore'
@@ -24,7 +25,28 @@ Key = React.createClass
     </div>
 
 
+Deactivates =
+
+  DEACTIVATE_TIMEOUT: 250
+
+  componentWillMount: ->
+    unless @_deactivate?
+      throw new errors.NotImplemented "Mixing classes should implement _deactivate"
+    unless @_should_deactivate?
+          throw new errors.NotImplemented "Mixing classes should implement _should_deactivate"
+
+  componentDidUpdate: (__, prev_state)->
+    if @_should_deactivate()
+      # need this check to guard against infinite recursion!
+      console.log "Deactivate"
+      setTimeout =>
+        @_deactivate()
+      , @DEACTIVATE_TIMEOUT
+
+
 ArrowKeys = React.createClass
+
+  mixins: [Deactivates]
 
   componentWillMount: ->
     @setState active_by_key: Immutable.Map [
@@ -40,16 +62,14 @@ ArrowKeys = React.createClass
   shouldComponentUpdate: (__, next_state) ->
     next_state.active_by_key isnt @state.active_by_key
 
-  componentDidUpdate: ->
-    setTimeout =>
-      @_deactivate()
-    , 500
-
   _on_change: ({keycode}) ->
     active_by_key = @state.active_by_key.withMutations (mutable_keys) ->
       mutable_keys.forEach (active, key) ->
         mutable_keys.set(key, key.keycode() is keycode)
     @setState {active_by_key}
+
+  _should_deactivate: ->
+    @state.active_by_key.includes true
 
   _deactivate: ->
     @setState active_by_key: @state.active_by_key.withMutations (mutable_keys) ->
@@ -67,8 +87,27 @@ ArrowKeys = React.createClass
 
 RestartKey = React.createClass
 
+  mixins: [Deactivates]
+
+  getInitialState: ->
+    active: false
+
+  componentWillMount: ->
+    ControlStore.add_change_listener ({keycode}) =>
+      @_on_change({keycode})
+
+  _should_deactivate: ->
+    @state.active is true
+
+  _deactivate: ->
+    @setState active: false
+
+  _on_change: ({keycode}) ->
+    if Keys.R.keycode() is keycode
+      @setState active: true
+
   render: ->
-    <Key pressed={false} keytype={Keys.R}></Key>
+    <Key pressed={@state.active} keytype={Keys.R}></Key>
 
 
 __RestartKey__ = null
@@ -82,9 +121,9 @@ module.exports = Object.create null,
       @_restart_key_node
 
   _arrow_keys_node:
-      writable: true
-      value:
-        @_arrow_keys_node
+    writable: true
+    value:
+      @_arrow_keys_node
 
   mount_restart_key:
     enumerable: true
