@@ -53,7 +53,7 @@ module.exports = Object.create null,
     value: (motion) ->
       SNAKE.set_motion(motion)
 
-  move_SNAKE:
+  move_snake:
     enumerable: true
     value: ->
       SNAKE.move()
@@ -87,17 +87,14 @@ module.exports = Object.create null,
     value: ->
       SNAKE.grow()
       ITEMS -= 1
-      @emit @_SCORE_EVENT
       @_maybe_win()
 
   _maybe_win:
     value: ->
       if ITEMS is 0
         GAME_OVER = GAME_OVER_STATES.success
-        @emit @_GAME_OVER_EVENT, {GAME_OVER}
 
   _fail:
     value: ->
       SNAKE.set_motion(null)
-      game_over = GAME_OVER_STATES.failure
-      @emit @_GAME_OVER_EVENT, {game_over}
+      GAME_OVER = GAME_OVER_STATES.failure
