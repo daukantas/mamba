@@ -14,10 +14,13 @@ Key = React.createClass
     keytype: React.PropTypes.oneOf(_.values Keys).isRequired
 
   render: ->
-    pressed_class = (@props.pressed && 'pressed') || ''
+    [shortname, pressed] = [
+      @props.keytype.shortname()
+      (@props.pressed && 'pressed') || ''
+    ]
 
     <ReactCSSTransitionGroup transitionName='controls-key' transitionAppear={true}>
-      <div className="key #{@props.keytype.shortname()} #{pressed_class}">
+      <div className="key #{shortname} #{pressed}">
         {@props.keytype.symbol()}
       </div>
     </ReactCSSTransitionGroup>
