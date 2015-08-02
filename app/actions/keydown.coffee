@@ -28,6 +28,9 @@ class KeyDownAction extends Action
     else
       throw new Error "Unsupported keycode: #{keycode}; try #{@KEYCODES}"
 
+  keycode: ->
+    @payload.keycode
+
 
 class MotionKeyAction extends KeyDownAction
 

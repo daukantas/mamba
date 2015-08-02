@@ -14,19 +14,18 @@ module.exports = Object.create EmittingStore,
 
   _post_initialize_hook:
     value: ->
-      @_current_motion = null
+      @_current_keycode = null
 
-  current_motion:
+  current_keycode:
     enumerable: true
     get: ->
-      @_current_motion
-    set: (motion) ->
-      if motion isnt @_current_motion
-        @_current_motion = motion
-        console.log "Detected change #{motion}"
-        @emit @_CHANGE_EVENT, {motion}
+      @_current_keycode
+    set: (keycode) ->
+      if keycode isnt @_current_keycode
+        @_current_keycode = keycode
+        @emit @_CHANGE_EVENT, {keycode}
 
   _handle_action:
     value: (action) ->
       if action.is_a MotionKeyAction
-        @current_motion = action.motion()
+        @current_keycode = action.keycode()

@@ -1,8 +1,9 @@
 React = require 'react'
 ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
-{CellStore} = require '../../stores'
+{ControlStore} = require '../../stores'
 Keys = require './keys'
 
+Immutable = require 'immutable'
 _ = require 'underscore'
 
 
@@ -13,7 +14,6 @@ Key = React.createClass
     keytype: React.PropTypes.oneOf(_.values Keys).isRequired
 
   render: ->
-    console.log "Rendering #{@props.keytype.symbol()}"
     pressed_class = (@props.pressed && 'pressed') || ''
 
     <ReactCSSTransitionGroup transitionName='controls-key' transitionAppear={true}>
@@ -25,12 +25,31 @@ Key = React.createClass
 
 ArrowKeys = React.createClass
 
+  componentWillMount: ->
+    @setState active_by_key: Immutable.Map [
+     [Keys.LEFT, false]
+     [Keys.UP, false]
+     [Keys.RIGHT, false]
+     [Keys.DOWN, false]
+    ]
+
+    ControlStore.add_change_listener ({keycode}) =>
+      @_on_change({keycode})
+
+  shouldComponentUpdate: (__, next_state) ->
+    next_state.active_by_key isnt @state.active_by_key
+
+  _on_change: ({keycode}) ->
+    active_by_key = @state.active_by_key.withMutations (mutable_keys) ->
+      mutable_keys.forEach (active, key) ->
+        mutable_keys.set(key, key.keycode() is keycode)
+    @setState {active_by_key}
+
   render: ->
     <div className="arrow-keys">
-      <Key pressed={true} keytype={Keys.LEFT}></Key>
-      <Key pressed={true} keytype={Keys.UP}></Key>
-      <Key pressed={true} keytype={Keys.RIGHT}></Key>
-      <Key pressed={true} keytype={Keys.DOWN}></Key>
+      {@state.active_by_key.map (active, key) ->
+        <Key pressed={active} keytype={key}></Key>
+      }
     </div>
 
 
