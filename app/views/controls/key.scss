@@ -1,7 +1,13 @@
+@import "../../mamba";
+
+
+$unpressed_box_shadow: 0 5px darkgreen;
+$depressed_box_shadow: 0 3px darkgreen;
+
 $key_size: 35px;
 
 .controls-key {
-  background-color: beige;
+  background-color: $primary-color;
   color: black;
 
   font-size: 2em;
@@ -16,4 +22,15 @@ $key_size: 35px;
 
   border-radius: 5px;
   display: block;
+  box-shadow: $unpressed_box_shadow;
+
+  &.pressed {
+    color: green;
+    box-shadow: $depressed_box_shadow;
+    transform: translateY(3px);
+  }
+}
+
+.controls-key-appear, .controls-key-enter.controls-key-enter-active {
+  transition: box-shadow .5s ease-in;
 }

@@ -1,4 +1,5 @@
 React = require 'react'
+ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 {CellStore} = require '../../stores'
 Keys = require './keys'
 
@@ -15,9 +16,11 @@ Key = React.createClass
     console.log "Rendering #{@props.keytype.symbol()}"
     pressed_class = (@props.pressed && 'pressed') || ''
 
-    <div className="controls-key #{@props.keytype.shortname()} #{pressed_class}">
-      {@props.keytype.symbol()}
-    </div>
+    <ReactCSSTransitionGroup transitionName='controls-key' transitionAppear={true}>
+      <div className="controls-key #{@props.keytype.shortname()} #{pressed_class}">
+        {@props.keytype.symbol()}
+      </div>
+    </ReactCSSTransitionGroup>
 
 
 Controls = React.createClass
@@ -25,10 +28,7 @@ Controls = React.createClass
   render: ->
     <div className="key-controls">
       <div class='key-section'></div>
-      <Key pressed={true} keytype={Keys.R}></Key>
-      <Key pressed={true} keytype={Keys.LEFT}></Key>
-      <Key pressed={true} keytype={Keys.UP}></Key>
-      <Key pressed={true} keytype={Keys.RIGHT}></Key>
+
       <Key pressed={true} keytype={Keys.DOWN}></Key>
     </div>
 
