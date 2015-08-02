@@ -46,7 +46,7 @@ module.exports =
   add_item: ->
     @_num_items += 1
 
-  game_over: ->
+  over: ->
     @_game_over?
 
   failed: ->
