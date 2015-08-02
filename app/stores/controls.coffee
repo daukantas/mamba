@@ -1,4 +1,5 @@
 {EmittingStore} = require './emitter'
+{MotionKeyAction} = require '../actions'
 
 CURRENT_KEY = null
 
@@ -11,3 +12,8 @@ module.exports = Object.create EmittingStore,
 
   _CHANGE_EVENT:
     value: 'CHANGE'
+
+  _handle_action:
+    value: (action) ->
+      if action.is_a MotionKeyAction
+        console.log "Motion detected: #{action.motion()}"

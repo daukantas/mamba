@@ -1,4 +1,4 @@
-{CellStore} = require './stores'
+{CellStore, ControlStore} = require './stores'
 {KeySender, KEYCODES} = require './actions'
 Grid = require './views'
 
@@ -11,6 +11,7 @@ if $?
   .initialize(jQuery: $)
   .listen(KEYCODES, prevent_default: true)
 
+  ControlStore.initialize()
   CellStore.initialize()
 
   Grid

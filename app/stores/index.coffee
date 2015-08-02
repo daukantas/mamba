@@ -1,4 +1,5 @@
 CellStore = require './cells'
+ControlStore = require './controls'
 
 
-module.exports = {CellStore}
+module.exports = {CellStore, ControlStore}
