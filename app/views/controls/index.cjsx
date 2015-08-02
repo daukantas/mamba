@@ -23,11 +23,10 @@ Key = React.createClass
     </ReactCSSTransitionGroup>
 
 
-Controls = React.createClass
+ArrowKeys = React.createClass
 
   render: ->
-    <div className="key-container">
-      <Key pressed={true} keytype={Keys.R}></Key>
+    <div className="arrow-keys">
       <Key pressed={true} keytype={Keys.LEFT}></Key>
       <Key pressed={true} keytype={Keys.UP}></Key>
       <Key pressed={true} keytype={Keys.RIGHT}></Key>
@@ -35,16 +34,39 @@ Controls = React.createClass
     </div>
 
 
-__CONTROLS__ = null
+RestartKey = React.createClass
+
+  render: ->
+    <Key pressed={false} keytype={Keys.R}></Key>
+
+
+__RestartKey__ = null
+__ArrowKeys__ = null
 
 module.exports =
 
-  mount: (@_html_element) ->
+  mount_restart_key: (@_restart_key_node) ->
     @
 
-  render: (props) ->
-    if !@_html_element?
-      throw new Error("Set HTMLElement html_element before rendering!")
-    else if __CONTROLS__?
-      throw new Error("Controls has already been rendered!")
-    __CONTROLS__ = React.render <Controls {... props}/>, @_html_element
+  mount_arrow_keys: (@_arrow_keys_node) ->
+    @
+
+  render_arrow_keys: ->
+    if !@_arrow_keys_node?
+      throw new Error("mount_arrow_keys before rendering!")
+    else if __ArrowKeys__?
+      throw new Error("ArrowKeys has already been rendered!")
+    __ArrowKeys__ = React.render <ArrowKeys/>, @_arrow_keys_node
+    @
+
+  render_restart_key: ->
+    if !@_restart_key_node?
+      throw new Error("mount_restart_key before rendering!")
+    else if __RestartKey__?
+      throw new Error("RestartKey has already been rendered!")
+    __RestartKey__ = React.render <RestartKey/>, @_restart_key_node
+    @
+
+  render_keys: ->
+    @render_restart_key()
+    @render_arrow_keys()
