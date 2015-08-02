@@ -70,6 +70,11 @@ module.exports = Object.create null,
     value: ->
       ITEMS += 1
 
+  items_left:
+    enumerable: true
+    value: ->
+      ITEMS
+
   over:
     enumerable: true
     value: ->

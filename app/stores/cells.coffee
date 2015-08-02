@@ -31,6 +31,11 @@ CellStore = Object.create EmittingStore,
     value: (listener) ->
       @addListener @_CHANGE_EVENT, listener
 
+  items_left:
+    enumerable: true
+    value: ->
+      GAME.items_left()
+
   _CHANGE_EVENT:
     value: 'change'
 
