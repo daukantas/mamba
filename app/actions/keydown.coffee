@@ -21,9 +21,9 @@ class KeyDownAction extends Action
   @post_of_hook: (payload) ->
     {keycode} = payload
 
-    if MotionKeyAction.KEYCODES.has keycode
+    if MotionKeyAction.KEYCODE_MAP.has keycode
       new MotionKeyAction(payload)
-    else if MethodKeyAction.KEYCODES.has keycode
+    else if MethodKeyAction.KEYCODE_MAP.has keycode
       new MethodKeyAction(payload)
     else
       throw new Error "Unsupported keycode: #{keycode}; try #{@KEYCODES}"
