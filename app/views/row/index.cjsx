@@ -26,10 +26,7 @@ Row = React.createClass
           mutative_cells.set col, new_cell
 
   shouldComponentUpdate: (next_props, next_state) ->
-    if next_props.reset
-      true
-    else
-      (next_state.cells isnt @state.cells)
+    next_state.cells isnt @state.cells
 
   render: ->
     row = @props.index
