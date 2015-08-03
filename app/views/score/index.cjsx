@@ -1,5 +1,4 @@
 React = require 'react'
-Row = require '../row'
 
 {LEVEL} = require '../../settings'
 {GridEvolver} = require '../../stores'
@@ -7,25 +6,25 @@ Row = require '../row'
 
 Score = React.createClass
 
-  getInitialProps: ->
-    max: LEVEL.rounds_to_win
-
   getInitialState: ->
-    score: 0
+    current_score: 0, desired_score: LEVEL.max_score()
 
-  componentDidMount: ->
-    GridEvolver.add_score_listener @_on_change
+  componentWillMount: ->
+    GridEvolver.add_score_listener @_on_score
 
-  _on_change: (score) ->
-    @setState {score}
+  _on_score: (ev) ->
+    if ev.increment
+      @setState current_score: (@state.current_score + 1)
+    else if ev.reset
+      @setState current_score: 0
 
   render: ->
     <div className="score">
-      {@state.score}
+      {@state.current_score}/{@state.desired_score}
     </div>
 
 
-__Grid__ = null
+__Score__ = null
 
 
 module.exports = Object.create null,
@@ -44,7 +43,7 @@ module.exports = Object.create null,
     enumerable: true
     value: ->
       if !@_html_element?
-        throw new Error("Set HTMLElement html_element before rendering!")
-      else if __Grid__?
-        throw new Error("Grid's already been rendered!")
-      __Grid__ = React.render <Grid />, @_html_element
+        throw new Error("Mount HTMLElement before rendering!")
+      else if __Score__?
+        throw new Error("Score's already been rendered!")
+      __Score__ = React.render <Score />, @_html_element

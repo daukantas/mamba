@@ -65,8 +65,8 @@ GridEvolver = Object.create EmittingStore,
       @emit(@_CHANGE_EVENT, cellmap: LIVE_CELLS)
 
   _emit_score:
-    value: ->
-      @emit(@_SCORE_EVENT, score: 0)
+    value: (ev) ->
+      @emit(@_SCORE_EVENT, ev)
 
   _tick:
     value: ->
@@ -110,6 +110,7 @@ GridEvolver = Object.create EmittingStore,
           GAME.add_item()
 
       unless options.round
+        @_emit_score(reset: true)
         @_emit_cells()
 
   _finish:
@@ -146,6 +147,7 @@ GridEvolver = Object.create EmittingStore,
               mutable_cells.set xy, Cell.SNAKE
             else
               if previous_cell is Cell.ITEM
+                @_emit_score(increment: true)
                 mutable_cells.set xy, Cell.SNAKE
               GAME.track_collision previous_cell, xy
           else if previous_cell is Cell.SNAKE

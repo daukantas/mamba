@@ -1,11 +1,12 @@
 {GridEvolver, PressedKeys} = require './stores'
 {KeySender, KEYCODES} = require './actions'
-{Grid, Keys} = require './views'
+{Grid, Keys, Score} = require './views'
 
 $ = window.$
 
 if $?
   GRID = $('#mamba')[0]
+  SCOREBOARD = $('#scoreboard')[0]
   ARROW_KEYS = $('#arrow-keys-container')[0]
   RESTART_KEY = $('#restart-key-container')[0]
 
@@ -17,6 +18,7 @@ if $?
   GridEvolver.initialize()
 
   Grid.mount(GRID).render()
+  Score.mount(SCOREBOARD).render()
 
   Keys
   .mount_arrow_keys(ARROW_KEYS)
