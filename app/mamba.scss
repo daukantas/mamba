@@ -18,7 +18,7 @@ body {
 #title {
   font-weight: 700;
   font-size: 4em;
-  margin-bottom: 15px;;
+  margin-bottom: 15px;
 }
 
 #sidebar {
@@ -29,55 +29,54 @@ body {
   position: relative;
 
   #controls {
-
     position: relative;
-    height: 400px;
-
-    > .title {
-      font-size: 3em;
-    }
+    height: 500px;
 
     > div {
-      font-size: 2em;
-    }
-
-    .labels {
-
-      > div {
-        position: absolute;
-      }
-
-      div:nth-of-type(1) {
-        top: 50px;
-      }
-
-      div:nth-of-type(2) {
-        top: 100px;
-      }
-    }
-
-    #keys {
       position: absolute;
-      top: 200px;
-      left: 15px;
     }
 
-  }
+    > [class$="-label"] {
+      font-size: 1em;
+    }
 
-  a {
-    color: lightblue;
-    font-weight: 700;
-  }
+    > .restart-key-label {
+      top: 30px;
+      right: 10px;
+    }
+    
+    > #restart-key-container {
+      top: 15px;
+      left: 0;
+    }
 
-  p {
-    margin-top: 0;
-    margin-bottom: 20px;
+    > .arrow-keys-label {
+      top: 145px;
+      width: 100%;
+      text-align: center;
+    }
+
+    > #arrow-keys-container {
+      top: 160px;
+    }
+
   }
 
   .blurb {
     position: absolute;
+    font-style: italic;
     bottom: 10px;
     font-size: 16px;
+
+    a {
+      color: lightblue;
+      font-weight: 700;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
   }
 }
 
