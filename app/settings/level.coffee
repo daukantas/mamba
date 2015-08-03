@@ -8,7 +8,7 @@ GRID = require './grid'
 LEVEL = Immutable.Map [
   [
     Cells.WALL
-    20
+    15
   ]
   [
     Cells.ITEM
@@ -27,7 +27,7 @@ module.exports = Object.create null,
 
   resets_to_win:
     enumerable: true
-    value: 3
+    value: 5
 
   random_reset:
     enumerable: true

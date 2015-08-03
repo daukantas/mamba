@@ -2,7 +2,7 @@ React = require 'react'
 Keys = require './types'
 Key = require './key'
 Deactivates = require './deactivates'
-{KeysStore} = require '../../stores'
+{PressedKeys} = require '../../stores'
 
 
 RestartKey = React.createClass
@@ -13,7 +13,7 @@ RestartKey = React.createClass
     active: false
 
   componentWillMount: ->
-    KeysStore.add_change_listener ({keycode}) =>
+    PressedKeys.add_change_listener ({keycode}) =>
       @_on_change({keycode})
 
   _should_deactivate: ->

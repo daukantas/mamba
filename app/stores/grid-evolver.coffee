@@ -14,7 +14,7 @@ LIVE_CELLS = Immutable.OrderedMap().withMutations (mutable_cells) ->
     for col in range
       mutable_cells.set XY.value_of(row, col), null
 
-CellStore = Object.create EmittingStore,
+GridEvolver = Object.create EmittingStore,
 
   _post_initialize_hook:
     enumerable: false
@@ -156,4 +156,4 @@ CellStore = Object.create EmittingStore,
       Ticker.stop => @_reset()
 
 
-module.exports = CellStore
+module.exports = GridEvolver

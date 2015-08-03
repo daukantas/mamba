@@ -1,4 +1,4 @@
-{CellStore, KeysStore} = require './stores'
+{GridEvolver, PressedKeys} = require './stores'
 {KeySender, KEYCODES} = require './actions'
 {Grid, Keys} = require './views'
 
@@ -13,8 +13,8 @@ if $?
   .initialize(jQuery: $)
   .listen(KEYCODES, prevent_default: true)
 
-  KeysStore.initialize()
-  CellStore.initialize()
+  PressedKeys.initialize()
+  GridEvolver.initialize()
 
   Grid.mount(GRID).render()
 
