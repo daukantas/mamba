@@ -10,6 +10,7 @@ Key = React.createClass
   propTypes:
     pressed: React.PropTypes.bool.isRequired
     keytype: React.PropTypes.oneOf(_.values Keys).isRequired
+    label: React.PropTypes.string
 
   render: ->
     [keyname_class, pressed_class] = [
@@ -18,6 +19,9 @@ Key = React.createClass
     ]
 
     <ReactCSSTransitionGroup transitionName='fading-in' transitionAppear={true}>
+      {if @props.label?
+        <div className="controls-key-label #{keyname_class}">{@props.label}</div>
+      }
       <div className="controls-key #{keyname_class} #{pressed_class}">
         {@props.keytype.symbol()}
       </div>
