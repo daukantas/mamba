@@ -1,3 +1,3 @@
 module.exports =
 
-  interval: 100
+  interval: 85
