@@ -18,9 +18,14 @@ Score = React.createClass
     else if ev.reset
       @setState current_score: 0
 
+  _pad_score: (score) ->
+    (score < 10 && "0#{score}") || "#{score}"
+
   render: ->
     <div className="score">
-      {@state.current_score}/{@state.desired_score}
+      <span className="score-current">{@_pad_score(@state.current_score)}</span>
+      <span className="score-slash">/</span>
+      <span className="score-desired">{@state.desired_score}</span>
     </div>
 
 
