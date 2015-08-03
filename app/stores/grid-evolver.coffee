@@ -14,7 +14,7 @@ LIVE_CELLS = Immutable.OrderedMap().withMutations (mutable_cells) ->
     for col in range
       mutable_cells.set XY.value_of(row, col), null
 
-CellStore = Object.create EmittingStore,
+GridEvolver = Object.create EmittingStore,
 
   _post_initialize_hook:
     enumerable: false
@@ -26,18 +26,21 @@ CellStore = Object.create EmittingStore,
     value: ->
       LIVE_CELLS
 
-  add_change_listener:
+  add_cells_listener:
     enumerable: true
     value: (listener) ->
       @addListener @_CHANGE_EVENT, listener
 
-  items_left:
+  add_score_listener:
     enumerable: true
-    value: ->
-      GAME.items_left()
+    value: (listener) ->
+      @addListener @_SCORE_EVENT, listener
 
   _CHANGE_EVENT:
     value: 'change'
+
+  _SCORE_EVENT:
+    value: 'score'
 
   _METHOD_KEYMAP:
     value: Immutable.Map [
@@ -61,6 +64,10 @@ CellStore = Object.create EmittingStore,
     value: ->
       @emit(@_CHANGE_EVENT, cellmap: LIVE_CELLS)
 
+  _emit_score:
+    value: (ev) ->
+      @emit(@_SCORE_EVENT, ev)
+
   _tick:
     value: ->
       LAST_CELLS = LIVE_CELLS
@@ -69,7 +76,7 @@ CellStore = Object.create EmittingStore,
       if GAME.out_of_bounds()
         GAME.track_collision Cell.WALL
       if GAME.should_reset_round()
-        @_reset(game: false)
+        @_reset(round: true)
         Ticker.tick => @_tick()
       else if GAME.over()
         @_finish()
@@ -79,11 +86,11 @@ CellStore = Object.create EmittingStore,
       @_emit_cells()
 
   _reset:
-    value: (options = {game: true}) ->
-      if options.game
-        GAME.reset()
-      else
+    value: (options = {round: false}) ->
+      if options.round
         GAME.reset_round()
+      else
+        GAME.reset()
 
       # clear out cells that aren't Cell.SNAKE, in
       # preparation for random_reset
@@ -102,7 +109,8 @@ CellStore = Object.create EmittingStore,
         if cell is Cell.ITEM
           GAME.add_item()
 
-      if options.game
+      unless options.round
+        @_emit_score(reset: true)
         @_emit_cells()
 
   _finish:
@@ -139,6 +147,7 @@ CellStore = Object.create EmittingStore,
               mutable_cells.set xy, Cell.SNAKE
             else
               if previous_cell is Cell.ITEM
+                @_emit_score(increment: true)
                 mutable_cells.set xy, Cell.SNAKE
               GAME.track_collision previous_cell, xy
           else if previous_cell is Cell.SNAKE
@@ -149,4 +158,4 @@ CellStore = Object.create EmittingStore,
       Ticker.stop => @_reset()
 
 
-module.exports = CellStore
+module.exports = GridEvolver

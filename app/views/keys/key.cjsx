@@ -17,7 +17,7 @@ Key = React.createClass
       (@props.pressed && 'pressed') || ''
     ]
 
-    <ReactCSSTransitionGroup transitionName='row' transitionAppear={true}>
+    <ReactCSSTransitionGroup transitionName='fading-in' transitionAppear={true}>
       <div className="controls-key #{keyname_class} #{pressed_class}">
         {@props.keytype.symbol()}
       </div>

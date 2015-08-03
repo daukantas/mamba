@@ -2,19 +2,19 @@ React = require 'react'
 Row = require '../row'
 
 {GRID} = require '../../settings'
-{CellStore} = require '../../stores'
+{GridEvolver} = require '../../stores'
 
 
 Grid = React.createClass
 
   getInitialState: ->
-    cellmap: CellStore.cellmap()
+    cellmap: GridEvolver.cellmap()
 
   componentDidMount: ->
-    CellStore.add_change_listener @_on_change
+    GridEvolver.add_cells_listener @_on_change
 
   _on_change: ->
-    @setState(cellmap: CellStore.cellmap())
+    @setState cellmap: GridEvolver.cellmap()
 
   _get_row_cells: (row) ->
     @state

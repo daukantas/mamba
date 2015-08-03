@@ -1,13 +1,9 @@
 @import "../row/row";
-@import "../../mamba";
+@import "../../index";
 
 $cell_side: $row_height;
 
-[class*="-cell"] {
-  transition: background-color .15s ease-in;
-}
-
-@mixin cell($background_color) {
+@mixin cell($background_color, $fade: true) {
   height: $cell_side;
   width: $cell_side;
 
@@ -15,6 +11,10 @@ $cell_side: $row_height;
   border: 1px solid black;
   border-radius: $border_radius;
   background-color: $background_color;
+
+  @if $fade == true {
+    transition: background-color .3s ease-in;
+  }
 }
 
 .item-cell {
@@ -26,7 +26,7 @@ $cell_side: $row_height;
 }
 
 .snake-cell {
-  @include cell($primary-color);
+  @include cell($primary-color, false);
 }
 
 .wall-cell {

@@ -110,7 +110,7 @@ module.exports = Object.create null,
     value: ->
       if ITEMS is 0
         NUM_WINS += 1
-        if NUM_WINS is LEVEL.resets_to_win
+        if NUM_WINS is LEVEL.rounds_to_win
           STATE = STATES.success
         else
           STATE = STATES.reset

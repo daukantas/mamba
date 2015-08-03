@@ -5,10 +5,10 @@ Random = require '../utility/random'  # can't require utility directly :(
 GRID = require './grid'
 
 
-LEVEL = Immutable.Map [
+CELL_QUANTITIES= Immutable.Map [
   [
     Cells.WALL
-    20
+    15
   ]
   [
     Cells.ITEM
@@ -16,6 +16,7 @@ LEVEL = Immutable.Map [
   ]
 ]
 
+# Helper map for random_reset algorithm
 cellcodes = Immutable.Map [
   [Cells.VOID, 0]
   [Cells.WALL, 1]
@@ -25,9 +26,14 @@ cellcodes = Immutable.Map [
 
 module.exports = Object.create null,
 
-  resets_to_win:
+  rounds_to_win:
     enumerable: true
     value: 3
+
+  max_score:
+    enumerable: true
+    value: ->
+      (CELL_QUANTITIES.get Cells.ITEM) * @rounds_to_win
 
   random_reset:
     enumerable: true
@@ -40,8 +46,8 @@ module.exports = Object.create null,
         )
         .map((entry) -> entry[0]))
 
-      num_walls = LEVEL.get Cells.WALL
-      num_items = LEVEL.get Cells.ITEM
+      num_walls = CELL_QUANTITIES.get Cells.WALL
+      num_items = CELL_QUANTITIES.get Cells.ITEM
       num_voids = valid_xys.size - num_walls - num_items
 
       # Max size of this is (GRID.dimension - 1) squared; ~< 900.

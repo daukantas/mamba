@@ -4,7 +4,7 @@ Immutable = require 'immutable'
 Keys = require './types'
 Key = require './key'
 Deactivates = require './deactivates'
-{KeysStore} = require '../../stores'
+{PressedKeys} = require '../../stores'
 
 
 ArrowKeys = React.createClass
@@ -19,7 +19,7 @@ ArrowKeys = React.createClass
      [Keys.DOWN, false]
     ]
 
-    KeysStore.add_change_listener ({keycode}) =>
+    PressedKeys.add_change_listener ({keycode}) =>
       @_on_change({keycode})
 
   shouldComponentUpdate: (__, next_state) ->

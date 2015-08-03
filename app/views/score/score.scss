@@ -1,0 +1,48 @@
+@import "../../index";
+
+
+.score {
+  position: relative;
+  height: 100px;
+  width: 195px;
+}
+
+@mixin score-character($font-size: 4.5em, $top: 15px) {
+  display: inline-block;
+
+  position: absolute;
+  top: $top;
+
+  font-size: $font-size;
+  font-weight: bold;
+
+  color: $primary-color;
+
+  -webkit-transition: color .5s ease-in;
+  -moz-transition: color .5s ease-in;
+  -ms-transition: color .5s ease-in;
+  -o-transition: color .5s ease-in;
+  transition: color .5s ease-in;
+
+  &.scored {
+    color: green;
+  }
+}
+
+.score-current {
+  @include score-character();
+  left: 0;
+  margin: auto 0;
+}
+
+.score-desired {
+  @include score-character();
+  right: 0;
+  margin: auto 0;
+}
+
+.score-slash {
+  @include score-character($font-size: 5em, $top: 10px);
+  left: 75px;
+  margin: auto 12px;
+}
