@@ -8,29 +8,20 @@ Row = require '../row'
 Score = React.createClass
 
   getInitialProps: ->
-    max_score: LEVEL.rounds_to_win
+    max: LEVEL.rounds_to_win
 
   getInitialState: ->
-    cellmap: GridEvolver.cellmap()
+    score: 0
 
   componentDidMount: ->
-    GridEvolver.add_change_listener @_on_change
+    GridEvolver.add_score_listener @_on_change
 
-  _on_change: ->
-    @setState(cellmap: GridEvolver.cellmap())
-
-  _get_row_cells: (row) ->
-    @state
-    .cellmap
-    .filter (cell, xy) ->
-      xy.x is row
-    .valueSeq()
-    .toJS()
+  _on_change: (score) ->
+    @setState {score}
 
   render: ->
-    <div className="grid">
-      {for row in GRID.range()
-        <Row cells={@_get_row_cells(row)} index={row}key={"row-#{row}"} />}
+    <div className="score">
+      {@state.score}
     </div>
 
 
