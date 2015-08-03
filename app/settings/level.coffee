@@ -25,7 +25,7 @@ cellcodes = Immutable.Map [
 
 module.exports = Object.create null,
 
-  resets_to_win:
+  rounds_to_win:
     enumerable: true
     value: 5
 
