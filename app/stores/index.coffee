@@ -1,5 +1,5 @@
-CellStore = require './cells'
-KeysStore = require './keys'
+GridEvolver = require './grid-evolver'
+PressedKeys = require './pressed-keys'
 
 
-module.exports = {CellStore, KeysStore}
+module.exports = {GridEvolver, PressedKeys}

@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 @import "../../mamba";
 
 $start_opacity: 0;
 $finish_opacity: 1;
 
+=======
+@import "../../index";
+>>>>>>> master
 
 $unpressed_box_shadow: 0 5px darkgreen;
 $depressed_box_shadow: 0 3px darkgreen;
@@ -47,6 +51,14 @@ $space_between_keys: 10px;
   background-color: $primary-color;
   color: black;
 
+<<<<<<< HEAD
+=======
+  // Vertically center text in Firefox
+  // http://stackoverflow.com/a/10793589/2419669
+  display: table-cell;
+  vertical-align: middle;
+
+>>>>>>> master
   font-size: 2.5em;
   font-weight: bold;
 
@@ -56,7 +68,10 @@ $space_between_keys: 10px;
   text-align: center;
 
   border-radius: 5px;
+<<<<<<< HEAD
   display: block;
+=======
+>>>>>>> master
   box-shadow: $unpressed_box_shadow;
 
   &.pressed {
@@ -64,6 +79,7 @@ $space_between_keys: 10px;
     box-shadow: $depressed_box_shadow;
     transform: translateY(3px);
   }
+<<<<<<< HEAD
 }
 
 .controls-key-enter, .controls-key-appear {
@@ -77,4 +93,6 @@ $space_between_keys: 10px;
 
 .controls-key-appear.controls-key-appear-active, .controls-key-enter.row-enter-active {
   opacity: $finish_opacity;
+=======
+>>>>>>> master
 }

@@ -1,21 +1,22 @@
 Snake = require '../snake'
-{GRID} = require '../settings'
+{GRID, LEVEL} = require '../settings'
 Cell = require '../views/cell'
 XY = require '../utility/xy'  # can't require utility
 
 Immutable = require 'immutable'
 
-GAME_OVER_STATES =
+STATES =
 
-  failure:
-    success: false
+  reset: 'reset'
 
-  success:
-    success: true
+  failure: 'failure'
+
+  success: 'success'
 
 SNAKE = null
+STATE = null
 ITEMS = 0
-GAME_OVER = null
+NUM_WINS = 0
 
 module.exports = Object.create null,
   ###
@@ -25,21 +26,27 @@ module.exports = Object.create null,
     manipulating and reading game state, and lives outside the context
     of Actions.
 
-    This isn't a Flux Store; it's just a helper class.
+    This isn't a Flux Store; it's just a bookkeeping helper class.
   ###
 
   reset:
     enumerable: true
     value: ->
       SNAKE = Snake.at_position XY.random(GRID.dimension - 1)
-      GAME_OVER = null
+      NUM_WINS = 0
+      @reset_round()
+
+  reset_round:
+    enumerable: true
+    value: ->
+      STATE = null
       ITEMS = 0
 
-  collision:
+  collides_with:
     value: (xy) ->
       SNAKE.meets xy
 
-  collide:
+  track_collision:
     value: (target, xy) ->
       if target is Cell.WALL
         @_fail()
@@ -78,13 +85,18 @@ module.exports = Object.create null,
   over:
     enumerable: true
     value: ->
-      GAME_OVER?
+      STATE? && STATE isnt STATES.reset
+
+  should_reset_round:
+    enumerable: true
+    value: ->
+      STATE? && STATE is STATES.reset
 
   failed:
     enumerable: true
     value: ->
-      if GAME_OVER?
-        not GAME_OVER.success
+      if STATE?
+        STATE is STATES.failure
       else
         false
 
@@ -97,9 +109,13 @@ module.exports = Object.create null,
   _maybe_win:
     value: ->
       if ITEMS is 0
-        GAME_OVER = GAME_OVER_STATES.success
+        NUM_WINS += 1
+        if NUM_WINS is LEVEL.rounds_to_win
+          STATE = STATES.success
+        else
+          STATE = STATES.reset
 
   _fail:
     value: ->
       SNAKE.set_motion(null)
-      GAME_OVER = GAME_OVER_STATES.failure
+      STATE = STATES.failure

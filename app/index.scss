@@ -18,57 +18,63 @@ body {
 #title {
   font-weight: 700;
   font-size: 4em;
-  font-style: italic;
   margin-bottom: 15px;
   margin-left: 20px;
 }
 
-#sidebar {
+$sidebar_width: 200px;
+
+.sidebar {
   text-align: left;
   float: right;
-  width: 200px;
+  width: $sidebar_width;
   height: 630px;
   position: relative;
 
-  #controls {
-    position: relative;
-    height: 500px;
+  .scoreboard-container {
+    position: absolute;
+    width: $sidebar_width;
+    height: 100px;
+    top: 20px;
+  }
 
-    > div {
-      position: absolute;
-    }
+  .controls {
+    position: absolute;
+    width: $sidebar_width;
+    height: 375px;
+    top: 130px;
 
-    > [class$="-label"] {
-      font-size: 1em;
-      font-style: italic;
-      font-weight: bold;
-    }
+    .controls-container {
+      position: relative;
+      width: $sidebar_width;
 
-    > .restart-key-label {
-      top: 30px;
-      right: 10px;
-    }
-    
-    > #restart-key-container {
-      top: 15px;
-      left: 0;
-    }
+      > div {
+        position: absolute;
+      }
 
-    > .arrow-keys-label {
-      top: 125px;
-      width: 100%;
-      text-align: center;
-    }
+      > [class$="-label"] {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
 
-    > #arrow-keys-container {
-      top: 140px;
-    }
+      > .restart-key-label {
+        top: 70px;
+        left: 90px;
+      }
 
+      > #restart-key-container {
+        top: 60px;
+        left: 10px;
+      }
+
+      > #arrow-keys-container {
+        top: 160px;
+      }
+    }
   }
 
   .blurb {
     position: absolute;
-    font-style: italic;
     bottom: 10px;
     font-size: 16px;
 
