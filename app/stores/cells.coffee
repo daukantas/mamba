@@ -31,6 +31,11 @@ CellStore = Object.create EmittingStore,
     value: (listener) ->
       @addListener @_CHANGE_EVENT, listener
 
+  add_score_listener:
+    enumerable: true
+    value: (listener) ->
+      @addListener @_SCORE_EVENT, listener
+
   items_left:
     enumerable: true
     value: ->
@@ -38,6 +43,9 @@ CellStore = Object.create EmittingStore,
 
   _CHANGE_EVENT:
     value: 'change'
+
+  _SCORE_EVENT:
+    value: 'score'
 
   _METHOD_KEYMAP:
     value: Immutable.Map [
