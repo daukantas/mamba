@@ -6,10 +6,6 @@ Cell = require '../cell'
 Immutable = require 'immutable'
 
 Row = React.createClass
-  ###
-    Has an Immutable.List of Cells in @state, set from @props.
-    Immutability is used for faster change-tracking in shouldComponentUpdate.
-  ###
 
   propTypes:
     cells: React.PropTypes.array.isRequired
@@ -32,7 +28,7 @@ Row = React.createClass
     row = @props.index
     <ReactCSSTransitionGroup transitionName='fading-in' transitionAppear={true}>
       <div className="row">
-          {@state.cells.map (cell, col) ->
+          {@state.cells.toSeq().map (cell, col) ->
             (<Cell key="cell-#{row}-#{col}" content={cell}/>)}
       </div>
     </ReactCSSTransitionGroup>

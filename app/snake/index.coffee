@@ -11,7 +11,6 @@ class Snake
 
   constructor: (xy_list) ->
     @_this_frame = Immutable.OrderedSet(xy_list)
-    @_last_frame = null
     @_length = 1
     @
 
@@ -34,7 +33,6 @@ class Snake
     if @moving()
       new_front = XY.add(@_this_frame.first(), @_motion)
       new_frame = @_this_frame.take(@_length - 1)
-      @_last_frame = @_this_frame
       @_this_frame = Immutable.OrderedSet.of(new_front, (new_frame.toJS())...)
 
   length: ->
@@ -45,9 +43,6 @@ class Snake
 
   meets: (xy) ->
     @_this_frame.has xy
-
-  rewind: ->
-    @_this_frame = (@_last_frame? && @_last_frame) || @_this_frame
 
   moving: ->
     @_motion?

@@ -13,6 +13,7 @@ LIVE_CELLS = Immutable.OrderedMap().withMutations (mutable_cells) ->
   for row in range
     for col in range
       mutable_cells.set XY.value_of(row, col), null
+  undefined
 
 GridEvolver = Object.create EmittingStore,
 
