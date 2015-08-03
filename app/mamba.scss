@@ -38,6 +38,8 @@ body {
 
     > [class$="-label"] {
       font-size: 1em;
+      font-style: italic;
+      font-weight: bold;
     }
 
     > .restart-key-label {
@@ -51,13 +53,13 @@ body {
     }
 
     > .arrow-keys-label {
-      top: 145px;
+      top: 125px;
       width: 100%;
       text-align: center;
     }
 
     > #arrow-keys-container {
-      top: 160px;
+      top: 140px;
     }
 
   }

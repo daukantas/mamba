@@ -1,5 +1,8 @@
 @import "../../mamba";
 
+$start_opacity: 0;
+$finish_opacity: 1;
+
 
 $unpressed_box_shadow: 0 5px darkgreen;
 $depressed_box_shadow: 0 3px darkgreen;
@@ -14,26 +17,26 @@ $space_between_keys: 10px;
   width: ($key_size * 3) + ($space_between_keys * 4);
   height:($key_size * 2) + ($space_between_keys * 3);
 
-  > .controls-key {
+  .controls-key {
     position: absolute;
   }
 
-  > .left-key {
+  .left-key {
     bottom: 0;
     left: $space_between_keys;
   }
 
-  > .up-key {
+  .up-key {
     left: $key_size + (2 * $space_between_keys);
     bottom: $key_size + $space_between_keys;
   }
 
-  > .down-key {
+  .down-key {
     bottom: 0;
     left: $key_size + (2 * $space_between_keys);
   }
 
-  > .right-key {
+  .right-key {
     bottom: 0;
     left: (2 * $key_size) + (3 * $space_between_keys);
   }
@@ -61,4 +64,17 @@ $space_between_keys: 10px;
     box-shadow: $depressed_box_shadow;
     transform: translateY(3px);
   }
+}
+
+.controls-key-enter, .controls-key-appear {
+  opacity: $start_opacity;
+}
+
+
+.controls-key-appear, .controls-key-enter.controls-key-enter-active {
+  transition: opacity .5s ease-in;
+}
+
+.controls-key-appear.controls-key-appear-active, .controls-key-enter.row-enter-active {
+  opacity: $finish_opacity;
 }
