@@ -29,11 +29,6 @@ module.exports = Object.create null,
     enumerable: true
     value: 3
 
-  ###
-    Algorithm to re-shuffle a grid.
-
-    It sucks because it's uses maximally sizes arrays, I
-  ###
   random_reset:
     enumerable: true
     value: (immutable_cellmap) ->
