@@ -92,7 +92,7 @@ CellStore = Object.create EmittingStore,
       LIVE_CELLS = LEVEL.random_reset LIVE_CELLS
 
       LIVE_CELLS.entrySeq().forEach (entry) ->
-        [cell, __] = entry
+        [__, cell] = entry
         if cell is Cell.ITEM
           GAME.add_item()
 
