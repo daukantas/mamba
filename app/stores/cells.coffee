@@ -80,7 +80,10 @@ CellStore = Object.create EmittingStore,
       GAME.reset()
 
       LAST_CELLS = null
-      LIVE_CELLS = LEVEL.reset(LIVE_CELLS)
+      LIVE_CELLS = LEVEL.reset @_batch_mutate (mutable_cells) ->
+        mutable_cells.forEach (cell, xy) ->
+          if GAME.collision xy
+            mutable_cells.set xy, Cell.SNAKE
 
       LIVE_CELLS.entrySeq().forEach (entry) ->
         [cell, __] = entry

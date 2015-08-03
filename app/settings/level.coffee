@@ -29,7 +29,7 @@ module.exports =
   ###
     Algorithm to re-shuffle a grid.
 
-    It sucks because it's memory-
+    It sucks because it's uses maximally sizes arrays, I
   ###
   reset: (immutable_cellmap) ->
     valid_xys = Immutable.OrderedSet(immutable_cellmap
@@ -59,13 +59,7 @@ module.exports =
       mutable_cells.forEach (cell, xy) ->
         if valid_xys.has xy
           profile_index = ((GRID.dimension - 1) * xy.x) + xy.y
-
-          new_cell = switch grid_profile[profile_index]
-            when 0 then Cells.VOID
-            when 1 then Cells.WALL
-            when 2 then Cells.ITEM
-
-          mutable_cells.set xy, new_cell
+          mutable_cells.set xy, cellcodes.keyOf grid_profile[profile_index]
         else
           mutable_cells.set xy, Cells.SNAKE
 
