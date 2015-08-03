@@ -12,7 +12,7 @@ CELL_QUANTITIES= Immutable.Map [
   ]
   [
     Cells.ITEM
-    5
+    10
   ]
 ]
 
@@ -43,7 +43,7 @@ module.exports = Object.create null,
           if cell isnt Cells.SNAKE
             mutable_cells.set xy, Cells.VOID
 
-      will_refresh = Immutable.OrderedMap(voided_cells
+      to_repopulate = Immutable.OrderedMap(voided_cells
         .entrySeq()
         .filter((entry) ->
           [xy, cell] = entry
@@ -53,7 +53,10 @@ module.exports = Object.create null,
 
       num_walls = CELL_QUANTITIES.get Cells.WALL
       num_items = CELL_QUANTITIES.get Cells.ITEM
-      num_voids = will_refresh.size - num_walls - num_items # TODO: comment on implicit assumption here
+
+      # The sequel reasonably assumes this quantity is > 0; if we
+      # write down them math, it probably more than works out.
+      num_voids = to_repopulate.size - num_walls - num_items
 
       # Max size of this is (GRID.dimension - 1) squared; ~< 900.
       grid_profile = (
@@ -66,18 +69,18 @@ module.exports = Object.create null,
 
       Random.shuffle(grid_profile)
 
-      will_refresh = will_refresh.withMutations (mutable_cells) ->
+      to_repopulate = to_repopulate.withMutations (mutable_cells) ->
         mutable_cells.entrySeq().forEach (entry, index) ->
           [xy, __] = entry
           mutable_cells.set xy, cellcodes.keyOf(grid_profile[index])
 
       new_cellmap = immutable_cellmap.withMutations (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
-          if will_refresh.has xy
-            mutable_cells.set(xy, will_refresh.get(xy))
+          if to_repopulate.has xy
+            mutable_cells.set(xy, to_repopulate.get(xy))
 
       # set up for GC
       grid_profile = null
-      will_refresh = null
+      to_repopulate = null
 
       new_cellmap
