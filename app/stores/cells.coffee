@@ -79,11 +79,17 @@ CellStore = Object.create EmittingStore,
     value: ->
       GAME.reset()
 
-      LAST_CELLS = null
-      LIVE_CELLS = LEVEL.reset @_batch_mutate (mutable_cells) ->
+      # clear out cells that aren't Cell.SNAKE, in
+      # preparation for random_reset
+      @_batch_mutate (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
           if GAME.collision xy
             mutable_cells.set xy, Cell.SNAKE
+          else
+            mutable_cells.set xy, Cell.VOID
+
+      LAST_CELLS = null
+      LIVE_CELLS = LEVEL.random_reset LIVE_CELLS
 
       LIVE_CELLS.entrySeq().forEach (entry) ->
         [cell, __] = entry
@@ -107,6 +113,7 @@ CellStore = Object.create EmittingStore,
 
   _batch_mutate:
     value: (mutator) ->
+      LAST_CELLS = LIVE_CELLS
       LIVE_CELLS = LIVE_CELLS.withMutations mutator
 
   _rewind:

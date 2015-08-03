@@ -8,7 +8,7 @@ GRID = require './grid'
 LEVEL = Immutable.Map [
   [
     Cells.WALL
-    15
+    20
   ]
   [
     Cells.ITEM
@@ -31,7 +31,7 @@ module.exports =
 
     It sucks because it's uses maximally sizes arrays, I
   ###
-  reset: (immutable_cellmap) ->
+  random_reset: (immutable_cellmap) ->
     valid_xys = Immutable.OrderedSet(immutable_cellmap
       .entrySeq()
       .filter((entry) ->
