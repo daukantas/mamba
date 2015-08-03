@@ -6,10 +6,6 @@ Cell = require '../cell'
 Immutable = require 'immutable'
 
 Row = React.createClass
-  ###
-    Has an Immutable.List of Cells in @state, set from @props.
-    Immutability is used for faster change-tracking in shouldComponentUpdate.
-  ###
 
   propTypes:
     cells: React.PropTypes.array.isRequired
