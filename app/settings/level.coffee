@@ -38,17 +38,22 @@ module.exports = Object.create null,
   random_reset:
     enumerable: true
     value: (immutable_cellmap) ->
-      valid_xys = Immutable.OrderedSet(immutable_cellmap
+      voided_cells = immutable_cellmap.withMutations (mutable_cells) ->
+        mutable_cells.forEach (cell, xy) ->
+          if cell isnt Cells.SNAKE
+            mutable_cells.set xy, Cells.VOID
+
+      will_refresh = Immutable.OrderedMap(voided_cells
         .entrySeq()
         .filter((entry) ->
           [xy, cell] = entry
           cell isnt Cells.SNAKE
         )
-        .map((entry) -> entry[0]))
+        .map((entry) -> [entry[0], null]))
 
       num_walls = CELL_QUANTITIES.get Cells.WALL
       num_items = CELL_QUANTITIES.get Cells.ITEM
-      num_voids = valid_xys.size - num_walls - num_items
+      num_voids = will_refresh.size - num_walls - num_items # TODO: comment on implicit assumption here
 
       # Max size of this is (GRID.dimension - 1) squared; ~< 900.
       grid_profile = (
@@ -61,16 +66,18 @@ module.exports = Object.create null,
 
       Random.shuffle(grid_profile)
 
+      will_refresh = will_refresh.withMutations (mutable_cells) ->
+        mutable_cells.entrySeq().forEach (entry, index) ->
+          [xy, __] = entry
+          mutable_cells.set xy, cellcodes.keyOf(grid_profile[index])
+
       new_cellmap = immutable_cellmap.withMutations (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
-          if valid_xys.has xy
-            profile_index = ((GRID.dimension - 1) * xy.x) + xy.y
-            mutable_cells.set xy, cellcodes.keyOf grid_profile[profile_index]
-          else
-            mutable_cells.set xy, Cells.SNAKE
+          if will_refresh.has xy
+            mutable_cells.set(xy, will_refresh.get(xy))
 
       # set up for GC
       grid_profile = null
-      valid_xys = null
+      will_refresh = null
 
       new_cellmap

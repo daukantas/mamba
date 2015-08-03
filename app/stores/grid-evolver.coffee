@@ -71,7 +71,7 @@ GridEvolver = Object.create EmittingStore,
   _tick:
     value: ->
       LAST_CELLS = LIVE_CELLS
-      @_update()
+      @_evolve()
 
       if GAME.out_of_bounds()
         GAME.track_collision Cell.WALL
@@ -94,7 +94,7 @@ GridEvolver = Object.create EmittingStore,
 
       # clear out cells that aren't Cell.SNAKE, in
       # preparation for random_reset
-      @_batch_mutate (mutable_cells) ->
+      @_batch_evolve (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
           if GAME.collides_with xy
             mutable_cells.set xy, Cell.SNAKE
@@ -121,12 +121,12 @@ GridEvolver = Object.create EmittingStore,
       else
         transform_to_cell = Cell.ITEM
 
-      @_batch_mutate (mutable_cells) ->
+      @_batch_evolve (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
           if cell is Cell.SNAKE
             mutable_cells.set xy, transform_to_cell
 
-  _batch_mutate:
+  _batch_evolve:
     value: (mutator) ->
       LAST_CELLS = LIVE_CELLS
       LIVE_CELLS = LIVE_CELLS.withMutations mutator
@@ -136,11 +136,11 @@ GridEvolver = Object.create EmittingStore,
       LIVE_CELLS = LAST_CELLS
       LAST_CELLS = null
 
-  _update:
+  _evolve:
     value: ->
       GAME.move_snake()
 
-      @_batch_mutate (mutable_cells) =>
+      @_batch_evolve (mutable_cells) =>
         mutable_cells.forEach (previous_cell, xy) =>
           if GAME.collides_with xy
             if previous_cell is Cell.VOID

@@ -42,10 +42,6 @@ module.exports = Object.create null,
       STATE = null
       ITEMS = 0
 
-  collides_with:
-    value: (xy) ->
-      SNAKE.meets xy
-
   track_collision:
     value: (target, xy) ->
       if target is Cell.WALL
@@ -64,6 +60,10 @@ module.exports = Object.create null,
     enumerable: true
     value: ->
       SNAKE.move()
+
+  collides_with:
+    value: (xy) ->
+      SNAKE.meets xy
 
   out_of_bounds:
     enumerable: true
