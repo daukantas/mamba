@@ -6,6 +6,10 @@ $finish_opacity: 1;
 }
 
 .fading-in-appear, .fading-in-enter.fading-in-enter-active {
+  -webkit-transition: opacity .5s ease-in;
+  -moz-transition: opacity .5s ease-in;
+  -ms-transition: opacity .5s ease-in;
+  -o-transition: opacity .5s ease-in;
   transition: opacity .5s ease-in;
 }
 

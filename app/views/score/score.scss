@@ -17,6 +17,16 @@
   font-weight: bold;
 
   color: $primary-color;
+
+  -webkit-transition: color .5s ease-in;
+  -moz-transition: color .5s ease-in;
+  -ms-transition: color .5s ease-in;
+  -o-transition: color .5s ease-in;
+  transition: color .5s ease-in;
+
+  &.scored {
+    color: green;
+  }
 }
 
 .score-current {
