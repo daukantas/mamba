@@ -112,12 +112,12 @@ GridEvolver = Object.create EmittingStore,
       else
         transform_to_cell = Cell.ITEM
 
-      @_batch_mutate (mutable_cells) ->
+      @_evolve (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
           if cell is Cell.SNAKE
             mutable_cells.set xy, transform_to_cell
 
-  _batch_mutate:
+  _evolve:
     value: (mutator) ->
       LAST_CELLS = LIVE_CELLS
       LIVE_CELLS = LIVE_CELLS.withMutations mutator
@@ -131,7 +131,7 @@ GridEvolver = Object.create EmittingStore,
     value: ->
       GAME.move_snake()
 
-      @_batch_mutate (mutable_cells) =>
+      @_evolve (mutable_cells) =>
         mutable_cells.forEach (previous_cell, xy) =>
           if previous_cell is Cell.SNAKE
             if previous_cell is Cell.VOID
