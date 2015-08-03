@@ -26,7 +26,7 @@ GridEvolver = Object.create EmittingStore,
     value: ->
       LIVE_CELLS
 
-  add_change_listener:
+  add_cells_listener:
     enumerable: true
     value: (listener) ->
       @addListener @_CHANGE_EVENT, listener

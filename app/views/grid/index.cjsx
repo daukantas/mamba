@@ -11,10 +11,10 @@ Grid = React.createClass
     cellmap: GridEvolver.cellmap()
 
   componentDidMount: ->
-    GridEvolver.add_change_listener @_on_change
+    GridEvolver.add_cells_listener @_on_change
 
   _on_change: ->
-    @setState(cellmap: GridEvolver.cellmap())
+    @setState cellmap: GridEvolver.cellmap()
 
   _get_row_cells: (row) ->
     @state
