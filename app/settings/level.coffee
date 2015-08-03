@@ -22,8 +22,15 @@ cellcodes = Immutable.Map [
   [Cells.ITEM, 2]
 ]
 
+
 module.exports =
 
+
+  ###
+    Algorithm to re-shuffle a grid.
+
+    It sucks because it's memory-
+  ###
   reset: (immutable_cellmap) ->
     valid_xys = Immutable.OrderedSet(immutable_cellmap
       .entrySeq()
@@ -48,7 +55,7 @@ module.exports =
 
     Random.shuffle(grid_profile)
 
-    immutable_cellmap.withMutations (mutable_cells) ->
+    new_cellmap = immutable_cellmap.withMutations (mutable_cells) ->
       mutable_cells.forEach (cell, xy) ->
         if valid_xys.has xy
           profile_index = ((GRID.dimension - 1) * xy.x) + xy.y
@@ -59,3 +66,11 @@ module.exports =
             when 2 then Cells.ITEM
 
           mutable_cells.set xy, new_cell
+        else
+          mutable_cells.set xy, Cells.SNAKE
+
+    # set up for GC
+    grid_profile = null
+    valid_xys = null
+
+    new_cellmap
