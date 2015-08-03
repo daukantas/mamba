@@ -1,21 +1,22 @@
 Snake = require '../snake'
-{GRID} = require '../settings'
+{GRID, LEVEL} = require '../settings'
 Cell = require '../views/cell'
 XY = require '../utility/xy'  # can't require utility
 
 Immutable = require 'immutable'
 
-GAME_OVER_STATES =
+GAME_STATES =
 
-  failure:
-    success: false
+  reset: 'reset'
 
-  success:
-    success: true
+  failure: 'failure'
+
+  success: 'success'
 
 SNAKE = null
 ITEMS = 0
-GAME_OVER = null
+NUM_WINS = 0
+GAME_STATE = null
 
 module.exports = Object.create null,
   ###
@@ -32,7 +33,13 @@ module.exports = Object.create null,
     enumerable: true
     value: ->
       SNAKE = Snake.at_position XY.random(GRID.dimension - 1)
-      GAME_OVER = null
+      NUM_WINS = 0
+      @reset_round()
+
+  reset_round:
+    enumerable: true
+    value: ->
+      GAME_STATE = null
       ITEMS = 0
 
   collision:
@@ -78,13 +85,18 @@ module.exports = Object.create null,
   over:
     enumerable: true
     value: ->
-      GAME_OVER?
+      GAME_STATE? && GAME_STATE isnt GAME_STATES.reset
+
+  should_reset_round:
+    enumerable: true
+    value: ->
+      GAME_STATE? && GAME_STATE is GAME_STATES.reset
 
   failed:
     enumerable: true
     value: ->
-      if GAME_OVER?
-        not GAME_OVER.success
+      if GAME_STATE?
+        GAME_STATE is GAME_STATES.failure
       else
         false
 
@@ -97,9 +109,13 @@ module.exports = Object.create null,
   _maybe_win:
     value: ->
       if ITEMS is 0
-        GAME_OVER = GAME_OVER_STATES.success
+        NUM_WINS += 1
+        if NUM_WINS is LEVEL.resets_to_win
+          GAME_STATE = GAME_STATES.success
+        else
+          GAME_STATE = GAME_STATES.reset
 
   _fail:
     value: ->
       SNAKE.set_motion(null)
-      GAME_OVER = GAME_OVER_STATES.failure
+      GAME_STATE = GAME_STATES.failure

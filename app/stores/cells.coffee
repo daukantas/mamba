@@ -68,7 +68,10 @@ CellStore = Object.create EmittingStore,
 
       if GAME.out_of_bounds()
         GAME.collide Cell.WALL
-      if GAME.over()
+      if GAME.should_reset_round()
+        @_reset(game: false)
+        Ticker.tick => @_tick()
+      else if GAME.over()
         @_finish()
       else
         Ticker.tick => @_tick()
@@ -76,8 +79,11 @@ CellStore = Object.create EmittingStore,
       @_emit_cells()
 
   _reset:
-    value: ->
-      GAME.reset()
+    value: (options = {game: true}) ->
+      if options.game
+        GAME.reset()
+      else
+        GAME.reset_round()
 
       # clear out cells that aren't Cell.SNAKE, in
       # preparation for random_reset
@@ -96,7 +102,8 @@ CellStore = Object.create EmittingStore,
         if cell is Cell.ITEM
           GAME.add_item()
 
-      @_emit_cells()
+      if options.game
+        @_emit_cells()
 
   _finish:
     value: ->
