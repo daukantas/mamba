@@ -43,17 +43,17 @@ module.exports = Object.create null,
           if cell isnt Cells.SNAKE
             mutable_cells.set xy, Cells.VOID
 
-      can_populate = Immutable.OrderedSet(voided_cells
+      can_populate = Immutable.OrderedMap(voided_cells
         .entrySeq()
         .filter((entry) ->
           [xy, cell] = entry
           cell isnt Cells.SNAKE
         )
-        .map((entry) -> entry[0]))
+        .map((entry) -> [entry[0], null]))
 
       num_walls = CELL_QUANTITIES.get Cells.WALL
       num_items = CELL_QUANTITIES.get Cells.ITEM
-      num_voids = can_populate.size
+      num_voids = can_populate.size - num_walls - num_items
 
       # Max size of this is (GRID.dimension - 1) squared; ~< 900.
       grid_profile = (
@@ -66,11 +66,10 @@ module.exports = Object.create null,
 
       Random.shuffle(grid_profile)
 
-      new_cellmap = voided_cells.withMutations (mutable_cells) ->
-        mutable_cells.forEach (cell, xy) ->
-          if can_populate.has xy
-            profile_index = ((GRID.dimension - 1) * xy.x) + xy.y
-            mutable_cells.set xy, cellcodes.keyOf grid_profile[profile_index]
+      new_cellmap = can_populate.withMutations (mutable_cells) ->
+        mutable_cells.entrySeq().forEach (entry, index) ->
+          xy = entry[0]
+          mutable_cells.set xy, cellcodes.keyOf grid_profile[index]
 
       # set up for GC
       grid_profile = null

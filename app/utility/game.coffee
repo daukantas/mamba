@@ -61,6 +61,10 @@ module.exports = Object.create null,
     value: ->
       SNAKE.move()
 
+  collides_with:
+    value: (xy) ->
+      SNAKE.meets xy
+
   out_of_bounds:
     enumerable: true
     value: ->
