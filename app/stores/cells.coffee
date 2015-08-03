@@ -1,10 +1,10 @@
-{KeyDownAction} = require '../actions'
+{MotionKeyAction, MethodKeyAction} = require '../actions'
 {Ticker, XY, GAME} = require '../utility'
 Cell = require '../views/cell'
-{GRID} = require '../settings'
+{GRID, LEVEL} = require '../settings'
 
 Dispatcher = require '../dispatcher'
-{EventEmitter} = require 'events'
+{EmittingStore} = require './emitter'
 Immutable = require 'immutable'
 
 LAST_CELLS = null
@@ -14,18 +14,12 @@ LIVE_CELLS = Immutable.OrderedMap().withMutations (mutable_cells) ->
     for col in range
       mutable_cells.set XY.value_of(row, col), null
 
-INITIALIZED = false
+CellStore = Object.create EmittingStore,
 
-CellStore = Object.create EventEmitter::,
-
-  initialize:
-    enumerable: true
+  _post_initialize_hook:
+    enumerable: false
     value: ->
-      if INITIALIZED
-        throw new Error "CellStore already initialized"
       @_reset()
-      Dispatcher.register (action) =>
-        @_handle_action(action)
 
   cellmap:
     enumerable: true
@@ -35,33 +29,37 @@ CellStore = Object.create EventEmitter::,
   add_change_listener:
     enumerable: true
     value: (listener) ->
-      @addListener @CHANGE_EVENT, listener
+      @addListener @_CHANGE_EVENT, listener
 
-  CHANGE_EVENT:
+  items_left:
     enumerable: true
+    value: ->
+      GAME.items_left()
+
+  _CHANGE_EVENT:
     value: 'change'
 
-  METHOD_KEYMAP:
+  _METHOD_KEYMAP:
     value: Immutable.Map [
-      ['restart', '__restart']
+      ['restart', '_restart']
     ]
 
   _handle_action:
     value: (action) ->
-      if action.is KeyDownAction
+      if action.is_a MotionKeyAction
         motion = action.motion()
-        method = action.method()
 
         if motion? && not GAME.over()
           GAME.set_motion(motion)
           if not Ticker.ticking()
             @_tick()
-        else if method?
-          @[@METHOD_KEYMAP.get(method)]()
+      else if action.is_a MethodKeyAction
+        method = @_METHOD_KEYMAP.get(action.method())
+        @[method]()
 
   _emit_cells:
     value: ->
-      @emit(@CHANGE_EVENT, cellmap: LIVE_CELLS)
+      @emit(@_CHANGE_EVENT, cellmap: LIVE_CELLS)
 
   _tick:
     value: ->
@@ -69,7 +67,7 @@ CellStore = Object.create EventEmitter::,
       @_update()
 
       if GAME.out_of_bounds()
-        GAME.collide Cell.Wall
+        GAME.collide Cell.WALL
       if GAME.over()
         @_finish()
       else
@@ -79,38 +77,43 @@ CellStore = Object.create EventEmitter::,
 
   _reset:
     value: ->
-      random_cell = ->
-        cell = Cell.random()
-        if cell is Cell.Item
-          GAME.add_item()
-        cell
-
       GAME.reset()
 
+      # clear out cells that aren't Cell.SNAKE, in
+      # preparation for random_reset
       @_batch_mutate (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
           if GAME.collision xy
-            mutable_cells.set xy, Cell.Snake
+            mutable_cells.set xy, Cell.SNAKE
           else
-            mutable_cells.set xy, random_cell()
+            mutable_cells.set xy, Cell.VOID
+
+      LAST_CELLS = null
+      LIVE_CELLS = LEVEL.random_reset LIVE_CELLS
+
+      LIVE_CELLS.entrySeq().forEach (entry) ->
+        [cell, __] = entry
+        if cell is Cell.ITEM
+          GAME.add_item()
 
       @_emit_cells()
 
   _finish:
     value: ->
       if GAME.failed()
-        transform_to_cell = Cell.Collision
+        transform_to_cell = Cell.COLLISION
         @_rewind()
       else
-        transform_to_cell = Cell.Item
+        transform_to_cell = Cell.ITEM
 
       @_batch_mutate (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
-          if cell is Cell.Snake
+          if cell is Cell.SNAKE
             mutable_cells.set xy, transform_to_cell
 
   _batch_mutate:
     value: (mutator) ->
+      LAST_CELLS = LIVE_CELLS
       LIVE_CELLS = LIVE_CELLS.withMutations mutator
 
   _rewind:
@@ -125,16 +128,16 @@ CellStore = Object.create EventEmitter::,
       @_batch_mutate (mutable_cells) =>
         mutable_cells.forEach (previous_cell, xy) =>
           if GAME.collision xy
-            if previous_cell is Cell.Void
-              mutable_cells.set xy, Cell.Snake
+            if previous_cell is Cell.VOID
+              mutable_cells.set xy, Cell.SNAKE
             else
-              if previous_cell is Cell.Item
-                mutable_cells.set xy, Cell.Snake
+              if previous_cell is Cell.ITEM
+                mutable_cells.set xy, Cell.SNAKE
               GAME.collide previous_cell, xy
-          else if previous_cell is Cell.Snake
-            mutable_cells.set xy, Cell.Void
+          else if previous_cell is Cell.SNAKE
+            mutable_cells.set xy, Cell.VOID
 
-  __restart:
+  _restart:
     value: ->
       Ticker.stop => @_reset()
 

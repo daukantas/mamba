@@ -5,7 +5,7 @@ XY = require '../utility/xy'  # can't require utility
 
 Immutable = require 'immutable'
 
-GAME_OVER =
+GAME_OVER_STATES =
 
   failure:
     success: false
@@ -13,54 +13,93 @@ GAME_OVER =
   success:
     success: true
 
+SNAKE = null
+ITEMS = 0
+GAME_OVER = null
 
-module.exports =
+module.exports = Object.create null,
+  ###
+    Object that manages the state of the current game.
 
-  reset: ->
-    @_snake = Snake.at_position XY.random(GRID.dimension - 1)
-    @_game_over = null
-    @_num_items = 0
+    It doesn't handle Actions, it exposes convenience methods for
+    manipulating and reading game state, and lives outside the context
+    of Actions.
 
-  collision: (xy) ->
-    @_snake.meets xy
+    This isn't a Flux Store; it's just a helper class.
+  ###
 
-  collide: (target, xy) ->
-    if target is Cell.Wall
-      @_fail()
-    else if target is Cell.Snake && @_snake.head() is xy
-      @_fail()
-    else if target is Cell.Item
-      @_score()
+  reset:
+    enumerable: true
+    value: ->
+      SNAKE = Snake.at_position XY.random(GRID.dimension - 1)
+      GAME_OVER = null
+      ITEMS = 0
 
-  set_motion: (motion) ->
-    @_snake.set_motion(motion)
+  collision:
+    value: (xy) ->
+      SNAKE.meets xy
 
-  move_snake: ->
-    @_snake.move()
+  collide:
+    value: (target, xy) ->
+      if target is Cell.WALL
+        @_fail()
+      else if target is Cell.SNAKE
+        if SNAKE.head() is xy
+          @_fail()
+      else if target is Cell.ITEM
+        @_score()
 
-  out_of_bounds: ->
-    {x, y} = @_snake.head()
-    Math.min(x, y) < 0 ||
-    Math.max(x, y) >= GRID.dimension
+  set_motion:
+    value: (motion) ->
+      SNAKE.set_motion(motion)
 
-  add_item: ->
-    @_num_items += 1
+  move_snake:
+    enumerable: true
+    value: ->
+      SNAKE.move()
 
-  over: ->
-    @_game_over?
+  out_of_bounds:
+    enumerable: true
+    value: ->
+      {x, y} = SNAKE.head()
+      Math.min(x, y) < 0 ||
+      Math.max(x, y) >= GRID.dimension
 
-  failed: ->
-    if @_game_over?
-      not @_game_over.success
-    else
-      false
+  add_item:
+    enumerable: true
+    value: ->
+      ITEMS += 1
 
-  _score: ->
-    @_snake.grow()
-    @_num_items -= 1
-    if @_num_items is 0
-      @_game_over = GAME_OVER.success
+  items_left:
+    enumerable: true
+    value: ->
+      ITEMS
 
-  _fail: ->
-    @_snake.set_motion(null)
-    @_game_over = GAME_OVER.failure
+  over:
+    enumerable: true
+    value: ->
+      GAME_OVER?
+
+  failed:
+    enumerable: true
+    value: ->
+      if GAME_OVER?
+        not GAME_OVER.success
+      else
+        false
+
+  _score:
+    value: ->
+      SNAKE.grow()
+      ITEMS -= 1
+      @_maybe_win()
+
+  _maybe_win:
+    value: ->
+      if ITEMS is 0
+        GAME_OVER = GAME_OVER_STATES.success
+
+  _fail:
+    value: ->
+      SNAKE.set_motion(null)
+      GAME_OVER = GAME_OVER_STATES.failure

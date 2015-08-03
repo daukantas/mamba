@@ -5,9 +5,9 @@ Immutable = require 'immutable'
 
 class Action
 
-  @abstract_classprops = Immutable.Set([
+  @abstract_classprops = Immutable.Set [
     'validate_payload'
-  ])
+  ]
 
   __abstract_validated = false
 
@@ -28,13 +28,17 @@ class Action
   toString: ->
     @constructor.name
 
-  @of: (payload) ->
+  @value_of: (payload) ->
     @__validate_class()
     @validate_payload(payload)
+    @post_value_of_hook(payload)
+
+  # Subclass can override this
+  @post_value_of_hook: (payload) ->
     new @(payload)
 
-  is: (klass) ->
-    @constructor is klass
+  is_a: (klass) ->
+    @ instanceof klass
 
 
 module.exports = Action

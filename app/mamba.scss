@@ -18,38 +18,69 @@ body {
 #title {
   font-weight: 700;
   font-size: 4em;
-  margin-bottom: 15px;;
+  font-style: italic;
+  margin-bottom: 15px;
+  margin-left: 20px;
 }
 
-#instructions {
+#sidebar {
   text-align: left;
   float: right;
   width: 200px;
   height: 630px;
   position: relative;
 
-  h2 {
-    margin-top: 0;
-  }
+  #controls {
+    position: relative;
+    height: 500px;
 
-  a {
-    color: lightblue;
-    font-weight: 700;
-  }
+    > div {
+      position: absolute;
+    }
 
-  p {
-    margin-top: 0;
-    margin-bottom: 20px;
-  }
+    > [class$="-label"] {
+      font-size: 1em;
+      font-style: italic;
+      font-weight: bold;
+    }
 
-  strong {
-    font-weight: 700;
+    > .restart-key-label {
+      top: 30px;
+      right: 10px;
+    }
+    
+    > #restart-key-container {
+      top: 15px;
+      left: 0;
+    }
+
+    > .arrow-keys-label {
+      top: 125px;
+      width: 100%;
+      text-align: center;
+    }
+
+    > #arrow-keys-container {
+      top: 140px;
+    }
+
   }
 
   .blurb {
     position: absolute;
+    font-style: italic;
     bottom: 10px;
     font-size: 16px;
+
+    a {
+      color: lightblue;
+      font-weight: 700;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
   }
 }
 

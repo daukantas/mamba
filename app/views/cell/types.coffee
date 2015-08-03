@@ -7,41 +7,41 @@ class CellType
   constructor: ->
     if @constructor == CellType
       throw new Error "Can't instantiate abstract class CellType"
-    else if !@constructor.name
+    else if !_.isString @constructor.name
       throw new errors.NotImplemented("`name` property not implemented")
 
   toString: ->
-    @name
+    @constructor.name
 
 
 class Item extends CellType
 
-  name: "item"
+  @name: "item"
 
 
 class Void extends CellType
 
-  name: "void"
+  @name: "void"
 
 
 class Wall extends CellType
 
-  name: "wall"
+  @name: "wall"
 
 
 class Snake extends CellType
 
-  name: "snake"
+  @name: "snake"
 
 
 class Collision extends CellType
 
-  name: "collision"
+  @name: "collision"
 
 
 module.exports =
-  Item: new Item
-  Wall: new Wall
-  Void: new Void
-  Snake: new Snake
-  Collision: new Collision
+  ITEM: new Item
+  WALL: new Wall
+  VOID: new Void
+  SNAKE: new Snake
+  COLLISION: new Collision
