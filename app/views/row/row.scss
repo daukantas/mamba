@@ -6,11 +6,14 @@ $row_width: 100%;
 $start_opacity: .01;
 $finish_opacity: 1;
 
+$border_radius: 5px;
+
 $background-color: grey;
 
 .row {
   height: $row_height;
   width: $row_width;
+  border-radius: $border_radius;
   background-color: $background-color;
 }
 
