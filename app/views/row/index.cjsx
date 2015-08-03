@@ -30,12 +30,12 @@ Row = React.createClass
 
   render: ->
     row = @props.index
-    <div className="row">
-      <ReactCSSTransitionGroup transitionName='row' transitionAppear={true}>
-        {@state.cells.map (cell, col) ->
-          (<Cell key="cell-#{row}-#{col}" content={cell}/>)}
-      </ReactCSSTransitionGroup>
-    </div>
+    <ReactCSSTransitionGroup transitionName='fading-in' transitionAppear={true}>
+      <div className="row">
+          {@state.cells.map (cell, col) ->
+            (<Cell key="cell-#{row}-#{col}" content={cell}/>)}
+      </div>
+    </ReactCSSTransitionGroup>
 
 
 module.exports = Row;

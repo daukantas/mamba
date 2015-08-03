@@ -1,9 +1,5 @@
 @import "../../index";
 
-$start_opacity: 0;
-$finish_opacity: 1;
-
-
 $unpressed_box_shadow: 0 5px darkgreen;
 $depressed_box_shadow: 0 3px darkgreen;
 
@@ -68,17 +64,4 @@ $space_between_keys: 10px;
     box-shadow: $depressed_box_shadow;
     transform: translateY(3px);
   }
-}
-
-.controls-key-enter, .controls-key-appear {
-  opacity: $start_opacity;
-}
-
-
-.controls-key-appear, .controls-key-enter.controls-key-enter-active {
-  transition: opacity .5s ease-in;
-}
-
-.controls-key-appear.controls-key-appear-active, .controls-key-enter.row-enter-active {
-  opacity: $finish_opacity;
 }

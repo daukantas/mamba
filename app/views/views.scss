@@ -1,0 +1,14 @@
+$start_opacity: .01;
+$finish_opacity: 1;
+
+.fading-in-enter, .fading-in-appear {
+  opacity: $start_opacity;
+}
+
+.fading-in-appear, .fading-in-enter.fading-in-enter-active {
+  transition: opacity .5s ease-in;
+}
+
+.fading-in-appear.fading-in-appear-active, .fading-in-enter.fading-in-enter-active {
+  opacity: $finish_opacity;
+}

@@ -3,9 +3,6 @@
 $row_height: 20px;
 $row_width: 100%;
 
-$start_opacity: .01;
-$finish_opacity: 1;
-
 $border_radius: 5px;
 
 $background-color: grey;
@@ -17,14 +14,3 @@ $background-color: grey;
   background-color: $background-color;
 }
 
-.row-enter, .row-appear {
-  opacity: $start_opacity;
-}
-
-.row-appear, .row-enter.row-enter-active {
-  transition: opacity .5s ease-in;
-}
-
-.row-appear.row-appear-active, .row-enter.row-enter-active {
-  opacity: $finish_opacity;
-}
