@@ -1,4 +1,5 @@
 React = require 'react'
+ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
 {LEVEL} = require '../../settings'
 {GridEvolver} = require '../../stores'
@@ -22,11 +23,13 @@ Score = React.createClass
     (score < 10 && "0#{score}") || "#{score}"
 
   render: ->
-    <div className="score">
-      <span className="score-current">{@_pad_score(@state.current_score)}</span>
-      <span className="score-slash">/</span>
-      <span className="score-desired">{@state.desired_score}</span>
-    </div>
+    <ReactCSSTransitionGroup transitionName='fading-in' transitionAppear={true}>
+      <div className="score">
+        <span className="score-current">{@_pad_score(@state.current_score)}</span>
+        <span className="score-slash">/</span>
+        <span className="score-desired">{@state.desired_score}</span>
+      </div>
+    </ReactCSSTransitionGroup>
 
 
 __Score__ = null
