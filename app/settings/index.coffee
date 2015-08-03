@@ -1,3 +1,5 @@
-exports.GRID = require './grid'
-exports.LEVEL = require './level'
-exports.TICK = require './tick'
+GRID = require './grid'
+LEVEL = require './level'
+TICK = require './tick'
+
+module.exports = {GRID, LEVEL, TICK}

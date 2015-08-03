@@ -6,3 +6,6 @@ module.exports =
 
   int: (min, max) ->
     Random.integer(min, max)(engine)
+
+  shuffle: (array) ->
+    Random.shuffle(engine, array)

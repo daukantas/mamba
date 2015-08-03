@@ -11,7 +11,7 @@ Cell = React.createClass
     content: React.PropTypes.oneOf(_.values cells).isRequired
 
   statics: _.extend {}, cells
-  , classmap: Immutable.Map([
+  , classmap: Immutable.Map [
       [
         cells.ITEM
         'item-cell'
@@ -32,11 +32,7 @@ Cell = React.createClass
         cells.COLLISION
         'collision-cell'
       ]
-    ])
-
-  , random: ->
-      choice = LEVEL.choose(cells.WALL, cells.ITEM)
-      (choice? && choice) || @VOID
+    ]
 
   render: ->
     <div className="#{@constructor.classmap.get(@props.content)}"></div>

@@ -1,7 +1,7 @@
 {MotionKeyAction, MethodKeyAction} = require '../actions'
 {Ticker, XY, GAME} = require '../utility'
 Cell = require '../views/cell'
-{GRID} = require '../settings'
+{GRID, LEVEL} = require '../settings'
 
 Dispatcher = require '../dispatcher'
 {EmittingStore} = require './emitter'
@@ -77,20 +77,15 @@ CellStore = Object.create EmittingStore,
 
   _reset:
     value: ->
-      random_cell = ->
-        cell = Cell.random()
-        if cell is Cell.ITEM
-          GAME.add_item()
-        cell
-
       GAME.reset()
 
-      @_batch_mutate (mutable_cells) ->
-        mutable_cells.forEach (cell, xy) ->
-          if GAME.collision xy
-            mutable_cells.set xy, Cell.SNAKE
-          else
-            mutable_cells.set xy, random_cell()
+      LAST_CELLS = null
+      LIVE_CELLS = LEVEL.reset(LIVE_CELLS)
+
+      LIVE_CELLS.entrySeq().forEach (entry) ->
+        [cell, __] = entry
+        if cell is Cell.ITEM
+          GAME.add_item()
 
       @_emit_cells()
 
