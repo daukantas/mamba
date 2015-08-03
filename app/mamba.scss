@@ -23,16 +23,15 @@ body {
   margin-left: 20px;
 }
 
-#sidebar {
+.sidebar {
   text-align: left;
   float: right;
   width: 200px;
   height: 630px;
   position: relative;
 
-  #controls {
+  .controls {
     position: relative;
-    height: 500px;
 
     > div {
       position: absolute;
@@ -64,6 +63,16 @@ body {
       top: 140px;
     }
 
+  }
+
+  .scoreboard-container {
+    position: absolute;
+    top: 350px;
+
+    #scoreboard {
+
+    }
+    
   }
 
   .blurb {
