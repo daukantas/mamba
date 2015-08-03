@@ -36,11 +36,6 @@ CellStore = Object.create EmittingStore,
     value: (listener) ->
       @addListener @_SCORE_EVENT, listener
 
-  items_left:
-    enumerable: true
-    value: ->
-      GAME.items_left()
-
   _CHANGE_EVENT:
     value: 'change'
 
@@ -69,6 +64,10 @@ CellStore = Object.create EmittingStore,
     value: ->
       @emit(@_CHANGE_EVENT, cellmap: LIVE_CELLS)
 
+  _emit_score:
+    value: ->
+      @emit(@_SCORE_EVENT, score: 0)
+
   _tick:
     value: ->
       LAST_CELLS = LIVE_CELLS
@@ -77,7 +76,7 @@ CellStore = Object.create EmittingStore,
       if GAME.out_of_bounds()
         GAME.track_collision Cell.WALL
       if GAME.should_reset_round()
-        @_reset(game: false)
+        @_reset(round: true)
         Ticker.tick => @_tick()
       else if GAME.over()
         @_finish()
@@ -87,11 +86,11 @@ CellStore = Object.create EmittingStore,
       @_emit_cells()
 
   _reset:
-    value: (options = {game: true}) ->
-      if options.game
-        GAME.reset()
-      else
+    value: (options = {round: false}) ->
+      if options.round
         GAME.reset_round()
+      else
+        GAME.reset()
 
       # clear out cells that aren't Cell.SNAKE, in
       # preparation for random_reset
@@ -110,7 +109,7 @@ CellStore = Object.create EmittingStore,
         if cell is Cell.ITEM
           GAME.add_item()
 
-      if options.game
+      unless options.round
         @_emit_cells()
 
   _finish:

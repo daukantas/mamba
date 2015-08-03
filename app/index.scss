@@ -38,14 +38,14 @@ body {
     }
 
     > [class$="-label"] {
-      font-size: 1em;
+      font-size: 1.5em;
       font-style: italic;
       font-weight: bold;
     }
 
     > .restart-key-label {
-      top: 30px;
-      right: 0;
+      top: 25px;
+      left: 70px;
     }
     
     > #restart-key-container {
@@ -55,12 +55,11 @@ body {
 
     > .arrow-keys-label {
       top: 125px;
-      width: 100%;
-      text-align: center;
+      left: 0;
     }
 
     > #arrow-keys-container {
-      top: 140px;
+      top: 150px;
     }
 
   }
