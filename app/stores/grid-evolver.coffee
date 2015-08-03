@@ -142,7 +142,7 @@ GridEvolver = Object.create EmittingStore,
 
       @_batch_mutate (mutable_cells) =>
         mutable_cells.forEach (previous_cell, xy) =>
-          if GAME.collides_with xy
+          if previous_cell is Cell.SNAKE
             if previous_cell is Cell.VOID
               mutable_cells.set xy, Cell.SNAKE
             else
