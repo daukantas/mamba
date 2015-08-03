@@ -28,7 +28,7 @@ module.exports = Object.create null,
 
   rounds_to_win:
     enumerable: true
-    value: 3
+    value: 7
 
   max_score:
     enumerable: true
