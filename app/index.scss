@@ -52,14 +52,12 @@ $sidebar_width: 200px;
         position: absolute;
       }
 
-      > [class$="-label"] {
+      .controls-key-label.r-key {
         font-size: 1.5em;
         font-weight: bold;
-      }
-
-      > .restart-key-label {
-        top: 70px;
-        left: 90px;
+        top: 10px;
+        left: 75px;
+        position: absolute;
       }
 
       > #restart-key-container {

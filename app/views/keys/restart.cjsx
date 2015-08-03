@@ -9,6 +9,15 @@ RestartKey = React.createClass
 
   mixins: [Deactivates]
 
+  propTypes:
+    show_label: React.PropTypes.bool
+
+  statics:
+    label: '(restart)'
+
+  getDefaultProps: ->
+    show_label: true
+
   getInitialState: ->
     active: false
 
@@ -27,7 +36,9 @@ RestartKey = React.createClass
       @setState active: true
 
   render: ->
-    <Key pressed={@state.active} keytype={Keys.R}></Key>
+    label = (@props.show_label? && @constructor.label) || null
+    props = {pressed: @state.active, keytype: Keys.R, label: label}
+    <Key {...props}></Key>
 
 
 module.exports = RestartKey
