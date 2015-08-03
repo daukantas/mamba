@@ -5,7 +5,7 @@ XY = require '../utility/xy'  # can't require utility
 
 Immutable = require 'immutable'
 
-GAME_STATES =
+STATES =
 
   reset: 'reset'
 
@@ -14,9 +14,9 @@ GAME_STATES =
   success: 'success'
 
 SNAKE = null
+STATE = null
 ITEMS = 0
 NUM_WINS = 0
-GAME_STATE = null
 
 module.exports = Object.create null,
   ###
@@ -26,7 +26,7 @@ module.exports = Object.create null,
     manipulating and reading game state, and lives outside the context
     of Actions.
 
-    This isn't a Flux Store; it's just a helper class.
+    This isn't a Flux Store; it's just a bookkeeping helper class.
   ###
 
   reset:
@@ -39,14 +39,14 @@ module.exports = Object.create null,
   reset_round:
     enumerable: true
     value: ->
-      GAME_STATE = null
+      STATE = null
       ITEMS = 0
 
-  collision:
+  collides_with:
     value: (xy) ->
       SNAKE.meets xy
 
-  collide:
+  track_collision:
     value: (target, xy) ->
       if target is Cell.WALL
         @_fail()
@@ -85,18 +85,18 @@ module.exports = Object.create null,
   over:
     enumerable: true
     value: ->
-      GAME_STATE? && GAME_STATE isnt GAME_STATES.reset
+      STATE? && STATE isnt STATES.reset
 
   should_reset_round:
     enumerable: true
     value: ->
-      GAME_STATE? && GAME_STATE is GAME_STATES.reset
+      STATE? && STATE is STATES.reset
 
   failed:
     enumerable: true
     value: ->
-      if GAME_STATE?
-        GAME_STATE is GAME_STATES.failure
+      if STATE?
+        STATE is STATES.failure
       else
         false
 
@@ -111,11 +111,11 @@ module.exports = Object.create null,
       if ITEMS is 0
         NUM_WINS += 1
         if NUM_WINS is LEVEL.resets_to_win
-          GAME_STATE = GAME_STATES.success
+          STATE = STATES.success
         else
-          GAME_STATE = GAME_STATES.reset
+          STATE = STATES.reset
 
   _fail:
     value: ->
       SNAKE.set_motion(null)
-      GAME_STATE = GAME_STATES.failure
+      STATE = STATES.failure

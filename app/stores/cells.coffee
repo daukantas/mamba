@@ -67,7 +67,7 @@ CellStore = Object.create EmittingStore,
       @_update()
 
       if GAME.out_of_bounds()
-        GAME.collide Cell.WALL
+        GAME.track_collision Cell.WALL
       if GAME.should_reset_round()
         @_reset(game: false)
         Ticker.tick => @_tick()
@@ -89,7 +89,7 @@ CellStore = Object.create EmittingStore,
       # preparation for random_reset
       @_batch_mutate (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
-          if GAME.collision xy
+          if GAME.collides_with xy
             mutable_cells.set xy, Cell.SNAKE
           else
             mutable_cells.set xy, Cell.VOID
@@ -134,13 +134,13 @@ CellStore = Object.create EmittingStore,
 
       @_batch_mutate (mutable_cells) =>
         mutable_cells.forEach (previous_cell, xy) =>
-          if GAME.collision xy
+          if GAME.collides_with xy
             if previous_cell is Cell.VOID
               mutable_cells.set xy, Cell.SNAKE
             else
               if previous_cell is Cell.ITEM
                 mutable_cells.set xy, Cell.SNAKE
-              GAME.collide previous_cell, xy
+              GAME.track_collision previous_cell, xy
           else if previous_cell is Cell.SNAKE
             mutable_cells.set xy, Cell.VOID
 
