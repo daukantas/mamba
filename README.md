@@ -23,7 +23,7 @@ black squares, or self-intersecting.
 #### Instructions & Rules
 
 * press `R` to restart
-* use the arrow keys () to move around
+* use the arrow keys (`←`, `↑`, `→`, `↓`) to move around
 * reversing directions while moving isn't allowed
 
 
