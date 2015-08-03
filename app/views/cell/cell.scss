@@ -4,7 +4,7 @@
 $cell_side: $row_height;
 
 [class*="-cell"] {
-  transition: background-color .1s ease-in;
+  transition: background-color .15s ease-in;
 }
 
 @mixin cell($background_color) {
@@ -13,7 +13,7 @@ $cell_side: $row_height;
 
   display: inline-block;
   border: 1px solid black;
-  border-radius: 5px;
+  border-radius: $border_radius;
   background-color: $background_color;
 }
 

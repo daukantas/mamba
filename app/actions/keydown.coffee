@@ -18,7 +18,7 @@ class KeyDownAction extends Action
     unless _.isObject(payload) && _.isNumber(payload.keycode)
       throw new Error 'Expected payload to have a number keycode property'
 
-  @post_of_hook: (payload) ->
+  @post_value_of_hook: (payload) ->
     {keycode} = payload
 
     if MotionKeyAction.KEYCODE_MAP.has keycode
@@ -27,6 +27,9 @@ class KeyDownAction extends Action
       new MethodKeyAction(payload)
     else
       throw new Error "Unsupported keycode: #{keycode}; try #{@KEYCODES}"
+
+  keycode: ->
+    @payload.keycode
 
 
 class MotionKeyAction extends KeyDownAction
@@ -52,10 +55,4 @@ class MethodKeyAction extends KeyDownAction
     @constructor.KEYCODE_MAP.get(@payload.keycode) || null
 
 
-module.exports = {
-  KEYCODES: KeyDownAction.KEYCODES,
-
-  KeyDownAction: KeyDownAction.of.bind(KeyDownAction),
-
-  MotionKeyAction, MethodKeyAction
-}
+module.exports = {KeyDownAction, MotionKeyAction, MethodKeyAction}

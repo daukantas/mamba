@@ -73,7 +73,8 @@ KeySender = Object.create {},
         @_add_pressed_key(keycode)
 
         if keycodes.has keycode
-          Dispatcher.dispatch KeyDownAction({keycode})
+          Dispatcher.dispatch KeyDownAction.value_of({keycode})
+
           if @_should_prevent_default(ev, options)
             bubbled = false
         bubbled

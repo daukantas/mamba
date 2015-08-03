@@ -2,27 +2,69 @@ Immutable = require 'immutable'
 _ = require 'underscore'
 Cells = require '../views/cell/types' # can't require cell directly :(
 Random = require '../utility/random'  # can't require utility directly :(
+GRID = require './grid'
+
+
+LEVEL = Immutable.Map [
+  [
+    Cells.WALL
+    20
+  ]
+  [
+    Cells.ITEM
+    10
+  ]
+]
+
+cellcodes = Immutable.Map [
+  [Cells.VOID, 0]
+  [Cells.WALL, 1]
+  [Cells.ITEM, 2]
+]
+
 
 module.exports =
-  # A mode is determined by a Map whose keys are Cells,
-  # and whose values are a likelihood between 0-100 that
-  # a random cell in the grid is that type of Cell.
-  #
-  # The ranges should be mutually disjoint.
 
-  setting: Immutable.Map([
-    [
-      Cells.Wall
-      Immutable.Range(0, 15)
-    ]
-    [
-      Cells.Item
-      Immutable.Range(40, 55)
-    ]
-  ])
 
-  choose: (cells...) ->
-    # This number has to be > 100 to see the expected randomness.
-    sample = Random.int(0, 1000)
-    _.find cells, (cell) =>
-      @setting.get(cell).contains sample
+  ###
+    Algorithm to re-shuffle a grid.
+
+    It sucks because it's uses maximally sizes arrays, I
+  ###
+  random_reset: (immutable_cellmap) ->
+    valid_xys = Immutable.OrderedSet(immutable_cellmap
+      .entrySeq()
+      .filter((entry) ->
+        [xy, cell] = entry
+        cell isnt Cells.SNAKE
+      )
+      .map((entry) -> entry[0]))
+
+    num_walls = LEVEL.get Cells.WALL
+    num_items = LEVEL.get Cells.ITEM
+    num_voids = valid_xys.size - num_walls - num_items
+
+    # Max size of this is (GRID.dimension - 1) squared; ~< 900.
+    grid_profile = (
+      cellcodes.get(Cells.WALL) for _ in [0...num_walls]
+    ).concat (
+      cellcodes.get(Cells.ITEM) for _ in [0...num_items]
+    ).concat (
+      cellcodes.get(Cells.VOID) for _ in [0...num_voids]
+    )
+
+    Random.shuffle(grid_profile)
+
+    new_cellmap = immutable_cellmap.withMutations (mutable_cells) ->
+      mutable_cells.forEach (cell, xy) ->
+        if valid_xys.has xy
+          profile_index = ((GRID.dimension - 1) * xy.x) + xy.y
+          mutable_cells.set xy, cellcodes.keyOf grid_profile[profile_index]
+        else
+          mutable_cells.set xy, Cells.SNAKE
+
+    # set up for GC
+    grid_profile = null
+    valid_xys = null
+
+    new_cellmap
