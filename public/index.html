@@ -1,48 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>mamba.</title>
-    <link rel="icon" type="image/png" href="img/favicon.png">
-    <!-- bower:css -->
-    <!-- endinject -->
-    <!-- inject:css -->
-    <link rel='stylesheet' href='css/mamba.css'>
-    <!-- endinject -->
+  <meta charset="UTF-8">
+  <title>mamba</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <!-- bower:css -->
+  <!-- endinject -->
+  <!-- inject:css -->
+  <link rel='stylesheet' href='css/mamba.css'>
+  <!-- endinject -->
 </head>
 <body>
-    <section id="title">
-        mamba.
-    </section>
-    <section id="mamba">
-        <!-- React root component mounts here! -->
-    </section>
-    <section id="instructions">
-        <h2>Instructions</h2>
-        <p>
-            Use the arrow keys to move around, consuming the green squares.
-        </p>
-        <p>
-            Press <strong>R</strong> to start over.
-        </p>
-        <div class="blurb">
-            <p>
-                Built with <a href="http://facebook.github.io/react/" target="_blank">React.js</a> and <a href="https://facebook.github.io/immutable-js/" target="_blank">immutable-js</a>.
-            </p>
-            <p>
-                This is a work in progress, with more features coming.
-            </p>
-            <p>
-                <a href="https://github.com/yangmillstheory/mamba">See the source.</a>
-            </p>
-        </div>
-    </section>
-    <div style="clear: both"></div>
-    <!-- bower:js -->
-    <script src='bower/bower.min.js'></script>
-    <!-- endinject -->
-    <!-- inject:js -->
-    <script src='js/mamba.js'></script>
-    <!-- endinject -->
+  <section id="title">
+    mamba
+  </section>
+
+  <section id="mamba"></section>
+
+  <section id="sidebar">
+    <div id="controls">
+      <div class="restart-key-label">press r to restart</div>
+      <div id="restart-key-container"></div>
+      <div class="arrow-keys-label">move with arrow keys</div>
+      <div id="arrow-keys-container"></div>
+    </div>
+
+      <div class="blurb">
+        <p>Built with <a href="http://facebook.github.io/react/" target="_blank">React.js</a> and <a href="https://facebook.github.io/immutable-js/" target="_blank">immutable-js</a>.</p>
+        <p><a href="https://github.com/yangmillstheory/mamba">See the source.</a></p>
+      </div>
+  </section>
+  <div style="clear: both"></div>
+  <!-- bower:js -->
+  <script src='bower/bower.min.js'></script>
+  <!-- endinject -->
+  <!-- inject:js -->
+  <script src='js/mamba.js'></script>
+  <!-- endinject -->
 </body>
 </html>
