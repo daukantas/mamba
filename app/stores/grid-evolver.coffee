@@ -92,15 +92,6 @@ GridEvolver = Object.create EmittingStore,
       else
         GAME.reset()
 
-      # clear out cells that aren't Cell.SNAKE, in
-      # preparation for random_reset
-      @_batch_mutate (mutable_cells) ->
-        mutable_cells.forEach (cell, xy) ->
-          if GAME.collides_with xy
-            mutable_cells.set xy, Cell.SNAKE
-          else
-            mutable_cells.set xy, Cell.VOID
-
       LAST_CELLS = null
       LIVE_CELLS = LEVEL.random_reset LIVE_CELLS
 
