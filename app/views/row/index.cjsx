@@ -28,7 +28,7 @@ Row = React.createClass
     row = @props.index
     <ReactCSSTransitionGroup transitionName='fading-in' transitionAppear={true}>
       <div className="row">
-          {@state.cells.map (cell, col) ->
+          {@state.cells.toSeq().map (cell, col) ->
             (<Cell key="cell-#{row}-#{col}" content={cell}/>)}
       </div>
     </ReactCSSTransitionGroup>

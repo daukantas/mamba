@@ -27,7 +27,7 @@ Grid = React.createClass
   render: ->
     <div className="grid">
       {for row in GRID.range()
-        <Row cells={@_get_row_cells(row)} index={row}key={"row-#{row}"} />}
+        <Row cells={@_get_row_cells(row)} index={row} key={"row-#{row}"} />}
     </div>
 
 
