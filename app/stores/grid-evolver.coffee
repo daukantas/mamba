@@ -1,5 +1,5 @@
 {MotionKeyAction, MethodKeyAction} = require '../actions'
-{Ticker, XY, GAME} = require '../utility'
+{Ticker, XY, GAME, Random} = require '../utility'
 Cell = require '../views/cell'
 {GRID, LEVEL} = require '../settings'
 
@@ -93,20 +93,9 @@ GridEvolver = Object.create EmittingStore,
       else
         GAME.reset()
 
-      # clear out cells that aren't Cell.SNAKE, in
-      # preparation for random_reset
-      @_batch_evolve (mutable_cells) ->
-        mutable_cells.forEach (cell, xy) ->
-          if GAME.collides_with xy
-            mutable_cells.set xy, Cell.SNAKE
-          else
-            mutable_cells.set xy, Cell.VOID
+      @_shuffled_reset()
 
-      LAST_CELLS = null
-      LIVE_CELLS = LEVEL.random_reset LIVE_CELLS
-
-      LIVE_CELLS.entrySeq().forEach (entry) ->
-        [__, cell] = entry
+      LIVE_CELLS.valueSeq().forEach (cell) ->
         if cell is Cell.ITEM
           GAME.add_item()
 
@@ -126,6 +115,69 @@ GridEvolver = Object.create EmittingStore,
         mutable_cells.forEach (cell, xy) ->
           if cell is Cell.SNAKE
             mutable_cells.set xy, transform_to_cell
+
+  _shuffled_reset:
+    value: ->
+      @_batch_evolve (mutable_cells) ->
+        mutable_cells.forEach (cell, xy) ->
+          if GAME.collides_with xy
+            mutable_cells.set xy, Cell.SNAKE
+          else
+            mutable_cells.set xy, Cell.VOID
+
+      voided_cellmap = LIVE_CELLS.withMutations (mutable_cells) ->
+        mutable_cells.forEach (cell, xy) ->
+          if cell isnt Cell.SNAKE
+            mutable_cells.set xy, Cell.VOID
+
+      will_repopulate = Immutable.OrderedMap(voided_cellmap
+        .entrySeq()
+        .filter((entry) ->
+          [xy, cell] = entry
+          cell isnt Cell.SNAKE
+        )
+        .map((entry) -> [entry[0], null]))
+
+      num_walls = LEVEL.get_cell_quantity Cell.WALL
+      num_items = LEVEL.get_cell_quantity Cell.ITEM
+
+      # The sequel reasonably assumes this quantity is > 0; if we
+      # write down them math, it's probably >> 0.
+      num_voids = will_repopulate.size - num_walls - num_items
+
+      # Helper map for random_reset algorithm
+      cellcodes = Immutable.Map [
+        [Cell.VOID, 0]
+        [Cell.WALL, 1]
+        [Cell.ITEM, 2]
+      ]
+
+      # Max size of this is (GRID.dimension - 1) squared; ~< 900.
+      shuffle_profile = (
+        cellcodes.get(Cell.WALL) for _ in [0...num_walls]
+      ).concat (
+        cellcodes.get(Cell.ITEM) for _ in [0...num_items]
+      ).concat (
+        cellcodes.get(Cell.VOID) for _ in [0...num_voids]
+      )
+
+      Random.shuffle(shuffle_profile)
+
+      will_repopulate = will_repopulate.withMutations (mutable_cells) ->
+        mutable_cells.keySeq().forEach (xy, index) ->
+          mutable_cells.set xy, cellcodes.keyOf(shuffle_profile[index])
+
+      shuffled_cellmap = voided_cellmap.withMutations (mutable_cells) ->
+        mutable_cells.forEach (cell, xy) ->
+          if will_repopulate.has xy
+            mutable_cells.set(xy, will_repopulate.get(xy))
+
+      # set up for GC
+      shuffle_profile = null
+      will_repopulate = null
+
+      LAST_CELLS = null
+      LIVE_CELLS = shuffled_cellmap
 
   _batch_evolve:
     value: (mutator) ->

@@ -2,10 +2,6 @@
 _ = require 'underscore'
 
 Ticker =
-  ###
-    Object whose sole responsibility is to call a function on a given interval
-    (that's an application-level setting), and allow for stopping said interval.
-  ###
 
   _interval: null
 

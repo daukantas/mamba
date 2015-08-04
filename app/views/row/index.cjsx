@@ -15,11 +15,11 @@ Row = React.createClass
     @setState cells: Immutable.List(@props.cells)
 
   componentWillReceiveProps: (next_props, next_state) ->
-    @setState cells: @state.cells.withMutations (mutative_cells) ->
-      mutative_cells.forEach (old_cell, col) ->
+    @setState cells: @state.cells.withMutations (mutable_cells) ->
+      mutable_cells.forEach (old_cell, col) ->
         new_cell = next_props.cells[col]
         if old_cell isnt new_cell
-          mutative_cells.set col, new_cell
+          mutable_cells.set col, new_cell
 
   shouldComponentUpdate: (next_props, next_state) ->
     next_state.cells isnt @state.cells
