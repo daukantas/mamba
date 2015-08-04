@@ -6,13 +6,15 @@ An implementation of a classic game using [Flux](https://facebook.github.io/flux
 
 Served from Heroku; click the badge above to try it out.
 
-### Architecture
+### Architecture & Implementation
 
 There's one Dispatcher, a few Actions, and a couple of Stores evolving and feeding data 
 uni-directionally to React components.
 
 Because the models are backed by [immutable data structures](https://facebook.github.io/immutable-js/docs/#/), 
 change-detection and component rendering are fast and efficient.
+
+Developed in [coffee-react](https://github.com/jsdf/coffee-react). Sources are served minified (with sourcemaps) in production.
 
 ### Gameplay
 
