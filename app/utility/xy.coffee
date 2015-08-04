@@ -20,7 +20,9 @@ module.exports =
   value_of: (row, col) ->
     unless all_xy[row]?[col]?
       all_xy[row] ||= {}
-      all_xy[row][col] = Object.freeze XY.value_of(row, col)
+      # ideally we'd freeze the instance, but immutable-js
+      # complains on browsers that don't have WeakMap
+      all_xy[row][col] = XY.value_of(row, col)
     all_xy[row][col]
 
   random: (max) ->

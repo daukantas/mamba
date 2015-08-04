@@ -11,25 +11,13 @@ MAC_COMMAND = Immutable.Set [
 ]
 
 KeySender = Object.create {},
-  ###
-    Object that dispatches a pre-configured collection of keycodes.
-
-    jQuery is a dependency for event normalization.
-  ###
-
+  # jQuery is a dependency for event normalization
   dependencies:
     enumerable: true
     value: Immutable.Map [
       ['jQuery', '$']
     ]
 
-  ###
-    Initialize with the required dependencies, and start listening for keys.
-
-    @param {object} dependencies -
-      an object with key-value pairs of dependency names to dependency values
-      (no type-checking is done with the values).
-  ###
   initialize:
     enumerable: true
     value: (dependencies) ->
@@ -48,17 +36,6 @@ KeySender = Object.create {},
       @$(document).keyup (ev) => @_clear_pressed_keys()
       @
 
-  ###
-    Listen for a collection of keycodes, and emit the KeyDownAction when caught.
-
-    @param {array} keycodes -
-      an array of numerical keycodes to listen for.
-    @param {object} options -
-      an options dictionary; currently only prevent_default is supported,
-      defaulting to false. when it's true and ALT, CTRL, SHIFT, or the Mac
-      COMMAND keys aren't pressed, the keydown event won't be propagated
-      after dispatching the KeyDownAction.
-  ###
   listen:
     enumerable: true
     value: (keycodes, options) ->
