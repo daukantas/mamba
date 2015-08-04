@@ -5,7 +5,7 @@ settings = require '../settings'
 ###
   Represents an instance of an expandable, movable snake.
 
-  Backed by an Immutable.OrderedSet, so .meets(xy) and moveare fast.
+  Backed by an Immutable.OrderedSet, so .meets(xy) and .move() are fast.
 ###
 class Snake
 
