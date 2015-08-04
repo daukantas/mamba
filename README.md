@@ -11,9 +11,8 @@ Served from Heroku; click the badge above to try it out.
 There's one Dispatcher, a few Actions, and a couple of Stores evolving and feeding data 
 uni-directionally to React components.
 
-Because the data structures are backed using [immutable data structures](https://facebook.github.io/immutable-js/docs/#/), 
-change-detection and component rendering are fast and efficient - at each "tick", whole sections of 
-the Grid won't update.
+Because the models are backed by [immutable data structures](https://facebook.github.io/immutable-js/docs/#/), 
+change-detection and component rendering are fast and efficient.
 
 ### Gameplay
 
