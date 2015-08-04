@@ -78,8 +78,7 @@ GridEvolver = Object.create EmittingStore,
         GAME.track_collision Cell.WALL
       if GAME.should_reset_round()
         @_reset(round: true)
-        Ticker.tick => @_tick()
-      else if GAME.over()
+      if GAME.over()
         @_finish()
       else
         Ticker.tick => @_tick()
@@ -125,12 +124,7 @@ GridEvolver = Object.create EmittingStore,
           else
             mutable_cells.set xy, Cell.VOID
 
-      voided_cellmap = LIVE_CELLS.withMutations (mutable_cells) ->
-        mutable_cells.forEach (cell, xy) ->
-          if cell isnt Cell.SNAKE
-            mutable_cells.set xy, Cell.VOID
-
-      will_repopulate = Immutable.OrderedMap(voided_cellmap
+      will_repopulate = Immutable.OrderedMap(LIVE_CELLS
         .entrySeq()
         .filter((entry) ->
           [xy, cell] = entry
@@ -167,7 +161,7 @@ GridEvolver = Object.create EmittingStore,
         mutable_cells.keySeq().forEach (xy, index) ->
           mutable_cells.set xy, cellcodes.keyOf(shuffle_profile[index])
 
-      shuffled_cellmap = voided_cellmap.withMutations (mutable_cells) ->
+      LIVE_CELLS = LIVE_CELLS.withMutations (mutable_cells) ->
         mutable_cells.forEach (cell, xy) ->
           if will_repopulate.has xy
             mutable_cells.set(xy, will_repopulate.get(xy))
@@ -177,7 +171,7 @@ GridEvolver = Object.create EmittingStore,
       will_repopulate = null
 
       LAST_CELLS = null
-      LIVE_CELLS = shuffled_cellmap
+      LIVE_CELLS
 
   _batch_evolve:
     value: (mutator) ->
