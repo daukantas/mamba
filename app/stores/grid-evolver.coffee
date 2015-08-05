@@ -1,6 +1,6 @@
 {MotionKeyAction, MethodKeyAction} = require '../actions'
 {Ticker, XY, GAME, Random} = require '../utility'
-Cell = require '../views/cell'
+Cell = require '../components/cell'
 {GRID, LEVEL} = require '../settings'
 
 Dispatcher = require '../dispatcher'

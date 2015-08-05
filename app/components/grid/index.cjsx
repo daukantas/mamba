@@ -31,26 +31,6 @@ Grid = React.createClass
     </div>
 
 
-__Grid__ = null
+{wrap} = require '../wrapper'
 
-
-module.exports = Object.create null,
-
-  _html_element:
-    writable: true
-    value: ->
-      @_html_element
-
-  mount:
-    enumerable: true
-    value: (@_html_element) ->
-      @
-
-  render:
-    enumerable: true
-    value: ->
-      if !@_html_element?
-        throw new Error("Set HTMLElement html_element before rendering!")
-      else if __Grid__?
-        throw new Error("Grid's already been rendered!")
-      __Grid__ = React.render <Grid />, @_html_element
+module.exports = wrap(<Grid />)
