@@ -1,6 +1,6 @@
 Immutable = require 'immutable'
 _ = require 'underscore'
-Cells = require '../views/cell/types' # can't require cell directly :(
+Cells = require '../components/cell/types' # can't require cell directly :(
 
 
 CELL_QUANTITIES= Immutable.Map [

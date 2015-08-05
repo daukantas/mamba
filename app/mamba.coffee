@@ -1,6 +1,6 @@
 {GridEvolver, PressedKeys} = require './stores'
 {KeySender, KEYCODES} = require './actions'
-{Grid, Keys, Score} = require './views'
+{Grid, Keys, Score} = require './components'
 
 $ = window.$
 
@@ -20,9 +20,7 @@ if $?
   Grid.mount(GRID).render()
   Score.mount(SCOREBOARD).render()
 
-  Keys
-  .mount_arrow_keys(ARROW_KEYS)
-  .mount_restart_key(RESTART_KEY)
-  .render_keys()
+  Keys.arrows.mount(ARROW_KEYS).render()
+  Keys.restart.mount(RESTART_KEY).render()
 else
   throw new Error "Couldn't find window.$, are you sure jQuery is loaded?"

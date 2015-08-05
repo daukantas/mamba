@@ -1,6 +1,6 @@
 Snake = require '../snake'
 {GRID, LEVEL} = require '../settings'
-Cell = require '../views/cell'
+Cell = require '../components/cell'
 XY = require '../utility/xy'  # can't require utility
 
 Immutable = require 'immutable'
