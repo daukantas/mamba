@@ -8,15 +8,18 @@ build_common = [
   'clean'
   'cjsx'
   'sass'
+  'bower'
 ]
 
 
 gulp.task 'build:development', gulp.series(
   build_common...,
-  'bundle:development'
+  'bundle:development',
+  'inject'
 )
 
 gulp.task 'build:production', gulp.series(
   build_common...,
-  'bundle:production'
+  'bundle:production',
+  'inject'
 )
