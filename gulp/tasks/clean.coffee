@@ -6,7 +6,7 @@ _ = require 'underscore'
 
 post_delete = (err, files) ->
   if files.length > 0
-    console.info "Deleted #{files.join('\n\t')}"
+    console.info "Deleted files: \n\t#{files.join('\n\t')}"
   else
     console.info "Found nothing to delete!"
 
