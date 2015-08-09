@@ -1,20 +1,23 @@
 gulp = require 'gulp'
 del = require 'del'
+_ = require 'underscore'
 {BUILD, DEST} = require '../shared'
 
 
-post_delete = (base) ->
-  console.log "Deleted all files in #{base}."
+post_delete = (err, files) ->
+  if files.length > 0
+    console.info "Deleted #{files.join('\n\t')}"
+  else
+    console.info "Found nothing to delete!"
+
+gulp.task 'clean:public', (done) ->
+  base = DEST.base()
+  del "#{base}/**/*.+(js|css|map|html)", _.compose(done, post_delete)
 
 
-gulp.task 'clean:public', ->
-  dest = DEST.base()
-  del "#{dest}/*", force: true, post_delete.bind(null, base)
-
-
-gulp.task 'clean:build', ->
+gulp.task 'clean:build', (done) ->
   base = BUILD.base()
-  del "#{base}/*", force: true, post_delete.bind(null, base)
+  del "#{base}/*", _.compose(done, post_delete)
 
 
 gulp.task('clean', gulp.parallel('clean:build', 'clean:public'))
