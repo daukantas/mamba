@@ -1,0 +1,71 @@
+@import "../../index";
+
+$unpressed_box_shadow: 0 5px darkgreen;
+$depressed_box_shadow: 0 3px darkgreen;
+
+$key_size: 50px;
+$space_between_keys: 10px;
+
+.arrow-keys {
+  position: relative;
+  margin: 5px auto;
+
+  width: ($key_size * 3) + ($space_between_keys * 4);
+  height:($key_size * 2) + ($space_between_keys * 3);
+
+  .controls-key {
+    position: absolute;
+  }
+
+  .left-key {
+    bottom: 0;
+    left: $space_between_keys;
+  }
+
+  .up-key {
+    left: $key_size + (2 * $space_between_keys);
+    bottom: $key_size + $space_between_keys;
+  }
+
+  .down-key {
+    bottom: 0;
+    left: $key_size + (2 * $space_between_keys);
+  }
+
+  .right-key {
+    bottom: 0;
+    left: (2 * $key_size) + (3 * $space_between_keys);
+  }
+
+}
+
+.controls-key {
+  background-color: $primary-color;
+  color: black;
+
+  // Vertically center text in Firefox
+  // http://stackoverflow.com/a/10793589/2419669
+  display: table-cell;
+  vertical-align: middle;
+
+  font-size: 2.5em;
+  font-weight: bold;
+
+  width: $key_size;
+  height: $key_size;
+
+  text-align: center;
+
+  border-radius: 5px;
+  box-shadow: $unpressed_box_shadow;
+
+  &.pressed {
+    color: green;
+    box-shadow: $depressed_box_shadow;
+    -webkit-transform: translateY(5px);
+    -moz-transform: translateY(5px);
+    -ms-transform: translateY(5px);
+    -o-transform: translateY(5px);
+    transform: translateY(5px);
+  }
+}

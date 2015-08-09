@@ -1,0 +1,12 @@
+$grid_background: black;
+$grid_size: 660px;
+
+
+.grid {
+  width: $grid_size;
+  background-color: $grid_background;
+
+  float: left;
+  clear: right;
+}
+

@@ -1,0 +1,16 @@
+@import "../grid/grid";
+
+$row_height: 20px;
+$row_width: 100%;
+
+$border_radius: 5px;
+
+$background-color: grey;
+
+.row {
+  height: $row_height;
+  width: $row_width;
+  border-radius: $border_radius;
+  background-color: $background-color;
+}
+
